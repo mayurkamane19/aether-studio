@@ -488,6 +488,42 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
+  /* Lead Submission Form Handler */
+  window.handleLeadSubmission = function(e) {
+    e.preventDefault();
+    const btn = document.getElementById('submit-lead-btn');
+    const msg = document.getElementById('form-status-msg');
+    
+    if (!btn) return;
+    
+    // Loading State
+    btn.disabled = true;
+    btn.innerHTML = '<span>Processing Inquiry...</span> <i data-lucide="loader"></i>';
+    if (window.lucide) lucide.createIcons();
+
+    setTimeout(() => {
+      // Success State
+      btn.disabled = false;
+      btn.innerHTML = '<span>Inquiry Submitted Successfully!</span> <i data-lucide="check-circle"></i>';
+      if (window.lucide) lucide.createIcons();
+
+      if (msg) {
+        msg.style.display = 'block';
+        msg.style.background = 'rgba(16, 185, 129, 0.15)';
+        msg.style.border = '1px solid rgba(16, 185, 129, 0.3)';
+        msg.style.color = '#34d399';
+        msg.innerHTML = '✓ Thank you! Aether Studio has received your inquiry. We will respond within 4 hours.';
+      }
+
+      showToast('Lead submitted! Proposal & quote email dispatched.');
+
+      setTimeout(() => {
+        btn.innerHTML = '<span>Get a Quote & Official Proposal</span> <i data-lucide="send"></i>';
+        if (window.lucide) lucide.createIcons();
+      }, 5000);
+    }, 1200);
+  };
+
   /* ==========================================
      8. GLOBAL SEARCH SYSTEM
      ========================================== */

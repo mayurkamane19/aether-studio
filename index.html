@@ -793,34 +793,86 @@
           </div>
 
           <div class="contact-form-wrapper glass-panel gsap-scroll-header">
-            <form id="contact-form">
+            <form id="contact-form" onsubmit="handleLeadSubmission(event)">
               <div class="form-group">
-                <label for="form-name">Full Name</label>
+                <label for="form-name">Full Name *</label>
                 <input type="text" id="form-name" placeholder="John Doe" required>
               </div>
+
               <div class="form-group">
-                <label for="form-email">Email Address</label>
+                <label for="form-email">Email Address *</label>
                 <input type="email" id="form-email" placeholder="john@company.com" required>
               </div>
-              <div class="form-group">
-                <label for="form-service">Target Practice Area</label>
-                <select id="form-service">
-                  <option value="Branding">Luxury Brand Identity</option>
-                  <option value="CTR Thumbnails">CTR YouTube Thumbnail Package</option>
-                  <option value="3D Interior Renders">3D Interior Visualization</option>
-                  <option value="UI UX Dashboard">UI/UX Web & Mobile App</option>
-                  <option value="Packaging & Ads">Packaging & Product Advertisements</option>
-                </select>
-              </div>
-              <div class="form-group">
-                <label for="form-message">Project Overview</label>
-                <textarea id="form-message" rows="4" placeholder="Describe your objectives, deadline..." required></textarea>
+
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+                <div class="form-group">
+                  <label for="form-service">Project Type *</label>
+                  <select id="form-service" class="calc-select" required>
+                    <option value="Portfolio Website">Portfolio Website Development (₹9,999+)</option>
+                    <option value="Dashboard Development">Dashboard Development (₹14,999+)</option>
+                    <option value="Brand Identity">Brand Identity & UI/UX Design (₹19,999+)</option>
+                    <option value="Generative AI">Generative AI & Chatbot Solution (₹24,999+)</option>
+                    <option value="Custom Enterprise">Custom Enterprise Solution</option>
+                  </select>
+                </div>
+
+                <div class="form-group">
+                  <label for="form-budget">Project Budget *</label>
+                  <select id="form-budget" class="calc-select" required>
+                    <option value="₹9,999 - ₹15,000">₹9,999 – ₹15,000</option>
+                    <option value="₹15,000 - ₹25,000">₹15,000 – ₹25,000</option>
+                    <option value="₹25,000 - ₹50,000">₹25,000 – ₹50,000</option>
+                    <option value="₹50,000+ Enterprise">₹50,000+ Enterprise Quote</option>
+                  </select>
+                </div>
               </div>
 
-              <button type="submit" class="btn btn-gradient btn-full btn-lg">
-                <span>Send Direct Inquiry</span>
-                <i data-lucide="send"></i>
-              </button>
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+                <div class="form-group">
+                  <label for="form-timeline">Estimated Timeline *</label>
+                  <select id="form-timeline" class="calc-select" required>
+                    <option value="5-7 Days">5 – 7 Business Days (Express)</option>
+                    <option value="7-14 Days">7 – 14 Business Days (Standard)</option>
+                    <option value="2-4 Weeks">2 – 4 Weeks (Comprehensive)</option>
+                    <option value="Custom Schedule">Custom Milestone Schedule</option>
+                  </select>
+                </div>
+
+                <div class="form-group">
+                  <label for="form-contact-method">Preferred Contact Method *</label>
+                  <select id="form-contact-method" class="calc-select" required>
+                    <option value="Email">Email Desk</option>
+                    <option value="WhatsApp">WhatsApp Direct (+91 8080113826)</option>
+                    <option value="Phone Call">Scheduled Phone Call</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="form-message">Project Overview & Objectives *</label>
+                <textarea id="form-message" rows="3" placeholder="Describe your project vision, target audience, reference links, and deadline..." required></textarea>
+              </div>
+
+              <div class="contact-cta-buttons" style="display: flex; flex-direction: column; gap: 12px; margin-top: 20px;">
+                <button type="submit" id="submit-lead-btn" class="btn btn-gradient btn-full btn-lg">
+                  <span>Get a Quote & Official Proposal</span>
+                  <i data-lucide="send"></i>
+                </button>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+                  <a href="#booking" class="btn btn-glass btn-full">
+                    <span>Book Free Consultation</span>
+                    <i data-lucide="calendar"></i>
+                  </a>
+                  <a href="https://wa.me/918080113826" target="_blank" class="btn btn-glass btn-full">
+                    <span>WhatsApp Direct</span>
+                    <i data-lucide="message-square"></i>
+                  </a>
+                </div>
+              </div>
+
+              <!-- Form State Feedback Notification -->
+              <div id="form-status-msg" style="display:none; margin-top:16px; padding:12px; border-radius:10px; font-size:0.9rem; text-align:center;"></div>
             </form>
           </div>
         </div>
