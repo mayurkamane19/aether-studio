@@ -223,11 +223,11 @@ document.addEventListener('DOMContentLoaded', () => {
       services: ["Brand Strategy", "Logo Construction Grid", "Gold Foil Packaging", "Spatial Intelligence"],
       deliverables: ["Brand Manual PDF", "3D Bottle Renders", "Stationery Suite", "Retail Environment Specs"],
       desc: "Complete visual identity and luxury packaging system for an international spatial computing and architectural technology brand.",
-      client: "AURA MONOLITH™ Global Holdings",
+      client: "AURA MONOLITH™ Concept Client",
       problem: "Traditional smart home technology relies on glossy plastics and noisy screens that fail to command luxury prestige.",
       solution: "Forged a monolithic brand identity encased in raw natural materials (Nero Marquina marble, champagne gold foil, smoked oak).",
       palette: ["#08090d", "#d4af37", "#1f2430", "#f8fafc"],
-      results: "Published in Behance Featured & Architectural Digest",
+      results: "Portfolio Case Study • Spatial Luxury Branding",
       review: '"Surgical precision in gold foil hot stamping and spatial grid typography."'
     },
     {
@@ -243,11 +243,11 @@ document.addEventListener('DOMContentLoaded', () => {
       services: ["Specialty Coffee Branding", "Packaging Bags & Tins", "Flagship Café Architecture", "Digital Ecosystem"],
       deliverables: ["Coffee Bag Suite (250g/500g/1kg)", "Café Interior Specs", "E-Commerce Web App", "Mobile Ordering Flow"],
       desc: "Modern Scandinavian and Japanese minimalist specialty coffee brand identity, retail experience, and digital subscription app.",
-      client: "NOVA COFFEE Roasters (Nordic & Japan)",
+      client: "NOVA COFFEE Roasters Concept",
       problem: "Commoditized specialty coffee branding lacking cohesive retail architecture and digital subscription integration.",
       solution: "Engineered a warm cream, travertine beige, and espresso brown visual ecosystem inspired by Blue Bottle & Kinfolk.",
       palette: ["#f5f2eb", "#3d2b1f", "#556b2f", "#1c1c1c"],
-      results: "International Coffee Festival Design Winner",
+      results: "Portfolio Case Study • Specialty Coffee Architecture",
       review: '"Unforgettable Nordic warmth meeting Japanese minimalist café architecture."'
     },
     {
@@ -263,11 +263,11 @@ document.addEventListener('DOMContentLoaded', () => {
       services: ["Luxury Interior Design", "8K Archviz Renders", "Material Palette Library", "Hospitality Suites"],
       deliverables: ["Living Room Collection", "Kitchen & Dining Suite", "Master Bedroom Renders", "Villa Walkthrough Video"],
       desc: "Japandi and Organic Modern high-end interior architecture visualization studio for luxury residential and hospitality developments.",
-      client: "LUXE INTERIORS Architecture Studio",
+      client: "LUXE INTERIORS Concept Studio",
       problem: "Off-plan luxury real estate developers struggling to pre-sell multi-million dollar villas prior to construction.",
       solution: "Created photorealistic 8K architectural walkthrough renders with realistic chiaroscuro lighting and travertine specs.",
       palette: ["#f4f0ea", "#d8cdb8", "#4a3b32", "#1f1f1f"],
-      results: "Featured in Architectural Digest & Dezeen",
+      results: "Portfolio Case Study • Architectural Visualization",
       review: '"Photorealistic spatial visualization setting new global benchmarks for real estate architecture."'
     },
     {
@@ -283,11 +283,11 @@ document.addEventListener('DOMContentLoaded', () => {
       services: ["Enterprise Design System", "AI SaaS Dashboard", "Multi-Agent Workspace", "iOS & Mobile App"],
       deliverables: ["Component Tokens Library", "Web Marketing Platform", "Mobile App UI", "Launch Campaign Ads"],
       desc: "Enterprise AI software platform, multi-agent workspace, and analytics dashboard engineered for Fortune 500 product teams.",
-      client: "NEURA AI Platform Corp",
+      client: "NEURA AI Platform Concept",
       problem: "Complex artificial intelligence workflows overwhelming enterprise users with opaque controls.",
       solution: "Designed a dark glassmorphic interface with intuitive multi-agent canvas, prompt playground, and real-time token metrics.",
       palette: ["#0b0f19", "#2563eb", "#8b5cf6", "#f8fafc"],
-      results: "+280% User Engagement in Beta Handoff",
+      results: "Portfolio Case Study • Enterprise AI SaaS Design System",
       review: '"Apple and Linear-grade dark mode UI design system built for scalable AI platforms."'
     }
   ];
