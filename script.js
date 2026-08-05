@@ -374,48 +374,102 @@ document.addEventListener('DOMContentLoaded', () => {
     history.replaceState(null, null, `#${project.id}`);
 
     modalContainer.innerHTML = `
+      <!-- CASE STUDY HEADER -->
       <div style="margin-bottom:24px;">
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
           <span style="color:var(--accent-purple); font-weight:700; font-size:0.85rem; text-transform:uppercase;">${project.badge}</span>
-          <span style="color:var(--text-muted); font-size:0.85rem;">Year: ${project.year}</span>
+          <span style="color:var(--text-muted); font-size:0.85rem;">Year: ${project.year} • Timeline: ${project.timeline || '4 - 6 Weeks'}</span>
         </div>
         <h2 style="font-size:2.4rem; margin:4px 0;">${project.title}</h2>
         <p style="color:var(--text-secondary); font-size:1.1rem;">${project.desc}</p>
       </div>
 
-      <img src="${project.img}" alt="${project.title}" style="width:100%; height:420px; object-fit:cover; border-radius:16px; margin-bottom:24px;">
+      <!-- MAIN HERO IMAGE -->
+      <img src="${project.img}" alt="${project.title}" style="width:100%; height:440px; object-fit:cover; border-radius:16px; margin-bottom:24px; box-shadow:0 16px 40px rgba(0,0,0,0.5);">
 
+      <!-- METADATA GRID: ROLE, TOOLS, DELIVERABLES, TIMELINE -->
+      <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)); gap:16px; margin-bottom:24px;">
+        <div class="glass-card" style="padding:16px;">
+          <strong style="color:var(--accent-purple); display:block; margin-bottom:4px; font-size:0.85rem;">ROLE & LEADERSHIP</strong>
+          <p style="font-size:0.9rem; color:var(--text-primary); margin:0;">${project.role}</p>
+        </div>
+        <div class="glass-card" style="padding:16px;">
+          <strong style="color:var(--accent-blue); display:block; margin-bottom:4px; font-size:0.85rem;">TOOLS USED</strong>
+          <p style="font-size:0.9rem; color:var(--text-primary); margin:0;">${project.tools}</p>
+        </div>
+        <div class="glass-card" style="padding:16px;">
+          <strong style="color:var(--accent-green); display:block; margin-bottom:4px; font-size:0.85rem;">DELIVERABLES</strong>
+          <p style="font-size:0.88rem; color:var(--text-primary); margin:0;">${project.deliverables.join(' • ')}</p>
+        </div>
+      </div>
+
+      <!-- PROJECT OVERVIEW & CLIENT GOAL -->
       <div style="display:grid; grid-template-columns:1fr 1fr; gap:20px; margin-bottom:24px;">
         <div class="glass-card" style="padding:20px;">
-          <strong style="color:var(--accent-purple); display:block; margin-bottom:4px;">Role & Tools Used:</strong>
-          <p style="font-size:0.9rem; color:var(--text-secondary);">${project.role}</p>
-          <small style="color:var(--text-muted); display:block; margin-top:4px;">${project.tools}</small>
+          <h4 style="color:var(--accent-purple); margin-bottom:8px; display:flex; align-items:center; gap:8px;">
+            <i data-lucide="target" style="width:18px;"></i> Client Commercial Goal
+          </h4>
+          <p style="font-size:0.92rem; color:var(--text-secondary); line-height:1.6; margin:0;">${project.clientGoal || project.desc}</p>
         </div>
+
         <div class="glass-card" style="padding:20px;">
-          <strong style="color:var(--accent-green); display:block; margin-bottom:4px;">Deliverables Included:</strong>
-          <p style="font-size:0.9rem; color:var(--text-secondary);">${project.deliverables.join(' • ')}</p>
+          <h4 style="color:var(--accent-blue); margin-bottom:8px; display:flex; align-items:center; gap:8px;">
+            <i data-lucide="alert-circle" style="width:18px;"></i> Problem Statement
+          </h4>
+          <p style="font-size:0.92rem; color:var(--text-secondary); line-height:1.6; margin:0;">${project.problem}</p>
         </div>
       </div>
 
-      <div style="display:grid; grid-template-columns:1fr 1fr; gap:24px; margin-bottom:24px;">
+      <!-- RESEARCH & DESIGN STRATEGY -->
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:20px; margin-bottom:24px;">
         <div class="glass-card" style="padding:20px;">
-          <h4 style="color:var(--accent-blue); margin-bottom:8px;">The Business Goal & Challenge</h4>
-          <p style="font-size:0.9rem; color:var(--text-secondary);">${project.problem}</p>
+          <h4 style="color:var(--accent-purple); margin-bottom:8px; display:flex; align-items:center; gap:8px;">
+            <i data-lucide="search" style="width:18px;"></i> Research & Market Analysis
+          </h4>
+          <p style="font-size:0.92rem; color:var(--text-secondary); line-height:1.6; margin:0;">${project.research || 'Audited top global competitors to establish high-contrast dark themes, spatial grids, and monolithic luxury benchmarks.'}</p>
         </div>
+
         <div class="glass-card" style="padding:20px;">
-          <h4 style="color:var(--accent-green); margin-bottom:8px;">The Creative Solution & Execution</h4>
-          <p style="font-size:0.9rem; color:var(--text-secondary);">${project.solution}</p>
+          <h4 style="color:var(--accent-green); margin-bottom:8px; display:flex; align-items:center; gap:8px;">
+            <i data-lucide="compass" style="width:18px;"></i> Design Strategy & Solution
+          </h4>
+          <p style="font-size:0.92rem; color:var(--text-secondary); line-height:1.6; margin:0;">${project.solution}</p>
         </div>
       </div>
 
+      <!-- CREATIVE PROCESS STAGES -->
+      <div class="glass-card" style="padding:20px; margin-bottom:24px;">
+        <h4 style="color:var(--text-primary); margin-bottom:12px;">Creative Process & Execution</h4>
+        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(140px, 1fr)); gap:12px;">
+          <div style="background:rgba(255,255,255,0.03); padding:10px; border-radius:8px; font-size:0.82rem;">
+            <strong style="color:var(--accent-purple); display:block;">1. DISCOVERY</strong>
+            <span style="color:var(--text-muted);">Research & Wireframes</span>
+          </div>
+          <div style="background:rgba(255,255,255,0.03); padding:10px; border-radius:8px; font-size:0.82rem;">
+            <strong style="color:var(--accent-blue); display:block;">2. PROTOTYPE</strong>
+            <span style="color:var(--text-muted);">Visual Systems & Tokening</span>
+          </div>
+          <div style="background:rgba(255,255,255,0.03); padding:10px; border-radius:8px; font-size:0.82rem;">
+            <strong style="color:var(--accent-purple); display:block;">3. RENDERING</strong>
+            <span style="color:var(--text-muted);">8K Renders & UI Motion</span>
+          </div>
+          <div style="background:rgba(255,255,255,0.03); padding:10px; border-radius:8px; font-size:0.82rem;">
+            <strong style="color:var(--accent-green); display:block;">4. HANDOFF</strong>
+            <span style="color:var(--text-muted);">Code & Production Files</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- FINAL OUTCOME & KEY RESULTS -->
       <div style="background:var(--surface-glass); padding:20px; border-radius:12px; margin-bottom:24px; border:1px solid var(--border-glass);">
-        <strong style="color:var(--accent-green); font-size:1.1rem; display:block; margin-bottom:4px;">Impact & Recognition: ${project.results}</strong>
-        <p style="font-style:italic; font-size:0.9rem; color:var(--text-secondary);">${project.review}</p>
+        <strong style="color:var(--accent-green); font-size:1.1rem; display:block; margin-bottom:4px;">Final Outcome & Key Results: ${project.results}</strong>
+        <p style="font-style:italic; font-size:0.92rem; color:var(--text-secondary); margin:0;">${project.review}</p>
       </div>
 
-      <div style="margin-bottom:24px; display:flex; justify-content:space-between; align-items:center;">
+      <!-- COLOR PALETTE & SHARE LINK -->
+      <div style="margin-bottom:24px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:16px;">
         <div>
-          <h4 style="margin-bottom:8px;">Color Architecture:</h4>
+          <h4 style="margin-bottom:8px; font-size:0.9rem;">Color Architecture:</h4>
           <div style="display:flex; gap:12px;">
             ${project.palette.map(hex => `
               <div onclick="copyHex('${hex}')" style="background:${hex}; width:36px; height:36px; border-radius:50%; border:2px solid rgba(255,255,255,0.2); cursor:pointer;" title="Click to copy ${hex}"></div>
@@ -425,9 +479,11 @@ document.addEventListener('DOMContentLoaded', () => {
         <button class="btn btn-glass btn-sm" onclick="copyProjectLink('${project.id}')"><i data-lucide="share-2"></i> Share Case Study Link</button>
       </div>
 
-      <div style="display:flex; justify-content:space-between; align-items:center; border-top:1px solid var(--border-glass); padding-top:20px; margin-top:24px;">
-        <button class="btn btn-glass btn-sm" onclick="openProjectById('${prevProject.id}')"><i data-lucide="arrow-left"></i> Prev: ${prevProject.title}</button>
-        <button class="btn btn-glass btn-sm" onclick="openProjectById('${nextProject.id}')">Next: ${nextProject.title} <i data-lucide="arrow-right"></i></button>
+      <!-- NAVIGATION FOOTER CONTROLS: PREVIOUS, BACK TO PORTFOLIO, NEXT -->
+      <div style="display:flex; justify-content:space-between; align-items:center; border-top:1px solid var(--border-glass); padding-top:20px; margin-top:24px; flex-wrap:wrap; gap:12px;">
+        <button class="btn btn-glass btn-sm" onclick="openProjectById('${prevProject.id}')"><i data-lucide="arrow-left"></i> Previous Project: ${prevProject.title}</button>
+        <button class="btn btn-gradient btn-sm" onclick="document.getElementById('project-modal').style.display='none'; location.href='#portfolio';">Back to Portfolio Grid</button>
+        <button class="btn btn-glass btn-sm" onclick="openProjectById('${nextProject.id}')">Next Project: ${nextProject.title} <i data-lucide="arrow-right"></i></button>
       </div>
     `;
 
