@@ -183,10 +183,41 @@ html, body {
   transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), color 0.25s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.service-card:hover .service-explore-link {
-  transform: translateX(6px);
+.service-details-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 16px 0;
+  padding-top: 16px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.service-meta-item {
+  font-size: 0.84rem;
+  color: var(--text-secondary);
+}
+
+.service-meta-item strong {
   color: var(--text-primary);
 }
+
+.service-price {
+  font-size: 0.95rem;
+  color: var(--text-secondary);
+  font-weight: 600;
+  margin-top: 8px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.service-price span {
+  color: var(--accent-green);
+  font-size: 1.25rem;
+  font-weight: 700;
+  font-family: 'Space Grotesk', sans-serif;
+}
+
 
 input, select, textarea, button {
   -webkit-appearance: none;
