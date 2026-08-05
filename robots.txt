@@ -1,0 +1,5 @@
+# Robots.txt for Aether Studio
+User-agent: *
+Allow: /
+
+Sitemap: https://aetherstudio.com/sitemap.xml

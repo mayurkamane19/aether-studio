@@ -1,0 +1,820 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Aether Studio — International Creative Agency & Visual Engineering Platform</title>
+  <meta name="description" content="World-class Creative Agency by Aether Studio. Specializing in Luxury Brand Systems, Specialty Coffee Retail, Architectural Visualization, and Enterprise AI SaaS Platforms.">
+  <meta name="keywords" content="Aether Studio, Brand Identity, Packaging Design, Architectural Visualization, AI SaaS UI UX, Creative Director">
+  <meta name="author" content="Aether Studio">
+  <meta name="theme-color" content="#06070a">
+  <link rel="canonical" href="https://aetherstudio.com/">
+  <link rel="manifest" href="manifest.json">
+
+  <!-- Open Graph / Facebook / LinkedIn -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://aetherstudio.com/">
+  <meta property="og:title" content="Aether Studio — International Creative Agency">
+  <meta property="og:description" content="Production-ready agency portfolio featuring AURA MONOLITH™, NOVA COFFEE™, LUXE INTERIORS™, and NEURA AI™ master case studies.">
+  <meta property="og:image" content="assets/aura_logo_branding.jpg">
+
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:url" content="https://aetherstudio.com/">
+  <meta name="twitter:title" content="Aether Studio — International Creative Agency">
+  <meta name="twitter:description" content="Production-ready agency portfolio featuring AURA MONOLITH™, NOVA COFFEE™, LUXE INTERIORS™, and NEURA AI™ master case studies.">
+  <meta name="twitter:image" content="assets/aura_logo_branding.jpg">
+
+  <!-- JSON-LD Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "Aether Studio",
+    "url": "https://aetherstudio.com/",
+    "logo": "https://aetherstudio.com/assets/aura_logo_branding.jpg",
+    "description": "International Creative Agency & Visual Engineering Platform",
+    "email": "mayurkamane23@gmail.com",
+    "sameAs": [
+      "https://behance.net",
+      "https://dribbble.com",
+      "https://linkedin.com",
+      "https://instagram.com"
+    ]
+  }
+  </script>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300..800;1,300..800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- CDNs: Lenis Smooth Scroll + GSAP + ScrollTrigger + Lucide Icons -->
+  <link rel="stylesheet" href="https://unpkg.com/lenis@1.1.9/dist/lenis.css">
+  <script src="https://unpkg.com/lenis@1.1.9/dist/lenis.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- Skip Navigation for Accessibility -->
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+
+  <!-- CINEMATIC PRELOADER SCREEN -->
+  <div class="preloader-screen" id="preloader">
+    <div class="preloader-content">
+      <div class="preloader-logo">
+        <span class="logo-mark">A</span>
+        <span class="logo-text">AETHER<span class="logo-sub">STUDIO</span></span>
+      </div>
+      <div class="preloader-bar-wrapper">
+        <div class="preloader-bar" id="preloader-bar"></div>
+      </div>
+      <div class="preloader-counter" id="preloader-counter">0%</div>
+      <span class="preloader-subtitle">INITIALIZING AGENCY PORTFOLIO...</span>
+    </div>
+  </div>
+
+  <!-- Scroll Progress Indicator -->
+  <div class="scroll-progress-bar" id="scroll-progress"></div>
+
+  <!-- Ambient Aurora Background -->
+  <div class="aurora-bg">
+    <div class="aurora-blob blob-1"></div>
+    <div class="aurora-blob blob-2"></div>
+    <div class="aurora-blob blob-3"></div>
+  </div>
+
+  <!-- Header Navigation -->
+  <header class="glass-header" id="header">
+    <div class="nav-container">
+      <a href="#hero" class="brand-logo">
+        <span class="logo-mark">A</span>
+        <span class="logo-text">AETHER<span class="logo-sub">STUDIO</span></span>
+      </a>
+
+      <nav class="nav-menu" id="nav-menu">
+        <a href="#hero" class="nav-link active">Home</a>
+        <a href="#portfolio" class="nav-link">Featured Case Studies</a>
+        <a href="#services" class="nav-link">Services</a>
+        <a href="#resources" class="nav-link">Resource Hub</a>
+        <a href="#pricing" class="nav-link">Proposal Wizard</a>
+        <a href="#booking" class="nav-link">Book Call</a>
+        <a href="#contact" class="nav-link">Contact</a>
+      </nav>
+
+      <div class="nav-actions">
+        <button class="icon-btn" id="client-portal-btn" title="Client Dashboard Portal">
+          <i data-lucide="user-check"></i>
+        </button>
+        <button class="icon-btn" id="search-trigger-btn" aria-label="Search Portfolio Case Studies (Ctrl + K)">
+          <i data-lucide="search"></i>
+        </button>
+        <button class="theme-toggle" id="theme-toggle" aria-label="Toggle Theme">
+          <i data-lucide="moon" class="dark-icon"></i>
+          <i data-lucide="sun" class="light-icon"></i>
+        </button>
+        <a href="#inquiry-wizard" class="btn btn-primary nav-cta">
+          <span>Start Project</span>
+          <i data-lucide="arrow-up-right"></i>
+        </a>
+        <button class="mobile-toggle" id="mobile-toggle" aria-label="Toggle Menu">
+          <i data-lucide="menu"></i>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Quick Search Modal -->
+  <div class="search-modal-backdrop" id="search-modal">
+    <div class="search-modal-box glass-panel">
+      <div class="search-modal-header">
+        <i data-lucide="search" class="search-icon"></i>
+        <label for="global-search-input" class="visually-hidden">Search Portfolio Case Studies</label>
+        <input type="text" id="global-search-input" placeholder="Search case studies: AURA MONOLITH, NOVA COFFEE, LUXE INTERIORS, NEURA AI... (Press Esc to close)">
+        <button class="close-search-btn" id="close-search" aria-label="Close Search Modal"><i data-lucide="x"></i></button>
+      </div>
+      <div class="search-results-list" id="search-results-list">
+        <p class="search-hint">Type keywords like "AURA MONOLITH", "NOVA COFFEE", "LUXE INTERIORS", "NEURA AI"...</p>
+      </div>
+    </div>
+  </div>
+
+  <main id="main-content">
+    <!-- HERO SECTION (AUTOMATED SHOWCASE CAROUSEL ROTATING 4 MASTER PROJECTS) -->
+    <section id="hero" class="hero-section">
+      <div class="container hero-container">
+        <!-- LEFT SIDE CONTENT -->
+        <div class="hero-content gsap-hero-reveal">
+          <div class="status-badge">
+            <span class="status-dot"></span>
+            <span>Available for Worldwide Agency Retainers & Projects</span>
+          </div>
+
+          <h1 class="hero-title text-reveal">
+            Creative Agency & <br>
+            <span class="gradient-text">Visual Studio</span>
+          </h1>
+
+          <p class="hero-description gsap-fade-up">
+            Architecting luxury brand systems, specialty coffee retail, architectural visualization, and enterprise AI SaaS platforms.
+          </p>
+
+          <!-- Premium Service Chips -->
+          <div class="service-chips-wrapper gsap-fade-up">
+            <span class="chip-item">Luxury Branding</span>
+            <span class="chip-item">Packaging Design</span>
+            <span class="chip-item">Retail & Café Architecture</span>
+            <span class="chip-item">Interior Visualization</span>
+            <span class="chip-item">Enterprise AI SaaS</span>
+            <span class="chip-item">UI/UX Platforms</span>
+          </div>
+
+          <div class="hero-cta-group gsap-fade-up margin-top-md">
+            <a href="#inquiry-wizard" class="btn btn-gradient btn-lg">
+              <span>Start Your Project</span>
+              <i data-lucide="sparkles"></i>
+            </a>
+            <a href="#portfolio" class="btn btn-glass btn-lg">
+              <span>View Case Studies</span>
+              <i data-lucide="grid"></i>
+            </a>
+          </div>
+
+          <!-- Hero Metrics -->
+          <div class="hero-metrics gsap-fade-up">
+            <div class="metric-card glass-card">
+              <span class="metric-num">4</span>
+              <span class="metric-label">Master Case Studies</span>
+            </div>
+            <div class="metric-card glass-card">
+              <span class="metric-num count-up" data-target="180">0</span><span class="plus">+</span>
+              <span class="metric-label">Visual Assets</span>
+            </div>
+            <div class="metric-card glass-card">
+              <span class="metric-num">8K</span>
+              <span class="metric-label">Photorealistic Quality</span>
+            </div>
+            <div class="metric-card glass-card">
+              <span class="metric-num">100%</span>
+              <span class="metric-label">Commercial Rights</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- RIGHT SIDE: SHOWCASE CAROUSEL ROTATING 4 COMPLETED MASTER CASE STUDIES -->
+        <div class="hero-visual parallax-hero-img">
+          <div class="showcase-carousel-wrapper glass-panel">
+            <!-- Project 1: AURA MONOLITH -->
+            <div class="showcase-slide active" data-slide="0">
+              <img src="assets/aura_logo_branding.jpg" alt="AURA MONOLITH™ Luxury Branding" loading="eager">
+              <div class="carousel-overlay-glass">
+                <span class="slide-badge">LUXURY BRANDING • PACKAGING • VISUAL IDENTITY</span>
+                <h3>AURA MONOLITH™</h3>
+                <p>Spatial intelligence & monolithic luxury brand identity system.</p>
+                <button class="btn btn-glass btn-sm margin-top-sm" onclick="openProjectById('aura-monolith')">Explore Full Case Study <i data-lucide="arrow-right"></i></button>
+              </div>
+            </div>
+
+            <!-- Project 2: NOVA COFFEE -->
+            <div class="showcase-slide" data-slide="1">
+              <img src="assets/nova_coffee_brand_identity_board.jpg" alt="NOVA COFFEE™ Specialty Coffee" loading="lazy">
+              <div class="carousel-overlay-glass">
+                <span class="slide-badge">PREMIUM COFFEE • RETAIL EXPERIENCE • PACKAGING</span>
+                <h3>NOVA COFFEE™</h3>
+                <p>Modern Scandinavian & Japanese minimalist specialty coffee brand.</p>
+                <button class="btn btn-glass btn-sm margin-top-sm" onclick="openProjectById('nova-coffee')">Explore Full Case Study <i data-lucide="arrow-right"></i></button>
+              </div>
+            </div>
+
+            <!-- Project 3: LUXE INTERIORS -->
+            <div class="showcase-slide" data-slide="2">
+              <img src="assets/luxe_interiors_brand_identity_board.jpg" alt="LUXE INTERIORS™ Architectural Visualization" loading="lazy">
+              <div class="carousel-overlay-glass">
+                <span class="slide-badge">LUXURY INTERIOR DESIGN • VISUALIZATION • HOSPITALITY</span>
+                <h3>LUXE INTERIORS™</h3>
+                <p>Japandi & Organic Modern high-end architectural interior studio.</p>
+                <button class="btn btn-glass btn-sm margin-top-sm" onclick="openProjectById('luxe-interiors')">Explore Full Case Study <i data-lucide="arrow-right"></i></button>
+              </div>
+            </div>
+
+            <!-- Project 4: NEURA AI -->
+            <div class="showcase-slide" data-slide="3">
+              <img src="assets/neura_ai_brand_identity_board.jpg" alt="NEURA AI™ Enterprise AI SaaS" loading="lazy">
+              <div class="carousel-overlay-glass">
+                <span class="slide-badge">ENTERPRISE AI SAAS • DASHBOARD • WEBSITE • MOBILE APP</span>
+                <h3>NEURA AI™</h3>
+                <p>Next-generation enterprise AI platform & multi-agent workspace.</p>
+                <button class="btn btn-glass btn-sm margin-top-sm" onclick="openProjectById('neura-ai')">Explore Full Case Study <i data-lucide="arrow-right"></i></button>
+              </div>
+            </div>
+
+            <!-- Carousel Progress Indicators -->
+            <div class="carousel-indicators" id="carousel-indicators">
+              <span class="dot active" data-slide-target="0"></span>
+              <span class="dot" data-slide-target="1"></span>
+              <span class="dot" data-slide-target="2"></span>
+              <span class="dot" data-slide-target="3"></span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- AUTHENTIC AGENCY BRAND CLIENT BAR -->
+    <section id="trust" class="trust-section section-padding alt-bg">
+      <div class="container">
+        <div class="section-header center gsap-scroll-header">
+          <span class="section-subtitle">AGENCY CASE STUDIES</span>
+          <h2 class="section-title">Four Completed <span class="gradient-text">Master Projects</span></h2>
+          <p class="section-description">Comprehensive end-to-end design case studies engineered for global clients.</p>
+        </div>
+
+        <div class="brand-logos-grid gsap-scroll-stagger">
+          <div class="logo-item glass-card" onclick="openProjectById('aura-monolith')" style="cursor:pointer;"><span>1. AURA MONOLITH™</span></div>
+          <div class="logo-item glass-card" onclick="openProjectById('nova-coffee')" style="cursor:pointer;"><span>2. NOVA COFFEE™</span></div>
+          <div class="logo-item glass-card" onclick="openProjectById('luxe-interiors')" style="cursor:pointer;"><span>3. LUXE INTERIORS™</span></div>
+          <div class="logo-item glass-card" onclick="openProjectById('neura-ai')" style="cursor:pointer;"><span>4. NEURA AI™</span></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SERVICES PRACTICE AREAS -->
+    <section id="services" class="services-section section-padding">
+      <div class="container">
+        <div class="section-header gsap-scroll-header">
+          <span class="section-subtitle">AGENCY CAPABILITIES</span>
+          <h2 class="section-title">Specialized <span class="gradient-text">Design Services</span></h2>
+          <p class="section-description">Explore agency practice areas backed by real production case studies.</p>
+        </div>
+
+        <div class="services-grid gsap-scroll-stagger">
+          <div class="service-card glass-card" onclick="openServiceDetail('branding')">
+            <div class="service-icon"><i data-lucide="crown"></i></div>
+            <h3>Brand Identity & Strategy</h3>
+            <p>Luxury brand identity systems, guidelines, color architecture, and foil print specs.</p>
+            <span class="service-explore-link">Explore Practice <i data-lucide="arrow-right"></i></span>
+          </div>
+
+          <div class="service-card glass-card" onclick="openServiceDetail('packaging')">
+            <div class="service-icon"><i data-lucide="package"></i></div>
+            <h3>Packaging & Product Design</h3>
+            <p>Monolithic 3D bottle geometry, specialty coffee tins, bags, and luxury presentation boxes.</p>
+            <span class="service-explore-link">Explore Practice <i data-lucide="arrow-right"></i></span>
+          </div>
+
+          <div class="service-card glass-card" onclick="openServiceDetail('interior')">
+            <div class="service-icon"><i data-lucide="home"></i></div>
+            <h3>Architectural Visualization</h3>
+            <p>8K interior renders, Japandi spatial concepts, retail café design, and hotel lounges.</p>
+            <span class="service-explore-link">Explore Practice <i data-lucide="arrow-right"></i></span>
+          </div>
+
+          <div class="service-card glass-card" onclick="openServiceDetail('uiux')">
+            <div class="service-icon"><i data-lucide="layout"></i></div>
+            <h3>UI/UX & AI SaaS Platforms</h3>
+            <p>Glassmorphic enterprise dashboards, multi-agent AI workspaces, and mobile iOS apps.</p>
+            <span class="service-explore-link">Explore Practice <i data-lucide="arrow-right"></i></span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FEATURED CASE STUDIES PORTFOLIO SECTION -->
+    <section id="portfolio" class="portfolio-section section-padding alt-bg">
+      <div class="container">
+        <div class="section-header flex-header gsap-scroll-header">
+          <div>
+            <span class="section-subtitle">PORTFOLIO CASE STUDIES</span>
+            <h2 class="section-title">Master Featured <span class="gradient-text">Work Showcase</span></h2>
+            <p class="section-description">Filter by practice, search keywords, or click any card for a full 14-stage case study breakdown.</p>
+          </div>
+
+          <!-- Category Filter Bar -->
+          <div class="category-filters" id="category-filters">
+            <button class="filter-btn active" data-filter="all">All Case Studies (4)</button>
+            <button class="filter-btn" data-filter="branding">Branding</button>
+            <button class="filter-btn" data-filter="packaging">Packaging</button>
+            <button class="filter-btn" data-filter="interior">Interiors</button>
+            <button class="filter-btn" data-filter="uiux">AI & UI/UX</button>
+          </div>
+        </div>
+
+        <!-- Masonry Grid Container -->
+        <div class="portfolio-masonry-grid" id="portfolio-grid">
+          <!-- Rendered dynamically via script.js -->
+        </div>
+      </div>
+    </section>
+
+    <!-- RESOURCE CENTER -->
+    <section id="resources" class="resources-section section-padding">
+      <div class="container">
+        <div class="section-header center gsap-scroll-header">
+          <span class="section-subtitle">CREATIVE RESOURCE HUB</span>
+          <h2 class="section-title">Free Design Assets & <span class="gradient-text">AI Prompt Library</span></h2>
+          <p class="section-description">Open-source creative tools, color palettes, and Midjourney v6 prompt recipes.</p>
+        </div>
+
+        <div class="resource-tabs">
+          <button class="res-tab-btn active" onclick="switchResTab('prompts')">AI Prompt Library</button>
+          <button class="res-tab-btn" onclick="switchResTab('palettes')">Color Palettes</button>
+          <button class="res-tab-btn" onclick="switchResTab('templates')">Design Templates</button>
+        </div>
+
+        <div class="resource-content-box margin-top-md">
+          <!-- AI Prompts Tab -->
+          <div class="res-pane active" id="pane-prompts">
+            <div class="prompt-grid gsap-scroll-stagger">
+              <div class="prompt-card glass-card">
+                <span class="prompt-tag">Midjourney v6 • Archviz</span>
+                <h4>Photorealistic Luxury Living Room</h4>
+                <code>/imagine prompt: Ultra-realistic 3D interior design render of a modern luxury living room, dark marble fireplace, floor-to-ceiling glass windows, warm LED strip lighting, 8k --ar 16:9 --v 6.0</code>
+                <button class="btn btn-glass btn-full margin-top-md" onclick="copyPrompt(this)">Copy Prompt <i data-lucide="copy"></i></button>
+              </div>
+
+              <div class="prompt-card glass-card">
+                <span class="prompt-tag">Midjourney v6 • Packaging</span>
+                <h4>Matte Black Perfume Packaging</h4>
+                <code>/imagine prompt: Luxury monolithic perfume bottle, matte black frosted glass with metallic gold typography, standing on reflective slate pedestal, cinematic lighting --ar 16:9 --v 6.0</code>
+                <button class="btn btn-glass btn-full margin-top-md" onclick="copyPrompt(this)">Copy Prompt <i data-lucide="copy"></i></button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Color Palettes Tab -->
+          <div class="res-pane" id="pane-palettes" style="display:none;">
+            <div class="palette-grid">
+              <div class="palette-card glass-card">
+                <h4>Obsidian Gold Palette</h4>
+                <div class="swatches-flex margin-top-md">
+                  <div onclick="copyHex('#08090d')" style="background:#08090d;" title="#08090d"></div>
+                  <div onclick="copyHex('#2563eb')" style="background:#2563eb;" title="#2563eb"></div>
+                  <div onclick="copyHex('#8b5cf6')" style="background:#8b5cf6;" title="#8b5cf6"></div>
+                  <div onclick="copyHex('#d4af37')" style="background:#d4af37;" title="#d4af37"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Design Templates Tab -->
+          <div class="res-pane" id="pane-templates" style="display:none;">
+            <div class="template-grid">
+              <div class="template-card glass-card">
+                <h4>Figma Dark SaaS Design System</h4>
+                <p>Free UI components, buttons, glass cards, and color tokens file.</p>
+                <button class="btn btn-gradient margin-top-md" onclick="showToast('Downloading Figma Template File...')">Download Template (.FIG)</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- MULTI-STEP PROJECT INQUIRY WIZARD -->
+    <section id="inquiry-wizard" class="wizard-section section-padding alt-bg">
+      <div class="container">
+        <div class="wizard-box glass-panel">
+          <div class="section-header center">
+            <span class="section-subtitle">PROJECT ONBOARDING WIZARD</span>
+            <h2 class="section-title">Multi-Step <span class="gradient-text">Project Inquiry & Proposal</span></h2>
+            <p class="section-description">Configure your project scope to generate an instant proposal and invoice preview.</p>
+          </div>
+
+          <div class="wizard-progress">
+            <div class="wiz-step-indicator active" data-step="1">1. Service</div>
+            <div class="wiz-step-indicator" data-step="2">2. Deliverables</div>
+            <div class="wiz-step-indicator" data-step="3">3. Investment & Speed</div>
+            <div class="wiz-step-indicator" data-step="4">4. Proposal Preview</div>
+          </div>
+
+          <form id="multi-step-form">
+            <div class="wizard-form-step active" data-form-step="1">
+              <h4>Select Primary Service Practice:</h4>
+              <div class="wiz-option-grid">
+                <label class="wiz-card glass-card">
+                  <input type="radio" name="wiz-service" value="Luxury Brand Identity" checked>
+                  <strong>Luxury Brand Identity</strong>
+                  <span>Logos, guidelines, color system, stationery</span>
+                </label>
+                <label class="wiz-card glass-card">
+                  <input type="radio" name="wiz-service" value="3D Interior Visualization">
+                  <strong>3D Interior Visualization</strong>
+                  <span>Photorealistic 3D room renders & makeovers</span>
+                </label>
+                <label class="wiz-card glass-card">
+                  <input type="radio" name="wiz-service" value="CTR YouTube Thumbnails">
+                  <strong>CTR YouTube Thumbnails</strong>
+                  <span>High-contrast thumbnail package for creators</span>
+                </label>
+                <label class="wiz-card glass-card">
+                  <input type="radio" name="wiz-service" value="UI UX App Design">
+                  <strong>UI/UX Web & App Design</strong>
+                  <span>SaaS dashboards, mobile apps & Figma systems</span>
+                </label>
+              </div>
+              <div class="wiz-nav-btns margin-top-md">
+                <button type="button" class="btn btn-gradient" onclick="nextWizStep(2)">Next: Deliverables <i data-lucide="arrow-right"></i></button>
+              </div>
+            </div>
+
+            <div class="wizard-form-step" data-form-step="2">
+              <h4>Select Deliverable Package Options:</h4>
+              <div class="wiz-option-grid">
+                <label class="wiz-card glass-card">
+                  <input type="checkbox" name="wiz-deliv" value="Brand Guidelines PDF" checked>
+                  <span>Brand Guidelines Book (PDF & Figma)</span>
+                </label>
+                <label class="wiz-card glass-card">
+                  <input type="checkbox" name="wiz-deliv" value="3D Renders Suite">
+                  <span>3D Studio Lighting Product Renders</span>
+                </label>
+                <label class="wiz-card glass-card">
+                  <input type="checkbox" name="wiz-deliv" value="Social Kit & 10 Carousels">
+                  <span>Social Media Kit & Carousels</span>
+                </label>
+                <label class="wiz-card glass-card">
+                  <input type="checkbox" name="wiz-deliv" value="Commercial Rights License">
+                  <span>Full Vector Source Files & Commercial Rights</span>
+                </label>
+              </div>
+              <div class="wiz-nav-btns margin-top-md">
+                <button type="button" class="btn btn-glass" onclick="nextWizStep(1)">Back</button>
+                <button type="button" class="btn btn-gradient" onclick="nextWizStep(3)">Next: Investment & Speed <i data-lucide="arrow-right"></i></button>
+              </div>
+            </div>
+
+            <div class="wizard-form-step" data-form-step="3">
+              <h4>Investment Budget & Turnaround:</h4>
+              <div class="form-group">
+                <label for="wiz-budget">Project Budget Scope:</label>
+                <select id="wiz-budget" class="calc-select">
+                  <option value="$1,200 - $3,000">$1,200 - $3,000</option>
+                  <option value="$3,000 - $7,500">$3,000 - $7,500</option>
+                  <option value="$7,500 - $15,000">$7,500 - $15,000 (Enterprise)</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="wiz-speed">Turnaround Priority:</label>
+                <select id="wiz-speed" class="calc-select">
+                  <option value="Standard (7-14 Days)">Standard Delivery (7 - 14 Days)</option>
+                  <option value="Express Priority (48h)">Express Priority (48h Turnaround)</option>
+                </select>
+              </div>
+              <div class="wiz-nav-btns margin-top-md">
+                <button type="button" class="btn btn-glass" onclick="nextWizStep(2)">Back</button>
+                <button type="button" class="btn btn-gradient" onclick="nextWizStep(4)">Next: Contact Info <i data-lucide="arrow-right"></i></button>
+              </div>
+            </div>
+
+            <div class="wizard-form-step" data-form-step="4">
+              <h4>Your Contact & Proposal Details:</h4>
+              <div class="form-group">
+                <label for="wiz-name">Full Name</label>
+                <input type="text" id="wiz-name" placeholder="John Doe" required>
+              </div>
+              <div class="form-group">
+                <label for="wiz-email">Email Address</label>
+                <input type="email" id="wiz-email" placeholder="john@company.com" required>
+              </div>
+              <div class="form-group">
+                <label for="wiz-notes">Project Vision & Reference Links</label>
+                <textarea id="wiz-notes" rows="3" placeholder="Share any specific guidelines, reference links, or notes..."></textarea>
+              </div>
+              <div class="wiz-nav-btns margin-top-md">
+                <button type="button" class="btn btn-glass" onclick="nextWizStep(3)">Back</button>
+                <button type="submit" class="btn btn-gradient btn-lg">Generate Official Proposal & Quote</button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <!-- CALENDLY-STYLE STRATEGY BOOKING -->
+    <section id="booking" class="booking-section section-padding">
+      <div class="container">
+        <div class="section-header center gsap-scroll-header">
+          <span class="section-subtitle">STRATEGY SESSION</span>
+          <h2 class="section-title">Schedule A <span class="gradient-text">1-on-1 Consultation</span></h2>
+          <p class="section-description">Pick a date & time slot for a live video consultation.</p>
+        </div>
+
+        <div class="booking-box glass-panel">
+          <div class="booking-grid">
+            <div class="calendar-picker">
+              <h4>Select Date (August 2026):</h4>
+              <div class="calendar-days-grid" id="calendar-days"></div>
+            </div>
+
+            <div class="time-slot-picker">
+              <h4>Available Slots (<span id="selected-date-label">Aug 10, 2026</span>):</h4>
+              <div class="time-slots-grid" id="time-slots">
+                <button class="slot-btn glass-card active" onclick="selectTimeSlot(this, '09:00 AM EST')">09:00 AM EST</button>
+                <button class="slot-btn glass-card" onclick="selectTimeSlot(this, '11:30 AM EST')">11:30 AM EST</button>
+                <button class="slot-btn glass-card" onclick="selectTimeSlot(this, '02:00 PM EST')">02:00 PM EST</button>
+                <button class="slot-btn glass-card" onclick="selectTimeSlot(this, '04:30 PM EST')">04:30 PM EST</button>
+              </div>
+
+              <div class="booking-fields margin-top-md">
+                <label for="booking-name" class="visually-hidden">Your Full Name</label>
+                <input type="text" id="booking-name" placeholder="Your Name" class="calc-select" style="margin-bottom:12px;" required>
+                <label for="booking-email" class="visually-hidden">Your Email Address</label>
+                <input type="email" id="booking-email" placeholder="Your Email" class="calc-select" style="margin-bottom:12px;" required>
+                <button class="btn btn-gradient btn-full" onclick="confirmAppointment()">Confirm Appointment Session</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CONTACT DESK -->
+    <section id="contact" class="contact-section section-padding alt-bg">
+      <div class="container">
+        <div class="contact-grid">
+          <div class="contact-info gsap-scroll-header">
+            <span class="section-subtitle">GET IN TOUCH</span>
+            <h2 class="section-title">Let's Discuss Your <span class="gradient-text">Next Project</span></h2>
+            <p>Direct communication channels for inquiries, proposals, and retainer bookings.</p>
+
+            <div class="contact-details">
+              <div class="detail-item">
+                <i data-lucide="mail"></i>
+                <div>
+                  <strong>Email Desk:</strong>
+                  <a href="mailto:mayurkamane23@gmail.com">mayurkamane23@gmail.com</a>
+                </div>
+              </div>
+              <div class="detail-item">
+                <i data-lucide="phone"></i>
+                <div>
+                  <strong>Direct Line:</strong>
+                  <a href="tel:+918080113826">+91 8080113826</a>
+                </div>
+              </div>
+              <div class="detail-item">
+                <i data-lucide="message-square"></i>
+                <div>
+                  <strong>WhatsApp Direct Line:</strong>
+                  <a href="https://wa.me/918080113826" target="_blank">+91 8080113826</a>
+                </div>
+              </div>
+              <div class="detail-item">
+                <i data-lucide="clock"></i>
+                <div>
+                  <strong>Studio Operations:</strong>
+                  <span>Mon – Sat: 09:00 AM – 08:00 PM EST / GMT+5:30</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="map-placeholder-card glass-card margin-top-md" style="padding:20px;">
+              <div style="display:flex; align-items:center; gap:10px; margin-bottom:8px;">
+                <i data-lucide="map-pin" style="color:var(--accent-purple);"></i>
+                <strong>Global Studio Operations</strong>
+              </div>
+              <p style="font-size:0.85rem; color:var(--text-secondary);">Serving enterprise clients remotely across North America, Europe, UAE, & Asia Pacific.</p>
+            </div>
+
+            <div class="social-links-bar margin-top-md">
+              <a href="https://behance.net" target="_blank" title="Behance"><i data-lucide="layout-grid"></i></a>
+              <a href="https://dribbble.com" target="_blank" title="Dribbble"><i data-lucide="dribbble"></i></a>
+              <a href="https://linkedin.com" target="_blank" title="LinkedIn"><i data-lucide="linkedin"></i></a>
+              <a href="https://instagram.com" target="_blank" title="Instagram"><i data-lucide="instagram"></i></a>
+              <a href="https://github.com" target="_blank" title="GitHub"><i data-lucide="github"></i></a>
+            </div>
+          </div>
+
+          <div class="contact-form-wrapper glass-panel gsap-scroll-header">
+            <form id="contact-form">
+              <div class="form-group">
+                <label for="form-name">Full Name</label>
+                <input type="text" id="form-name" placeholder="John Doe" required>
+              </div>
+              <div class="form-group">
+                <label for="form-email">Email Address</label>
+                <input type="email" id="form-email" placeholder="john@company.com" required>
+              </div>
+              <div class="form-group">
+                <label for="form-service">Target Practice Area</label>
+                <select id="form-service">
+                  <option value="Branding">Luxury Brand Identity</option>
+                  <option value="CTR Thumbnails">CTR YouTube Thumbnail Package</option>
+                  <option value="3D Interior Renders">3D Interior Visualization</option>
+                  <option value="UI UX Dashboard">UI/UX Web & Mobile App</option>
+                  <option value="Packaging & Ads">Packaging & Product Advertisements</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="form-message">Project Overview</label>
+                <textarea id="form-message" rows="4" placeholder="Describe your objectives, deadline..." required></textarea>
+              </div>
+
+              <button type="submit" class="btn btn-gradient btn-full btn-lg">
+                <span>Send Direct Inquiry</span>
+                <i data-lucide="send"></i>
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- PROPOSAL GENERATOR PREVIEW MODAL -->
+  <div class="modal-backdrop" id="proposal-modal">
+    <div class="modal-content glass-panel" style="max-width:850px;">
+      <button class="close-modal-btn" onclick="document.getElementById('proposal-modal').style.display='none'"><i data-lucide="x"></i></button>
+      <div id="proposal-modal-body"></div>
+    </div>
+  </div>
+
+  <!-- CLIENT DASHBOARD PORTAL MODAL -->
+  <div class="modal-backdrop" id="client-portal-modal">
+    <div class="modal-content glass-panel" style="max-width:950px;">
+      <button class="close-modal-btn" onclick="document.getElementById('client-portal-modal').style.display='none'"><i data-lucide="x"></i></button>
+      
+      <div class="portal-header">
+        <span class="result-badge">SECURE CLIENT PORTAL</span>
+        <h2>Active Project Dashboard</h2>
+        <p>Real-time milestone tracking, file deliveries, and revision management.</p>
+      </div>
+
+      <div class="portal-tabs">
+        <button class="portal-tab-btn active" onclick="switchPortalTab('milestones')">Project Milestones</button>
+        <button class="portal-tab-btn" onclick="switchPortalTab('files')">File Delivery Hub</button>
+        <button class="portal-tab-btn" onclick="switchPortalTab('revision')">Submit Revision</button>
+      </div>
+
+      <div class="portal-tab-content active" id="tab-milestones">
+        <div class="milestone-timeline">
+          <div class="timeline-step done">
+            <span class="step-icon">✓</span>
+            <div>
+              <strong>1. Discovery & Strategy Brief</strong>
+              <small>Completed Aug 01, 2026</small>
+            </div>
+          </div>
+          <div class="timeline-step done">
+            <span class="step-icon">✓</span>
+            <div>
+              <strong>2. AI Moodboard & Vector Exploration</strong>
+              <small>Completed Aug 03, 2026</small>
+            </div>
+          </div>
+          <div class="timeline-step active">
+            <span class="step-icon">⏳</span>
+            <div>
+              <strong>3. 3D Studio Renders & Packaging Specs</strong>
+              <small>In Progress (ETA: Aug 06, 2026)</small>
+            </div>
+          </div>
+          <div class="timeline-step">
+            <span class="step-icon">⭕</span>
+            <div>
+              <strong>4. Final Handoff & Source Files</strong>
+              <small>Pending Milestone</small>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="portal-tab-content" id="tab-files" style="display:none;">
+        <div class="file-delivery-grid">
+          <div class="file-card glass-card" style="padding:16px; display:flex; justify-content:space-between; align-items:center;">
+            <div>
+              <strong>AURA_MONOLITH_Master_Assets.zip</strong>
+              <small style="display:block; color:var(--text-muted);">ZIP Archive • 128.4 MB</small>
+            </div>
+            <button class="btn btn-glass" onclick="showToast('Downloading AURA_MONOLITH_Master_Assets.zip...')"><i data-lucide="download"></i> Download</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="portal-tab-content" id="tab-revision" style="display:none;">
+        <form id="revision-form" onsubmit="event.preventDefault(); showToast('Revision Request Submitted!');">
+          <div class="form-group">
+            <label>Select Target Asset</label>
+            <select class="calc-select">
+              <option>Logo Vector Hierarchy</option>
+              <option>3D Render Lighting</option>
+              <option>Packaging Typography</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Revision Notes & Markup Details</label>
+            <textarea rows="3" placeholder="Describe requested adjustments..." class="calc-select" required></textarea>
+          </div>
+          <button type="submit" class="btn btn-gradient">Submit Revision Request</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- SERVICE DETAIL MODAL -->
+  <div class="modal-backdrop" id="service-modal">
+    <div class="modal-content glass-panel" style="max-width:900px;">
+      <button class="close-modal-btn" onclick="document.getElementById('service-modal').style.display='none'"><i data-lucide="x"></i></button>
+      <div id="service-modal-body"></div>
+    </div>
+  </div>
+
+  <!-- CASE STUDY MODAL -->
+  <div class="modal-backdrop" id="project-modal">
+    <div class="modal-content glass-panel">
+      <button class="close-modal-btn" id="close-modal"><i data-lucide="x"></i></button>
+      <div id="modal-body-container"></div>
+    </div>
+  </div>
+
+  <!-- LEGAL MODAL -->
+  <div class="modal-backdrop" id="legal-modal">
+    <div class="modal-content glass-panel" style="max-width:700px;">
+      <button class="close-modal-btn" onclick="document.getElementById('legal-modal').style.display='none'"><i data-lucide="x"></i></button>
+      <div id="legal-modal-body">
+        <h3>Privacy Policy & Agency Terms</h3>
+        <p style="color:var(--text-secondary); margin-top:12px;">Aether Studio respects your intellectual property and privacy. All client proposals, vector assets, and brand data are governed under strict non-disclosure agreements (NDA).</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="container footer-container">
+      <div class="footer-left">
+        <a href="#hero" class="brand-logo">
+          <span class="logo-mark">A</span>
+          <span class="logo-text">AETHER<span class="logo-sub">STUDIO</span></span>
+        </a>
+        <p>© 2026 Aether Studio. All Rights Reserved. Production-Ready Creative Agency Platform.</p>
+        <div style="display:flex; gap:16px; margin-top:12px; font-size:0.8rem;">
+          <a href="#" onclick="event.preventDefault(); document.getElementById('legal-modal').style.display='flex';">Privacy Policy</a>
+          <a href="#" onclick="event.preventDefault(); document.getElementById('legal-modal').style.display='flex';">Terms of Service</a>
+        </div>
+      </div>
+
+      <div class="footer-right">
+        <a href="#hero">Back to top <i data-lucide="arrow-up"></i></a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Toast Container -->
+  <div class="toast-container" id="toast-container"></div>
+
+  <script src="script.js"></script>
+  <script>
+    lucide.createIcons();
+    // Register PWA Service Worker if available
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js').catch(err => console.log('SW reg skipped:', err));
+      });
+    }
+  </script>
+</body>
+</html>
