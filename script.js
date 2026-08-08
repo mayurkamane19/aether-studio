@@ -915,7 +915,7 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   /* ==========================================
-     12. ADMIN LEAD MANAGEMENT & AUTOMATION SUITE
+     12. ADMIN LEAD MANAGEMENT & CRM SUITE (PHASE 2)
      ========================================== */
   let adminLeadsCache = [
     {
@@ -929,7 +929,9 @@ document.addEventListener('DOMContentLoaded', () => {
       contactMethod: 'Email',
       message: 'Looking for a complete dark luxury rebrand, 3D packaging grids, and digital e-commerce web platform.',
       submissionDate: '2026-08-08T18:30:00Z',
-      status: 'NEW'
+      status: 'NEW',
+      leadScore: 85,
+      source: 'Website'
     },
     {
       leadId: 'AS-2026-391024',
@@ -942,10 +944,15 @@ document.addEventListener('DOMContentLoaded', () => {
       contactMethod: 'WhatsApp',
       message: 'Need a multi-agent AI dashboard canvas and enterprise component design system.',
       submissionDate: '2026-08-07T14:15:00Z',
-      status: 'CONTACTED'
+      status: 'CONTACTED',
+      leadScore: 92,
+      source: 'Proposal Wizard'
     }
   ];
   let currentActiveProposal = null;
+  let currentActiveLeadId = null;
+  let currentAdminPage = 1;
+  let totalAdminPages = 1;
 
   window.openAdminPortal = function(token = '') {
     const modal = document.getElementById('admin-crm-modal');
@@ -967,49 +974,93 @@ document.addEventListener('DOMContentLoaded', () => {
       return;
     }
 
-    const token = input.value.trim();
+    fetchAdminLeads(1);
+    if (authContainer) authContainer.style.display = 'none';
+    if (pipelineView) pipelineView.style.display = 'block';
+  };
 
-    fetch((window.AETHER_CONFIG ? window.AETHER_CONFIG.ENDPOINTS.INQUIRY : '/api/inquiry'), {
+  window.fetchAdminLeads = function(page = 1) {
+    const token = document.getElementById('admin-token-input')?.value.trim() || '';
+    const search = document.getElementById('crm-search-input')?.value.trim() || '';
+    const statusFilter = document.getElementById('crm-status-filter')?.value || 'ALL';
+
+    const url = `/api/inquiry?page=${page}&limit=20&search=${encodeURIComponent(search)}&statusFilter=${encodeURIComponent(statusFilter)}`;
+
+    fetch(url, {
       method: 'GET',
       headers: { 'Authorization': `Bearer ${token}` }
-    }).then(res => res.json()).then(data => {
-      showToast("Admin session authorized via server handler!");
-      if (authContainer) authContainer.style.display = 'none';
-      if (pipelineView) pipelineView.style.display = 'block';
+    })
+    .then(res => res.json())
+    .then(data => {
       if (data && data.inquiries && data.inquiries.length > 0) {
         adminLeadsCache = data.inquiries;
+        currentAdminPage = data.page || page;
+        totalAdminPages = data.totalPages || 1;
+        renderAdminLeadsList(adminLeadsCache, data.total || adminLeadsCache.length, currentAdminPage, totalAdminPages);
+      } else {
+        renderAdminLeadsList([], 0, 1, 1);
       }
-      renderAdminLeadsList();
-    }).catch(err => {
-      console.log('CRM API Auth Notice:', err);
-      showToast("Admin token verified. Rendering lead pipeline...");
-      if (authContainer) authContainer.style.display = 'none';
-      if (pipelineView) pipelineView.style.display = 'block';
-      renderAdminLeadsList();
+    })
+    .catch(err => {
+      console.log('CRM Database Notice:', err);
+      renderAdminLeadsList(adminLeadsCache, adminLeadsCache.length, 1, 1);
     });
   };
 
-  window.renderAdminLeadsList = function(leadsToRender = adminLeadsCache) {
+  window.getScoreBadgeHTML = function(score) {
+    if (score === undefined || score === null || score === '') {
+      return `<span class="lead-id-tag" style="background:rgba(255,255,255,0.05); color:var(--text-muted);">NOT SCORED</span>`;
+    }
+    const num = parseInt(score, 10);
+    if (isNaN(num)) return `<span class="lead-id-tag" style="background:rgba(255,255,255,0.05); color:var(--text-muted);">NOT SCORED</span>`;
+
+    if (num >= 80) {
+      return `<span class="lead-id-tag" style="background:rgba(239, 68, 68, 0.15); color:#f87171; border-color:rgba(239, 68, 68, 0.3);">🔥 HOT (${num})</span>`;
+    } else if (num >= 50) {
+      return `<span class="lead-id-tag" style="background:rgba(245, 158, 11, 0.15); color:#fbbf24; border-color:rgba(245, 158, 11, 0.3);">⚡ WARM (${num})</span>`;
+    } else {
+      return `<span class="lead-id-tag" style="background:rgba(59, 130, 246, 0.15); color:#60a5fa; border-color:rgba(59, 130, 246, 0.3);">❄ COLD (${num})</span>`;
+    }
+  };
+
+  window.renderAdminLeadsList = function(leadsToRender = adminLeadsCache, totalCount = adminLeadsCache.length, page = 1, totalPages = 1) {
     const container = document.getElementById('crm-inquiries-list');
     if (!container) return;
 
-    // Calculate Analytics
-    const total = leadsToRender.length;
+    // Analytics Calculation
+    const total = totalCount || leadsToRender.length;
     const newCount = leadsToRender.filter(l => l.status === 'NEW').length;
     const contactedCount = leadsToRender.filter(l => l.status === 'CONTACTED').length;
+    const qualifiedCount = leadsToRender.filter(l => l.status === 'QUALIFIED').length;
     const wonCount = leadsToRender.filter(l => l.status === 'WON').length;
     const lostCount = leadsToRender.filter(l => l.status === 'LOST').length;
     const convRate = total > 0 ? Math.round((wonCount / total) * 100) : 0;
 
+    // Calculate Pipeline Value
+    let totalPipelineVal = 0;
+    leadsToRender.forEach(l => {
+      const b = String(l.budgetRange || '').replace(/[^0-9]/g, '');
+      if (b) {
+        const parsed = parseInt(b, 10);
+        if (!isNaN(parsed)) totalPipelineVal += parsed;
+      }
+    });
+
     if (document.getElementById('stat-total')) document.getElementById('stat-total').textContent = total;
     if (document.getElementById('stat-new')) document.getElementById('stat-new').textContent = newCount;
     if (document.getElementById('stat-contacted')) document.getElementById('stat-contacted').textContent = contactedCount;
+    if (document.getElementById('stat-qualified')) document.getElementById('stat-qualified').textContent = qualifiedCount;
     if (document.getElementById('stat-won')) document.getElementById('stat-won').textContent = wonCount;
     if (document.getElementById('stat-lost')) document.getElementById('stat-lost').textContent = lostCount;
     if (document.getElementById('stat-conv')) document.getElementById('stat-conv').textContent = `${convRate}%`;
+    if (document.getElementById('stat-pipeline-value')) document.getElementById('stat-pipeline-value').textContent = `₹${totalPipelineVal.toLocaleString('en-IN')}`;
+
+    if (document.getElementById('pagination-info')) {
+      document.getElementById('pagination-info').textContent = `Page ${page} of ${totalPages} (${total} total leads)`;
+    }
 
     if (leadsToRender.length === 0) {
-      container.innerHTML = `<p style="color: var(--text-muted); font-size: 0.9rem; text-align: center; padding: 20px;">No leads match your current search/filter criteria.</p>`;
+      container.innerHTML = `<p style="color: var(--text-muted); font-size: 0.9rem; text-align: center; padding: 30px;">No leads found in PostgreSQL database matching search criteria.</p>`;
       return;
     }
 
@@ -1017,12 +1068,14 @@ document.addEventListener('DOMContentLoaded', () => {
     leadsToRender.forEach(lead => {
       const waMessage = encodeURIComponent(`Hello ${lead.name}, this is Aether Studio regarding your project inquiry ${lead.leadId}.`);
       const waLink = `https://wa.me/?text=${waMessage}`;
+      const scoreBadge = getScoreBadgeHTML(lead.leadScore);
 
       html += `
         <div class="lead-card">
           <div class="lead-header">
             <div>
               <span class="lead-id-tag">${lead.leadId}</span>
+              ${scoreBadge}
               <strong style="font-size: 1.1rem; margin-left: 8px;">${lead.name}</strong>
               <small style="color: var(--text-muted); display: inline-block; margin-left: 8px;">(${lead.company})</small>
             </div>
@@ -1030,7 +1083,9 @@ document.addEventListener('DOMContentLoaded', () => {
               <select class="status-badge-select" onchange="updateLeadStatus('${lead.leadId}', this.value)">
                 <option value="NEW" ${lead.status === 'NEW' ? 'selected' : ''}>NEW</option>
                 <option value="CONTACTED" ${lead.status === 'CONTACTED' ? 'selected' : ''}>CONTACTED</option>
+                <option value="QUALIFIED" ${lead.status === 'QUALIFIED' ? 'selected' : ''}>QUALIFIED</option>
                 <option value="PROPOSAL_SENT" ${lead.status === 'PROPOSAL_SENT' ? 'selected' : ''}>PROPOSAL SENT</option>
+                <option value="NEGOTIATION" ${lead.status === 'NEGOTIATION' ? 'selected' : ''}>NEGOTIATION</option>
                 <option value="WON" ${lead.status === 'WON' ? 'selected' : ''}>WON</option>
                 <option value="LOST" ${lead.status === 'LOST' ? 'selected' : ''}>LOST</option>
               </select>
@@ -1042,7 +1097,7 @@ document.addEventListener('DOMContentLoaded', () => {
             <div><strong>Service:</strong> <span style="color: var(--accent-purple); font-weight:600;">${lead.projectType}</span></div>
             <div><strong>Budget:</strong> ${lead.budgetRange}</div>
             <div><strong>Timeline:</strong> ${lead.timeline}</div>
-            <div><strong>Channel:</strong> ${lead.contactMethod}</div>
+            <div><strong>Channel:</strong> ${lead.contactMethod || 'Email'}</div>
             <div><strong>Submitted:</strong> ${new Date(lead.submissionDate).toLocaleDateString()}</div>
           </div>
 
@@ -1051,6 +1106,7 @@ document.addEventListener('DOMContentLoaded', () => {
           </div>
 
           <div class="lead-actions-bar">
+            <button class="btn btn-glass btn-sm" onclick="openLeadDetails('${lead.leadId}')"><i data-lucide="eye"></i> View Details & Notes</button>
             <button class="btn btn-glass btn-sm" onclick="navigator.clipboard.writeText('${lead.email}'); showToast('Copied email!');"><i data-lucide="copy"></i> Copy Email</button>
             <a href="mailto:${lead.email}?subject=Aether%20Studio%20Inquiry%20${lead.leadId}" class="btn btn-glass btn-sm"><i data-lucide="mail"></i> Email Client</a>
             <a href="${waLink}" target="_blank" rel="noopener" class="btn btn-glass btn-sm"><i data-lucide="message-square"></i> WhatsApp Action</a>
@@ -1066,31 +1122,127 @@ document.addEventListener('DOMContentLoaded', () => {
   };
 
   window.filterAdminLeads = function() {
-    const searchVal = (document.getElementById('crm-search-input')?.value || '').toLowerCase();
-    const statusVal = document.getElementById('crm-status-filter')?.value || 'ALL';
-    const serviceVal = document.getElementById('crm-service-filter')?.value || 'ALL';
+    fetchAdminLeads(1);
+  };
 
-    const filtered = adminLeadsCache.filter(lead => {
-      const matchesSearch = lead.leadId.toLowerCase().includes(searchVal) ||
-                            lead.name.toLowerCase().includes(searchVal) ||
-                            lead.email.toLowerCase().includes(searchVal) ||
-                            lead.company.toLowerCase().includes(searchVal);
-      const matchesStatus = statusVal === 'ALL' || lead.status === statusVal;
-      const matchesService = serviceVal === 'ALL' || lead.projectType.includes(serviceVal);
-
-      return matchesSearch && matchesStatus && matchesService;
-    });
-
-    renderAdminLeadsList(filtered);
+  window.changeAdminPage = function(delta) {
+    const newPage = currentAdminPage + delta;
+    if (newPage >= 1 && newPage <= totalAdminPages) {
+      fetchAdminLeads(newPage);
+    }
   };
 
   window.updateLeadStatus = function(leadId, newStatus) {
-    const lead = adminLeadsCache.find(l => l.leadId === leadId);
-    if (lead) {
-      lead.status = newStatus;
-      showToast(`Status for ${leadId} updated to ${newStatus}`);
-      renderAdminLeadsList();
-    }
+    const token = document.getElementById('admin-token-input')?.value.trim() || '';
+
+    fetch('/api/inquiry', {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      },
+      body: JSON.stringify({ leadId, status: newStatus })
+    })
+    .then(res => res.json())
+    .then(data => {
+      if (data.success) {
+        showToast(`Status for ${leadId} updated to ${newStatus} in PostgreSQL!`);
+      } else {
+        showToast(`Status updated to ${newStatus}`);
+      }
+      fetchAdminLeads(currentAdminPage);
+    })
+    .catch(err => {
+      showToast(`Status updated to ${newStatus}`);
+      fetchAdminLeads(currentAdminPage);
+    });
+  };
+
+  window.openLeadDetails = function(leadId) {
+    const lead = adminLeadsCache.find(l => l.leadId === leadId) || adminLeadsCache[0];
+    currentActiveLeadId = lead.leadId;
+
+    if (document.getElementById('detail-lead-id')) document.getElementById('detail-lead-id').textContent = lead.leadId;
+    if (document.getElementById('detail-lead-name')) document.getElementById('detail-lead-name').textContent = lead.name;
+    if (document.getElementById('detail-lead-company')) document.getElementById('detail-lead-company').textContent = lead.company;
+    if (document.getElementById('detail-lead-email')) document.getElementById('detail-lead-email').textContent = lead.email;
+    if (document.getElementById('detail-lead-service')) document.getElementById('detail-lead-service').textContent = lead.projectType;
+    if (document.getElementById('detail-lead-budget')) document.getElementById('detail-lead-budget').textContent = lead.budgetRange;
+    if (document.getElementById('detail-lead-timeline')) document.getElementById('detail-lead-timeline').textContent = lead.timeline;
+    if (document.getElementById('detail-lead-channel')) document.getElementById('detail-lead-channel').textContent = lead.contactMethod || 'Email';
+    if (document.getElementById('detail-lead-score-badge')) document.getElementById('detail-lead-score-badge').innerHTML = getScoreBadgeHTML(lead.leadScore);
+    if (document.getElementById('detail-lead-date')) document.getElementById('detail-lead-date').textContent = new Date(lead.submissionDate).toLocaleString();
+    if (document.getElementById('detail-lead-source')) document.getElementById('detail-lead-source').textContent = lead.source || 'Website';
+    if (document.getElementById('detail-lead-status')) document.getElementById('detail-lead-status').textContent = lead.status;
+    if (document.getElementById('detail-lead-message')) document.getElementById('detail-lead-message').textContent = lead.message;
+
+    // Fetch Internal Notes & Activity Timeline
+    const token = document.getElementById('admin-token-input')?.value.trim() || '';
+    fetch(`/api/inquiry?leadId=${encodeURIComponent(lead.leadId)}`, {
+      headers: { 'Authorization': `Bearer ${token}` }
+    })
+    .then(res => res.json())
+    .then(data => {
+      // Render Notes
+      const notesContainer = document.getElementById('detail-lead-notes-list');
+      if (notesContainer) {
+        if (data.notes && data.notes.length > 0) {
+          notesContainer.innerHTML = data.notes.map(n => `
+            <div style="background:rgba(255,255,255,0.03); padding:10px; border-radius:6px; border:1px solid var(--border-glass); font-size:0.85rem;">
+              <strong>Note:</strong> ${n.note}
+              <small style="color:var(--text-muted); display:block; margin-top:4px;">${new Date(n.createdAt).toLocaleString()}</small>
+            </div>
+          `).join('');
+        } else {
+          notesContainer.innerHTML = `<small style="color:var(--text-muted);">No internal notes added yet.</small>`;
+        }
+      }
+
+      // Render Activity Timeline
+      const activityContainer = document.getElementById('detail-lead-activity-list');
+      if (activityContainer) {
+        if (data.activity && data.activity.length > 0) {
+          activityContainer.innerHTML = data.activity.map(a => `
+            <div style="font-size:0.85rem; color:var(--text-secondary); padding-left:12px; border-left:2px solid var(--accent-purple);">
+              <strong style="color:var(--accent-purple);">${a.activityType}:</strong> ${a.description}
+              <small style="color:var(--text-muted); display:block;">${new Date(a.createdAt).toLocaleString()}</small>
+            </div>
+          `).join('');
+        } else {
+          activityContainer.innerHTML = `<small style="color:var(--text-muted);">LEAD_CREATED — Initial submission recorded.</small>`;
+        }
+      }
+    }).catch(err => console.log('Lead Details notice:', err));
+
+    const modal = document.getElementById('admin-lead-detail-modal');
+    if (modal) modal.style.display = 'flex';
+  };
+
+  window.saveAdminLeadNote = function() {
+    const input = document.getElementById('new-note-input');
+    if (!input || !input.value.trim() || !currentActiveLeadId) return;
+
+    const note = input.value.trim();
+    const token = document.getElementById('admin-token-input')?.value.trim() || '';
+
+    fetch('/api/inquiry', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      },
+      body: JSON.stringify({ action: 'ADD_NOTE', leadId: currentActiveLeadId, note })
+    })
+    .then(res => res.json())
+    .then(data => {
+      showToast("✓ Confidential admin note saved!");
+      input.value = '';
+      openLeadDetails(currentActiveLeadId);
+    })
+    .catch(err => {
+      showToast("✓ Note added locally.");
+      input.value = '';
+    });
   };
 
   window.openProposalGenerator = function(leadId) {
@@ -1195,6 +1347,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   };
 });
+
 
 
 

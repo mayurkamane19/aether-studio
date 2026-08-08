@@ -1,7 +1,8 @@
 /**
  * SERVERLESS API ENDPOINT: /api/inquiry
  * Handles client project inquiry storage, unique Inquiry ID (INQ-2026-XXXXXX),
- * status updates (NEW, CONTACTED, QUALIFIED, PROPOSAL_SENT, NEGOTIATION, WON, LOST), and admin lead queries.
+ * status updates (NEW, CONTACTED, QUALIFIED, PROPOSAL_SENT, NEGOTIATION, WON, LOST),
+ * paginated search/filter queries, admin lead notes, and activity logs.
  * Integrates with lib/db.js for PostgreSQL database persistence.
  */
 
@@ -16,11 +17,30 @@ module.exports = async function handler(req, res) {
     return res.status(200).end();
   }
 
-  // 1. Submit New Inquiry (POST)
+  // 1. Submit New Inquiry or Add Internal Admin Note (POST)
   if (req.method === 'POST') {
     try {
-      const { name, email, company, projectType, budgetRange, timeline, message, source } = req.body || {};
+      const { action, leadId, note, name, email, company, projectType, budgetRange, timeline, message, source } = req.body || {};
 
+      // Handle Internal Admin Note Addition
+      if (action === 'ADD_NOTE') {
+        const authHeader = req.headers.authorization || '';
+        const token = authHeader.replace('Bearer ', '').trim();
+        const adminToken = process.env.ADMIN_CRM_TOKEN;
+
+        if (adminToken && token !== adminToken) {
+          return res.status(401).json({ success: false, error: 'Unauthorized: Invalid Admin Bearer Token.' });
+        }
+
+        if (!leadId || !note) {
+          return res.status(400).json({ success: false, error: 'leadId and note text are required.' });
+        }
+
+        const noteRes = await db.addLeadNote(leadId, note);
+        return res.status(200).json({ success: true, note: noteRes });
+      }
+
+      // Public Inquiry Submission
       if (!name || !String(name).trim()) {
         return res.status(400).json({ success: false, error: 'Name is required.' });
       }
@@ -38,7 +58,7 @@ module.exports = async function handler(req, res) {
       const cleanEmail = sanitize(email);
       const cleanCompany = sanitize(company || 'Independent');
       const cleanService = sanitize(projectType || 'General Inquiry');
-      const cleanBudget = sanitize(budgetRange || 'Standard');
+      const cleanBudget = sanitize(budgetRange || 'Not Specified');
       const cleanTimeline = sanitize(timeline || 'Flexible');
       const cleanMessage = sanitize(message || 'No details provided.');
       const cleanSource = sanitize(source || 'Website');
@@ -126,7 +146,7 @@ module.exports = async function handler(req, res) {
     }
   }
 
-  // 3. Admin CRM List & Query Inquiries (GET) — Admin Auth Protected
+  // 3. Admin CRM List, Search, Filter & Lead Details (GET) — Admin Auth Protected
   if (req.method === 'GET') {
     const authHeader = req.headers.authorization || '';
     const token = authHeader.replace('Bearer ', '').trim();
@@ -136,11 +156,34 @@ module.exports = async function handler(req, res) {
       return res.status(401).json({ success: false, error: 'Unauthorized: Invalid Admin Bearer Token.' });
     }
 
-    const dbRes = await db.getAllLeads();
-    if (dbRes.success && dbRes.rows.length > 0) {
+    const { search = '', statusFilter = 'ALL', page = '1', limit = '20', leadId = '' } = req.query || {};
+
+    // Single Lead Notes & Activity Fetch
+    if (leadId) {
+      const notesRes = await db.getLeadNotes(leadId);
+      const activityRes = await db.getLeadActivity(leadId);
       return res.status(200).json({
         success: true,
-        inquiries: dbRes.rows,
+        leadId,
+        notes: notesRes.rows || [],
+        activity: activityRes.rows || []
+      });
+    }
+
+    const paginatedRes = await db.getLeadsPaginated({
+      search: String(search),
+      statusFilter: String(statusFilter),
+      page: parseInt(page, 10) || 1,
+      limit: parseInt(limit, 10) || 20
+    });
+
+    if (paginatedRes.success && paginatedRes.inquiries.length > 0) {
+      return res.status(200).json({
+        success: true,
+        inquiries: paginatedRes.inquiries,
+        total: paginatedRes.total,
+        page: paginatedRes.page,
+        totalPages: paginatedRes.totalPages,
         source: 'PostgreSQL Database'
       });
     }
@@ -148,7 +191,10 @@ module.exports = async function handler(req, res) {
     return res.status(200).json({
       success: true,
       inquiries: [],
-      notice: 'Admin token authorized. Connect DATABASE_URL to stream live database records.'
+      total: 0,
+      page: 1,
+      totalPages: 1,
+      notice: 'Admin token authorized. Connect DATABASE_URL to query live database records.'
     });
   }
 

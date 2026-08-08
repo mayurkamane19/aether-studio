@@ -1196,9 +1196,11 @@
           <div class="admin-stat-card"><div class="admin-stat-num" id="stat-total">0</div><span class="admin-stat-label">Total Leads</span></div>
           <div class="admin-stat-card"><div class="admin-stat-num" id="stat-new" style="color:var(--accent-purple);">0</div><span class="admin-stat-label">New</span></div>
           <div class="admin-stat-card"><div class="admin-stat-num" id="stat-contacted" style="color:var(--accent-blue);">0</div><span class="admin-stat-label">Contacted</span></div>
+          <div class="admin-stat-card"><div class="admin-stat-num" id="stat-qualified" style="color:#fbbf24;">0</div><span class="admin-stat-label">Qualified</span></div>
           <div class="admin-stat-card"><div class="admin-stat-num" id="stat-won" style="color:#34d399;">0</div><span class="admin-stat-label">Won</span></div>
           <div class="admin-stat-card"><div class="admin-stat-num" id="stat-lost" style="color:#f87171;">0</div><span class="admin-stat-label">Lost</span></div>
           <div class="admin-stat-card"><div class="admin-stat-num" id="stat-conv" style="color:var(--accent-cyan);">0%</div><span class="admin-stat-label">Conv. Rate</span></div>
+          <div class="admin-stat-card"><div class="admin-stat-num" id="stat-pipeline-value" style="color:#34d399; font-size: 1.2rem;">₹0</div><span class="admin-stat-label">Pipeline Value</span></div>
         </div>
 
         <!-- Search & Filter Bar -->
@@ -1208,7 +1210,9 @@
             <option value="ALL">All Statuses</option>
             <option value="NEW">New</option>
             <option value="CONTACTED">Contacted</option>
+            <option value="QUALIFIED">Qualified</option>
             <option value="PROPOSAL_SENT">Proposal Sent</option>
+            <option value="NEGOTIATION">Negotiation</option>
             <option value="WON">Won</option>
             <option value="LOST">Lost</option>
           </select>
@@ -1223,7 +1227,65 @@
 
         <!-- Lead Pipeline List -->
         <div id="crm-inquiries-list" style="display: flex; flex-direction: column; gap: 16px;">
-          <p style="color: var(--text-muted); font-size: 0.9rem;">Connect <code>DATABASE_URL</code> to stream live database records into your CRM pipeline.</p>
+          <p style="color: var(--text-muted); font-size: 0.9rem; text-align: center; padding: 20px;">Loading leads from PostgreSQL database...</p>
+        </div>
+
+        <!-- Pagination Controls -->
+        <div id="crm-pagination-bar" style="display: flex; justify-content: space-between; align-items: center; margin-top: 24px; padding-top: 16px; border-top: 1px solid var(--border-glass);">
+          <button class="btn btn-glass btn-sm" id="btn-prev-page" onclick="changeAdminPage(-1)"><i data-lucide="chevron-left"></i> Previous</button>
+          <span style="font-size: 0.85rem; color: var(--text-muted);" id="pagination-info">Page 1 of 1</span>
+          <button class="btn btn-glass btn-sm" id="btn-next-page" onclick="changeAdminPage(1)">Next <i data-lucide="chevron-right"></i></button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- LEAD DETAIL MODAL (SPECS, INTERNAL NOTES & ACTIVITY TIMELINE) -->
+  <div class="modal-backdrop" id="admin-lead-detail-modal" style="display: none;">
+    <div class="modal-content glass-panel" style="max-width: 800px;">
+      <button class="close-modal-btn" onclick="document.getElementById('admin-lead-detail-modal').style.display='none'"><i data-lucide="x"></i></button>
+      <div style="margin-bottom: 20px;">
+        <span class="lead-id-tag" id="detail-lead-id">AS-2026-000000</span>
+        <h2 style="font-size: 1.8rem; margin: 8px 0 4px 0;" id="detail-lead-name">Visitor Name</h2>
+        <span style="color: var(--accent-purple);" id="detail-lead-company">Company Name</span>
+      </div>
+
+      <div style="background: rgba(255,255,255,0.03); padding: 20px; border-radius: 10px; border: 1px solid var(--border-glass); margin-bottom: 20px;">
+        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; font-size: 0.9rem; color: var(--text-secondary);">
+          <div><strong>Email:</strong> <span id="detail-lead-email">email</span></div>
+          <div><strong>Project Type:</strong> <span id="detail-lead-service" style="color:var(--accent-purple); font-weight:600;">service</span></div>
+          <div><strong>Budget:</strong> <span id="detail-lead-budget">budget</span></div>
+          <div><strong>Timeline:</strong> <span id="detail-lead-timeline">timeline</span></div>
+          <div><strong>Preferred Channel:</strong> <span id="detail-lead-channel">channel</span></div>
+          <div><strong>Priority Score:</strong> <span id="detail-lead-score-badge" class="lead-id-tag">NOT SCORED</span></div>
+          <div><strong>Submitted:</strong> <span id="detail-lead-date">date</span></div>
+          <div><strong>Source:</strong> <span id="detail-lead-source">Website</span></div>
+          <div><strong>Status:</strong> <span id="detail-lead-status" style="font-weight:700; color:#34d399;">NEW</span></div>
+        </div>
+      </div>
+
+      <div style="background: rgba(255,255,255,0.02); padding: 16px; border-radius: 8px; border: 1px solid var(--border-glass); margin-bottom: 24px;">
+        <strong style="display: block; margin-bottom: 6px; color: var(--text-primary);">Project Message / Requirements:</strong>
+        <p style="margin: 0; color: var(--text-secondary); line-height: 1.6; white-space: pre-wrap;" id="detail-lead-message">Message text...</p>
+      </div>
+
+      <!-- Lead Notes Section -->
+      <div style="margin-bottom: 24px; border-top: 1px solid var(--border-glass); padding-top: 20px;">
+        <h3 style="font-size: 1.1rem; margin-bottom: 12px;"><i data-lucide="file-text"></i> Internal Admin Notes (Private)</h3>
+        <div id="detail-lead-notes-list" style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 16px;">
+          <small style="color: var(--text-muted);">No internal notes added yet.</small>
+        </div>
+        <div style="display: flex; gap: 10px;">
+          <input type="text" id="new-note-input" placeholder="Add confidential internal note..." class="calc-select" style="flex: 1;">
+          <button class="btn btn-primary btn-sm" onclick="saveAdminLeadNote()">Add Note</button>
+        </div>
+      </div>
+
+      <!-- Activity Timeline Section -->
+      <div style="border-top: 1px solid var(--border-glass); padding-top: 20px;">
+        <h3 style="font-size: 1.1rem; margin-bottom: 12px;"><i data-lucide="clock"></i> Activity Audit Timeline</h3>
+        <div id="detail-lead-activity-list" style="display: flex; flex-direction: column; gap: 8px;">
+          <small style="color: var(--text-muted);">Loading activity logs...</small>
         </div>
       </div>
     </div>
