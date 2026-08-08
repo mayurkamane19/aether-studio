@@ -8,6 +8,7 @@
   <meta name="keywords" content="Aether Studio Blog, AI Web Development, SEO Performance, Business AI Automation, High Converting Web Design, UI UX Trends 2026">
   <meta name="author" content="Aether Studio">
   <meta name="theme-color" content="#06070a">
+  <meta name="robots" content="index, follow">
   <link rel="canonical" href="https://aetherstudio.com/blog/">
   <link rel="manifest" href="../manifest.json">
 
@@ -25,20 +26,40 @@
   <meta name="twitter:description" content="Explore master insights on AI web engineering, Core Web Vitals performance, business automation, and 2026 UI/UX design trends.">
   <meta name="twitter:image" content="../assets/blog_ai_web_dev.jpg">
 
-  <!-- JSON-LD Structured Data for Blog Collection -->
+  <!-- JSON-LD Structured Data for Blog Collection & Breadcrumbs -->
   <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "Blog",
-    "name": "Aether Studio Journal",
-    "url": "https://aetherstudio.com/blog/",
-    "description": "Insights and architectural guides on AI web development, SEO speed engineering, small business automation, high-converting web design, and 2026 UI/UX trends.",
-    "publisher": {
-      "@type": "Organization",
-      "name": "Aether Studio",
-      "logo": "https://aetherstudio.com/assets/aura_logo_branding.jpg"
+  [
+    {
+      "@context": "https://schema.org",
+      "@type": "Blog",
+      "name": "Aether Studio Journal",
+      "url": "https://aetherstudio.com/blog/",
+      "description": "Insights and architectural guides on AI web development, SEO speed engineering, small business automation, high-converting web design, and 2026 UI/UX trends.",
+      "publisher": {
+        "@type": "Organization",
+        "name": "Aether Studio",
+        "logo": "https://aetherstudio.com/assets/aura_logo_branding.jpg"
+      }
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "https://aetherstudio.com/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Journal",
+          "item": "https://aetherstudio.com/blog/"
+        }
+      ]
     }
-  }
+  ]
   </script>
 
   <!-- Fonts -->
@@ -122,13 +143,23 @@
   <main id="main-content">
     
     <!-- BLOG HERO SECTION -->
-    <section class="blog-hero section-padding" style="padding-top: 140px; padding-bottom: 40px;">
+    <section class="blog-hero section-padding" style="padding-top: 140px; padding-bottom: 30px;">
       <div class="container">
         <span class="section-subtitle" style="display: inline-block; margin-bottom: 12px; color: var(--accent-purple); font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em;">AETHER STUDIO JOURNAL</span>
         <h1>Engineering, AI & Visual Strategy Insights</h1>
-        <p style="color: var(--text-secondary); font-size: 1.15rem; max-width: 680px; margin: 0 auto 32px; line-height: 1.6;">
+        <p style="color: var(--text-secondary); font-size: 1.15rem; max-width: 680px; margin: 0 auto 28px; line-height: 1.6;">
           Actionable blueprints, in-depth architectural analysis, and design research crafted for enterprise founders, visual leaders, and modern engineering teams.
         </p>
+
+        <!-- CATEGORY FILTER BAR -->
+        <div class="blog-filter-bar">
+          <button class="filter-chip active" data-category="all">All Topics</button>
+          <button class="filter-chip" data-category="ai">AI & Web Dev</button>
+          <button class="filter-chip" data-category="seo">SEO & Speed</button>
+          <button class="filter-chip" data-category="automation">Automation</button>
+          <button class="filter-chip" data-category="conversion">Conversion UX</button>
+          <button class="filter-chip" data-category="uiux">2026 Design Trends</button>
+        </div>
       </div>
     </section>
 
@@ -138,9 +169,9 @@
         <div class="blog-grid">
 
           <!-- ARTICLE 1 -->
-          <a href="ai-modern-web-development/index.html" class="blog-card">
+          <a href="ai-modern-web-development/index.html" class="blog-card" data-category="ai">
             <div class="blog-card-img-wrapper">
-              <img src="../assets/blog_ai_web_dev.jpg" alt="How AI Is Changing Modern Web Development" loading="lazy">
+              <img src="../assets/blog_ai_web_dev.jpg" alt="How AI Is Changing Modern Web Development" width="600" height="338" loading="lazy">
               <span class="blog-card-category">AI & Web Engineering</span>
             </div>
             <div class="blog-card-body">
@@ -160,9 +191,9 @@
           </a>
 
           <!-- ARTICLE 2 -->
-          <a href="website-performance-seo/index.html" class="blog-card">
+          <a href="website-performance-seo/index.html" class="blog-card" data-category="seo">
             <div class="blog-card-img-wrapper">
-              <img src="../assets/blog_site_performance.jpg" alt="Why Website Performance Matters for SEO" loading="lazy">
+              <img src="../assets/blog_site_performance.jpg" alt="Why Website Performance Matters for SEO" width="600" height="338" loading="lazy">
               <span class="blog-card-category">SEO & Speed Optimization</span>
             </div>
             <div class="blog-card-body">
@@ -182,9 +213,9 @@
           </a>
 
           <!-- ARTICLE 3 -->
-          <a href="ai-automation-small-businesses/index.html" class="blog-card">
+          <a href="ai-automation-small-businesses/index.html" class="blog-card" data-category="automation">
             <div class="blog-card-img-wrapper">
-              <img src="../assets/blog_ai_automation.jpg" alt="AI Automation for Small Businesses" loading="lazy">
+              <img src="../assets/blog_ai_automation.jpg" alt="AI Automation for Small Businesses" width="600" height="338" loading="lazy">
               <span class="blog-card-category">Business Automation</span>
             </div>
             <div class="blog-card-body">
@@ -204,9 +235,9 @@
           </a>
 
           <!-- ARTICLE 4 -->
-          <a href="high-converting-business-website/index.html" class="blog-card">
+          <a href="high-converting-business-website/index.html" class="blog-card" data-category="conversion">
             <div class="blog-card-img-wrapper">
-              <img src="../assets/blog_converting_website.jpg" alt="How to Build a High-Converting Business Website" loading="lazy">
+              <img src="../assets/blog_converting_website.jpg" alt="How to Build a High-Converting Business Website" width="600" height="338" loading="lazy">
               <span class="blog-card-category">UX Architecture</span>
             </div>
             <div class="blog-card-body">
@@ -226,9 +257,9 @@
           </a>
 
           <!-- ARTICLE 5 -->
-          <a href="modern-ui-ux-trends-2026/index.html" class="blog-card">
+          <a href="modern-ui-ux-trends-2026/index.html" class="blog-card" data-category="uiux">
             <div class="blog-card-img-wrapper">
-              <img src="../assets/blog_ui_ux_trends.jpg" alt="Modern UI/UX Trends for 2026" loading="lazy">
+              <img src="../assets/blog_ui_ux_trends.jpg" alt="Modern UI/UX Trends for 2026" width="600" height="338" loading="lazy">
               <span class="blog-card-category">Design Systems & 2026</span>
             </div>
             <div class="blog-card-body">
@@ -248,6 +279,110 @@
           </a>
 
         </div>
+
+        <!-- EDITORIAL ROADMAP & UPCOMING RESEARCH TOPICS (10 SCALABLE PLACEHOLDERS) -->
+        <div style="margin-top: 80px;">
+          <div class="section-header text-center" style="margin-bottom: 40px;">
+            <span class="section-subtitle" style="color: var(--accent-cyan);">SCALABLE EDITORIAL ROADMAP</span>
+            <h2 style="font-family: var(--font-heading); font-size: 2rem; font-weight: 700; margin-top: 8px;">Upcoming Research & Topic Drafts</h2>
+            <p style="color: var(--text-muted); max-width: 600px; margin: 0 auto;">Our editorial calendar for upcoming technical whitepapers and architecture guides.</p>
+          </div>
+
+          <div class="blog-grid">
+            
+            <div class="blog-card upcoming-card" data-category="ai">
+              <div class="blog-card-body">
+                <span class="blog-card-category upcoming-badge">Upcoming Draft • AI Agents</span>
+                <div class="blog-card-meta" style="margin-top: 12px;"><i data-lucide="clock"></i> Scheduled Q3 2026</div>
+                <h3 class="blog-card-title">Building Autonomous AI Agents with LangChain & LlamaIndex</h3>
+                <p class="blog-card-excerpt">Architectural patterns for multi-agent workflows, tool execution loops, and vector database memory orchestration.</p>
+              </div>
+            </div>
+
+            <div class="blog-card upcoming-card" data-category="ai">
+              <div class="blog-card-body">
+                <span class="blog-card-category upcoming-badge">Upcoming Draft • Generative AI</span>
+                <div class="blog-card-meta" style="margin-top: 12px;"><i data-lucide="clock"></i> Scheduled Q3 2026</div>
+                <h3 class="blog-card-title">RAG Architecture vs Fine-Tuning for Enterprise Knowledge Engines</h3>
+                <p class="blog-card-excerpt">Evaluating Retrieval-Augmented Generation costs, latency trade-offs, and domain accuracy for custom AI platforms.</p>
+              </div>
+            </div>
+
+            <div class="blog-card upcoming-card" data-category="seo">
+              <div class="blog-card-body">
+                <span class="blog-card-category upcoming-badge">Upcoming Draft • Technical SEO</span>
+                <div class="blog-card-meta" style="margin-top: 12px;"><i data-lucide="clock"></i> Scheduled Q3 2026</div>
+                <h3 class="blog-card-title">Technical SEO Audit Guide for Modern Single-Page Web Apps</h3>
+                <p class="blog-card-excerpt">Resolving client-side rendering indexing issues, dynamic meta hydration, and edge server-side pre-rendering.</p>
+              </div>
+            </div>
+
+            <div class="blog-card upcoming-card" data-category="automation">
+              <div class="blog-card-body">
+                <span class="blog-card-category upcoming-badge">Upcoming Draft • AI Support</span>
+                <div class="blog-card-meta" style="margin-top: 12px;"><i data-lucide="clock"></i> Scheduled Q3 2026</div>
+                <h3 class="blog-card-title">AI-Powered Customer Support Desks: Reducing Ticket Volumes by 80%</h3>
+                <p class="blog-card-excerpt">Integrating LLM contextual search with Zendesk and Intercom to automate complex customer inquiry resolutions.</p>
+              </div>
+            </div>
+
+            <div class="blog-card upcoming-card" data-category="automation">
+              <div class="blog-card-body">
+                <span class="blog-card-category upcoming-badge">Upcoming Draft • Transformation</span>
+                <div class="blog-card-meta" style="margin-top: 12px;"><i data-lucide="clock"></i> Scheduled Q3 2026</div>
+                <h3 class="blog-card-title">Digital Transformation Playbook: Legacy Systems to AI Cloud Architecture</h3>
+                <p class="blog-card-excerpt">Migrating legacy monolithic software to cloud-native microservices with embedded machine learning capabilities.</p>
+              </div>
+            </div>
+
+            <div class="blog-card upcoming-card" data-category="uiux">
+              <div class="blog-card-body">
+                <span class="blog-card-category upcoming-badge">Upcoming Draft • Spatial UX</span>
+                <div class="blog-card-meta" style="margin-top: 12px;"><i data-lucide="clock"></i> Scheduled Q4 2026</div>
+                <h3 class="blog-card-title">Designing for Spatial Web Browsers: Vision Pro & WebXR Guidelines</h3>
+                <p class="blog-card-excerpt">UX design principles for spatial glass depth, gaze tracking focus indicators, and 3D web canvas rendering.</p>
+              </div>
+            </div>
+
+            <div class="blog-card upcoming-card" data-category="seo">
+              <div class="blog-card-body">
+                <span class="blog-card-category upcoming-badge">Upcoming Draft • Speed</span>
+                <div class="blog-card-meta" style="margin-top: 12px;"><i data-lucide="clock"></i> Scheduled Q4 2026</div>
+                <h3 class="blog-card-title">Sub-Second Edge Rendering: Cloudflare Workers & Serverless Pipelines</h3>
+                <p class="blog-card-excerpt">Deploying static and dynamic edge functions to achieve under 30ms Time To First Byte (TTFB) globally.</p>
+              </div>
+            </div>
+
+            <div class="blog-card upcoming-card" data-category="conversion">
+              <div class="blog-card-body">
+                <span class="blog-card-category upcoming-badge">Upcoming Draft • B2B Design</span>
+                <div class="blog-card-meta" style="margin-top: 12px;"><i data-lucide="clock"></i> Scheduled Q4 2026</div>
+                <h3 class="blog-card-title">High-Ticket B2B Web Design: Turning Cold Visitors into High-Value Inquiries</h3>
+                <p class="blog-card-excerpt">Structuring enterprise landing pages, interactive ROI estimators, and friction-free inquiry flows.</p>
+              </div>
+            </div>
+
+            <div class="blog-card upcoming-card" data-category="automation">
+              <div class="blog-card-body">
+                <span class="blog-card-category upcoming-badge">Upcoming Draft • Workflows</span>
+                <div class="blog-card-meta" style="margin-top: 12px;"><i data-lucide="clock"></i> Scheduled Q4 2026</div>
+                <h3 class="blog-card-title">AI Workflow Automation with n8n & Make for Mid-Market Enterprises</h3>
+                <p class="blog-card-excerpt">Connecting internal databases, Slack notifications, and AI API endpoints without writing custom backend code.</p>
+              </div>
+            </div>
+
+            <div class="blog-card upcoming-card" data-category="seo">
+              <div class="blog-card-body">
+                <span class="blog-card-category upcoming-badge">Upcoming Draft • INP Speed</span>
+                <div class="blog-card-meta" style="margin-top: 12px;"><i data-lucide="clock"></i> Scheduled Q4 2026</div>
+                <h3 class="blog-card-title">Core Web Vitals INP Optimization: Main Thread Bottleneck Elimination</h3>
+                <p class="blog-card-excerpt">Debugging JavaScript execution tasks, web workers, and long tasks to ensure under 100ms interaction response times.</p>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
       </div>
     </section>
 

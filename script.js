@@ -549,6 +549,21 @@ document.addEventListener('DOMContentLoaded', () => {
     e.preventDefault();
     const btn = document.getElementById('submit-lead-btn');
     const msg = document.getElementById('form-status-msg');
+    const nameInput = document.getElementById('form-name');
+    const emailInput = document.getElementById('form-email');
+    const serviceInput = document.getElementById('form-service');
+
+    if (nameInput && !nameInput.value.trim()) {
+      showToast("Please enter your name.");
+      nameInput.focus();
+      return;
+    }
+
+    if (emailInput && (!emailInput.value.trim() || !emailInput.value.includes('@'))) {
+      showToast("Please enter a valid email address.");
+      emailInput.focus();
+      return;
+    }
     
     if (!btn) return;
     
@@ -556,6 +571,9 @@ document.addEventListener('DOMContentLoaded', () => {
     btn.disabled = true;
     btn.innerHTML = '<span>Processing Inquiry...</span> <i data-lucide="loader"></i>';
     if (window.lucide) lucide.createIcons();
+
+    const serviceVal = serviceInput ? serviceInput.value : 'General';
+    trackGA4Event('submit_inquiry', { service_type: serviceVal });
 
     setTimeout(() => {
       // Success State
@@ -791,6 +809,48 @@ document.addEventListener('DOMContentLoaded', () => {
       const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
       document.documentElement.setAttribute('data-theme', newTheme);
       showToast(`Switched to ${newTheme.toUpperCase()} mode`);
+      trackGA4Event('toggle_theme', { theme: newTheme });
     });
   }
+
+  /* ==========================================
+     11. GA4 PRIVACY-COMPLIANT EVENT ENGINE & BLOG FILTERING
+     ========================================== */
+  window.trackGA4Event = function(eventName, params = {}) {
+    if (typeof window.gtag === 'function') {
+      window.gtag('event', eventName, params);
+    }
+  };
+
+  // Blog Category Filter Handler
+  const blogFilterChips = document.querySelectorAll('.blog-filter-bar .filter-chip');
+  const allBlogCards = document.querySelectorAll('.blog-grid .blog-card');
+
+  blogFilterChips.forEach(chip => {
+    chip.addEventListener('click', () => {
+      blogFilterChips.forEach(c => c.classList.remove('active'));
+      chip.classList.add('active');
+
+      const filterCategory = chip.getAttribute('data-category');
+      trackGA4Event('filter_category', { category: filterCategory });
+
+      allBlogCards.forEach(card => {
+        const cardCat = card.getAttribute('data-category');
+        if (filterCategory === 'all' || cardCat === filterCategory) {
+          card.style.display = 'flex';
+        } else {
+          card.style.display = 'none';
+        }
+      });
+    });
+  });
+
+  // Track CTA clicks
+  document.querySelectorAll('a.btn, button.btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+      const text = this.innerText.trim();
+      trackGA4Event('click_cta', { cta_label: text, destination: this.getAttribute('href') || 'button' });
+    });
+  });
 });
+
