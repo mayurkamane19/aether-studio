@@ -1285,6 +1285,31 @@
         </div>
       </div>
 
+      <!-- AI Project Pricing Assistant Panel -->
+      <div style="background: rgba(52, 211, 153, 0.06); padding: 20px; border-radius: 12px; border: 1px solid rgba(52, 211, 153, 0.25); margin-bottom: 24px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
+          <h3 style="font-size: 1.15rem; margin: 0; color: #34d399; display: flex; align-items: center; gap: 8px;">
+            <i data-lucide="dollar-sign"></i> AI Internal Pricing Assistant
+          </h3>
+          <div style="display: flex; gap: 8px;">
+            <button class="btn btn-glass btn-sm" id="btn-trigger-ai-pricing" onclick="runAiPricingAnalysis()">
+              <i data-lucide="calculator"></i> Generate Pricing
+            </button>
+            <button class="btn btn-primary btn-sm" id="btn-approve-ai-pricing" style="display: none;" onclick="approveAiPricingRecommendation()">
+              <i data-lucide="check-circle"></i> Approve Recommendation
+            </button>
+          </div>
+        </div>
+
+        <div id="detail-ai-pricing-body">
+          <p style="color: var(--text-muted); font-size: 0.88rem; margin: 0;">Click "Generate Pricing" to receive an internal AI-suggested scope quote, milestones, assumptions, and risk breakdown.</p>
+        </div>
+
+        <small style="color: var(--text-muted); font-size: 0.75rem; display: block; margin-top: 12px; border-top: 1px solid var(--border-glass); padding-top: 8px;">
+          ⚠ <em>AI-generated internal recommendation — admin review required. Will not modify client budget or send quotes automatically.</em>
+        </small>
+      </div>
+
       <!-- Lead Notes Section -->
       <div style="margin-bottom: 24px; border-top: 1px solid var(--border-glass); padding-top: 20px;">
         <h3 style="font-size: 1.1rem; margin-bottom: 12px;"><i data-lucide="file-text"></i> Internal Admin Notes (Private)</h3>

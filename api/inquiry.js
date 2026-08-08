@@ -158,17 +158,19 @@ module.exports = async function handler(req, res) {
 
     const { search = '', statusFilter = 'ALL', page = '1', limit = '20', leadId = '' } = req.query || {};
 
-    // Single Lead Notes, Activity & AI History Fetch
+    // Single Lead Notes, Activity, AI History & Pricing History Fetch
     if (leadId) {
       const notesRes = await db.getLeadNotes(leadId);
       const activityRes = await db.getLeadActivity(leadId);
       const aiHistoryRes = await db.getAIAnalysisHistory(leadId);
+      const pricingHistoryRes = await db.getAIPricingHistory(leadId);
       return res.status(200).json({
         success: true,
         leadId,
         notes: notesRes.rows || [],
         activity: activityRes.rows || [],
-        aiHistory: aiHistoryRes.rows || []
+        aiHistory: aiHistoryRes.rows || [],
+        pricingHistory: pricingHistoryRes.rows || []
       });
     }
 

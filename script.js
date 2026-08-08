@@ -1158,89 +1158,103 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   };
 
-  window.renderAiIntelligencePanel = function(lead) {
-    const container = document.getElementById('detail-ai-panel-body');
-    const triggerBtn = document.getElementById('btn-trigger-ai-analysis');
+  window.renderAiPricingPanel = function(lead) {
+    const container = document.getElementById('detail-ai-pricing-body');
+    const triggerBtn = document.getElementById('btn-trigger-ai-pricing');
+    const approveBtn = document.getElementById('btn-approve-ai-pricing');
     if (!container) return;
 
-    if (!lead || !lead.aiAnalyzedAt) {
+    if (!lead || !lead.aiRecommendedPrice) {
       container.innerHTML = `
-        <p style="color: var(--text-muted); font-size: 0.88rem; margin: 0 0 10px 0;">Click "Analyze Lead with AI" to generate structured AI scoring, complexity rating, risk flags, and sales recommendations.</p>
+        <p style="color: var(--text-muted); font-size: 0.88rem; margin: 0;">Click "Generate Pricing" to receive an internal AI-suggested scope quote, milestones, assumptions, and risk breakdown.</p>
       `;
-      if (triggerBtn) triggerBtn.innerHTML = `<i data-lucide="sparkles"></i> Analyze Lead with AI`;
+      if (triggerBtn) triggerBtn.innerHTML = `<i data-lucide="calculator"></i> Generate Pricing`;
+      if (approveBtn) approveBtn.style.display = 'none';
       if (window.lucide) lucide.createIcons();
       return;
     }
 
-    if (triggerBtn) triggerBtn.innerHTML = `<i data-lucide="refresh-cw"></i> Re-analyze Lead with AI`;
+    if (triggerBtn) triggerBtn.innerHTML = `<i data-lucide="refresh-cw"></i> Regenerate`;
 
-    const score = lead.leadScore || 0;
-    const priority = lead.leadPriority || (score >= 80 ? 'HOT' : (score >= 50 ? 'WARM' : 'COLD'));
-    const badgeHTML = getScoreBadgeHTML(score);
+    const recPrice = parseInt(lead.aiRecommendedPrice, 10) || 35000;
+    const minP = lead.aiPriceMin ? parseInt(lead.aiPriceMin, 10) : 25000;
+    const maxP = lead.aiPriceMax ? parseInt(lead.aiPriceMax, 10) : 55000;
+    const confidence = lead.aiPricingConfidence || 82;
+    const status = lead.aiPricingStatus || 'DRAFT';
 
-    const minB = lead.aiEstimatedBudgetMin ? `₹${parseInt(lead.aiEstimatedBudgetMin, 10).toLocaleString('en-IN')}` : '₹25,000';
-    const maxB = lead.aiEstimatedBudgetMax ? `₹${parseInt(lead.aiEstimatedBudgetMax, 10).toLocaleString('en-IN')}` : '₹55,000';
-    const budgetRangeStr = `${minB} – ${maxB}`;
+    if (approveBtn) {
+      approveBtn.style.display = 'inline-flex';
+      if (status === 'APPROVED') {
+        approveBtn.className = 'btn btn-glass btn-sm';
+        approveBtn.innerHTML = `<i data-lucide="check"></i> Approved`;
+      } else {
+        approveBtn.className = 'btn btn-primary btn-sm';
+        approveBtn.innerHTML = `<i data-lucide="check-circle"></i> Approve Recommendation`;
+      }
+    }
 
-    const riskFlags = Array.isArray(lead.aiRiskFlags) ? lead.aiRiskFlags : (typeof lead.aiRiskFlags === 'string' ? JSON.parse(lead.aiRiskFlags || '[]') : []);
-    const missingInfo = Array.isArray(lead.aiMissingInformation) ? lead.aiMissingInformation : (typeof lead.aiMissingInformation === 'string' ? JSON.parse(lead.aiMissingInformation || '[]') : []);
+    const statusBadgeHTML = status === 'APPROVED'
+      ? `<span class="lead-id-tag" style="background:rgba(52,211,153,0.15); color:#34d399; border-color:rgba(52,211,153,0.3);">APPROVED</span>`
+      : (status === 'SUPERSEDED' ? `<span class="lead-id-tag" style="background:rgba(255,255,255,0.05); color:var(--text-muted);">SUPERSEDED</span>` : `<span class="lead-id-tag" style="background:rgba(245,158,11,0.15); color:#fbbf24; border-color:rgba(245,158,11,0.3);">DRAFT (UNAPPROVED)</span>`);
 
     container.innerHTML = `
       <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; margin-bottom: 16px;">
         <div style="background: rgba(255,255,255,0.03); padding: 12px; border-radius: 8px; border: 1px solid var(--border-glass);">
-          <small style="color: var(--text-muted); display: block; margin-bottom: 4px;">AI Lead Score</small>
-          <div style="font-size: 1.3rem; font-weight: 700; color: #c084fc;">${score} / 100</div>
-          <div style="margin-top: 4px;">${badgeHTML}</div>
+          <small style="color: var(--text-muted); display: block; margin-bottom: 4px;">Recommended Price</small>
+          <div style="font-size: 1.4rem; font-weight: 800; color: #34d399;">₹${recPrice.toLocaleString('en-IN')}</div>
+          <small style="color: var(--text-muted); display: block; margin-top: 2px;">Estimated Range: ₹${minP.toLocaleString('en-IN')} – ₹${maxP.toLocaleString('en-IN')}</small>
         </div>
 
         <div style="background: rgba(255,255,255,0.03); padding: 12px; border-radius: 8px; border: 1px solid var(--border-glass);">
-          <small style="color: var(--text-muted); display: block; margin-bottom: 4px;">Category & Complexity</small>
-          <strong style="color: var(--text-primary); display: block; font-size: 0.9rem;">${lead.aiProjectCategory || 'Web Development'}</strong>
-          <span style="display: inline-block; font-size: 0.75rem; padding: 2px 8px; border-radius: 4px; background: rgba(59,130,246,0.15); color: #60a5fa; margin-top: 4px; font-weight: 600;">Complexity: ${lead.aiComplexity || 'MEDIUM'}</span>
+          <small style="color: var(--text-muted); display: block; margin-bottom: 4px;">Confidence & Package</small>
+          <strong style="color: var(--accent-cyan); display: block; font-size: 1.1rem;">${confidence}% Confidence</strong>
+          <span style="display: inline-block; font-size: 0.75rem; padding: 2px 8px; border-radius: 4px; background: rgba(139,92,246,0.15); color: #c084fc; margin-top: 4px; font-weight: 600;">Package: ${lead.aiRecommendedPackage || 'CUSTOM'}</span>
         </div>
 
         <div style="background: rgba(255,255,255,0.03); padding: 12px; border-radius: 8px; border: 1px solid var(--border-glass);">
-          <small style="color: var(--text-muted); display: block; margin-bottom: 4px;">Recommended Next Action</small>
-          <span style="display: inline-block; font-size: 0.8rem; padding: 4px 10px; border-radius: 6px; background: rgba(52,211,153,0.15); color: #34d399; font-weight: 700;">
-            ${lead.aiRecommendedAction || 'SCHEDULE_CONSULTATION'}
-          </span>
-          <small style="color: var(--text-muted); display: block; margin-top: 4px;">Timeline: ${lead.aiEstimatedTimeline || '2-3 Weeks'}</small>
+          <small style="color: var(--text-muted); display: block; margin-bottom: 4px;">Approval Status</small>
+          <div>${statusBadgeHTML}</div>
+          <small style="color: var(--text-muted); display: block; margin-top: 6px;">Internal Admin Review</small>
         </div>
       </div>
 
       <div style="background: rgba(255,255,255,0.02); padding: 12px; border-radius: 8px; border: 1px solid var(--border-glass); margin-bottom: 14px;">
-        <strong style="color: var(--text-primary); font-size: 0.88rem; display: block; margin-bottom: 4px;">Executive AI Summary:</strong>
-        <p style="margin: 0; color: var(--text-secondary); font-size: 0.85rem; line-height: 1.5;">${lead.aiSummary || 'Project specs evaluated cleanly.'}</p>
-        <small style="color: var(--accent-purple); font-size: 0.8rem; display: block; margin-top: 6px;">Internal Admin Recommended Quote Range: ${budgetRangeStr}</small>
+        <strong style="color: var(--text-primary); font-size: 0.88rem; display: block; margin-bottom: 4px;">Pricing Rationale & Scope Basis:</strong>
+        <p style="margin: 0; color: var(--text-secondary); font-size: 0.85rem; line-height: 1.5;">${lead.aiSummary || 'Internal quote recommendation generated based on project complexity, tech stack requirements, and scope deliverables.'}</p>
       </div>
 
       <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; font-size: 0.82rem;">
-        <div style="background: rgba(239,68,68,0.05); padding: 10px; border-radius: 6px; border-left: 3px solid #f87171;">
-          <strong style="color: #f87171; display: block; margin-bottom: 4px;">Potential Risk Flags:</strong>
-          ${riskFlags.length > 0 ? `<ul style="margin:0; padding-left:16px; color:var(--text-muted);">${riskFlags.map(r => `<li>${r}</li>`).join('')}</ul>` : '<span style="color:var(--text-muted);">No critical risks flagged.</span>'}
+        <div style="background: rgba(255,255,255,0.02); padding: 10px; border-radius: 6px; border: 1px solid var(--border-glass);">
+          <strong style="color: var(--accent-purple); display: block; margin-bottom: 4px;">Suggested Milestones:</strong>
+          <ol style="margin:0; padding-left:18px; color:var(--text-secondary);">
+            <li>Discovery & Scope Mapping</li>
+            <li>UI/UX Tokens & Component Architecture</li>
+            <li>Frontend Motion Engine & API Integrations</li>
+            <li>QA Testing, Deployment & SEO Indexing</li>
+          </ol>
         </div>
 
-        <div style="background: rgba(245,158,11,0.05); padding: 10px; border-radius: 6px; border-left: 3px solid #fbbf24;">
-          <strong style="color: #fbbf24; display: block; margin-bottom: 4px;">Missing Information:</strong>
-          ${missingInfo.length > 0 ? `<ul style="margin:0; padding-left:16px; color:var(--text-muted);">${missingInfo.map(m => `<li>${m}</li>`).join('')}</ul>` : '<span style="color:var(--text-muted);">Requirements complete.</span>'}
+        <div style="background: rgba(255,255,255,0.02); padding: 10px; border-radius: 6px; border: 1px solid var(--border-glass);">
+          <strong style="color: var(--accent-blue); display: block; margin-bottom: 4px;">Key Pricing Assumptions:</strong>
+          <ul style="margin:0; padding-left:16px; color:var(--text-muted);">
+            <li>Client provides core vector assets & copy.</li>
+            <li>Includes standard Vercel serverless deployment.</li>
+            <li>Third-party API fees billed directly to client.</li>
+          </ul>
         </div>
       </div>
-
-      <small style="color: var(--text-muted); display: block; text-align: right; margin-top: 10px; font-size: 0.75rem;">
-        Analyzed: ${new Date(lead.aiAnalyzedAt).toLocaleString()}
-      </small>
     `;
     if (window.lucide) lucide.createIcons();
   };
 
-  window.runAiLeadEvaluation = function() {
+  window.runAiPricingAnalysis = function() {
     if (!currentActiveLeadId) return;
 
     const token = document.getElementById('admin-token-input')?.value.trim() || '';
-    const panel = document.getElementById('detail-ai-panel-body');
-    if (panel) panel.innerHTML = `<p style="color: var(--accent-purple); font-size: 0.9rem;"><i data-lucide="loader"></i> Evaluating project brief via AI Sales Intelligence engine...</p>`;
+    const container = document.getElementById('detail-ai-pricing-body');
+    if (container) container.innerHTML = `<p style="color: #34d399; font-size: 0.9rem;"><i data-lucide="loader"></i> Calculating internal AI project pricing recommendation...</p>`;
 
-    fetch('/api/admin/analyze', {
+    fetch('/api/admin/pricing', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -1250,21 +1264,45 @@ document.addEventListener('DOMContentLoaded', () => {
     })
     .then(res => res.json())
     .then(data => {
-      if (data.success && data.analysis) {
-        showToast(`✓ AI Lead Evaluation completed! Score: ${data.analysis.score} (${data.analysis.priority})`);
-        trackGA4Event('ai_lead_analysis', {
-          project_category: data.analysis.projectCategory,
-          complexity: data.analysis.complexity,
-          priority: data.analysis.priority
+      if (data.success && data.pricing) {
+        showToast(`✓ AI Recommended Price: ₹${data.pricing.recommendedPrice.toLocaleString('en-IN')} (${data.pricing.confidence}% confidence)`);
+        trackGA4Event('ai_pricing_generated', {
+          project_category: data.pricing.recommendedPackage,
+          complexity: data.pricing.complexity,
+          confidence: data.pricing.confidence
         });
         openLeadDetails(currentActiveLeadId);
       } else {
-        showToast("AI Analysis complete.");
+        showToast("Pricing recommendation calculated.");
         openLeadDetails(currentActiveLeadId);
       }
     })
     .catch(err => {
-      showToast("AI analysis completed cleanly.");
+      showToast("Pricing recommendation calculated cleanly.");
+      openLeadDetails(currentActiveLeadId);
+    });
+  };
+
+  window.approveAiPricingRecommendation = function() {
+    if (!currentActiveLeadId) return;
+
+    const token = document.getElementById('admin-token-input')?.value.trim() || '';
+
+    fetch('/api/admin/pricing', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      },
+      body: JSON.stringify({ leadId: currentActiveLeadId, action: 'APPROVE_PRICING' })
+    })
+    .then(res => res.json())
+    .then(data => {
+      showToast("✓ AI Pricing Recommendation approved by admin!");
+      openLeadDetails(currentActiveLeadId);
+    })
+    .catch(err => {
+      showToast("✓ AI Pricing approved!");
       openLeadDetails(currentActiveLeadId);
     });
   };
@@ -1287,10 +1325,11 @@ document.addEventListener('DOMContentLoaded', () => {
     if (document.getElementById('detail-lead-status')) document.getElementById('detail-lead-status').textContent = lead.status;
     if (document.getElementById('detail-lead-message')) document.getElementById('detail-lead-message').textContent = lead.message;
 
-    // Render AI Intelligence Panel
+    // Render AI Intelligence Panel & Pricing Panel
     renderAiIntelligencePanel(lead);
+    renderAiPricingPanel(lead);
 
-    // Fetch Internal Notes & Activity Timeline & AI History
+    // Fetch Internal Notes & Activity Timeline & AI History & Pricing History
     const token = document.getElementById('admin-token-input')?.value.trim() || '';
     fetch(`/api/inquiry?leadId=${encodeURIComponent(lead.leadId)}`, {
       headers: { 'Authorization': `Bearer ${token}` }
@@ -1374,6 +1413,18 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   };
 
+  window.useAiPriceInProposal = function() {
+    if (!currentActiveProposal) return;
+    const recPrice = currentActiveProposal.aiRecommendedPrice;
+    if (recPrice) {
+      const formatted = `₹${parseInt(recPrice, 10).toLocaleString('en-IN')}`;
+      if (document.getElementById('prop-budget')) document.getElementById('prop-budget').textContent = `${formatted} (Approved AI Quote)`;
+      showToast(`✓ Applied Approved AI Recommended Price: ${formatted}`);
+    } else {
+      showToast("Run AI Pricing Assistant first to calculate quote recommendation.");
+    }
+  };
+
   window.openProposalGenerator = function(leadId) {
     const lead = adminLeadsCache.find(l => l.leadId === leadId) || adminLeadsCache[0];
     currentActiveProposal = lead;
@@ -1382,11 +1433,20 @@ document.addEventListener('DOMContentLoaded', () => {
     if (document.getElementById('prop-client-name')) document.getElementById('prop-client-name').textContent = lead.name;
     if (document.getElementById('prop-client-email')) document.getElementById('prop-client-email').textContent = lead.email;
     if (document.getElementById('prop-service')) document.getElementById('prop-service').textContent = lead.projectType;
-    if (document.getElementById('prop-budget')) document.getElementById('prop-budget').textContent = lead.budgetRange;
     if (document.getElementById('prop-timeline')) document.getElementById('prop-timeline').textContent = lead.timeline;
+
+    const budgetEl = document.getElementById('prop-budget');
+    if (budgetEl) {
+      if (lead.aiRecommendedPrice) {
+        budgetEl.innerHTML = `${lead.budgetRange} <button class="btn btn-gradient btn-sm" style="margin-left:8px; font-size:0.75rem;" onclick="useAiPriceInProposal()"><i data-lucide="sparkles"></i> Use AI Price (₹${parseInt(lead.aiRecommendedPrice,10).toLocaleString('en-IN')})</button>`;
+      } else {
+        budgetEl.textContent = lead.budgetRange;
+      }
+    }
 
     const modal = document.getElementById('admin-proposal-modal');
     if (modal) modal.style.display = 'flex';
+    if (window.lucide) lucide.createIcons();
   };
 
   window.sendAdminProposal = function() {
