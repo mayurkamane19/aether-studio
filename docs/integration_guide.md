@@ -1,78 +1,68 @@
-# Aether Studio — Enterprise Backend & Production Integration Guide
+# Aether Studio — Enterprise Lead Management & Automation Integration Guide
 
-This guide details the exact environment variables, API endpoints, and production backend integrations required for **Aether Studio**.
-
----
-
-## 1. Domain Configuration
-To point Aether Studio to a custom production domain (e.g. `https://aetherstudio.com`):
-
-### Environment Variable
-```env
-NEXT_PUBLIC_SITE_URL=https://aetherstudio.com
-```
-
-### Files Configured for Automatic Domain Resolution
-1. `config.js`: Controls `SITE_URL` fallback.
-2. `sitemap.xml`: Contains canonical XML location tags.
-3. `robots.txt`: Points to `https://aetherstudio.com/sitemap.xml`.
-4. `index.html` & `blog/**/*.html`: Use central `<link rel="canonical">` and Open Graph `og:url` tags.
+This guide details the complete technical architecture, serverless API endpoints, environment variables, security safeguards, and deployment workflows for **Aether Studio**.
 
 ---
 
-## 2. Professional Contact Form Email Delivery
-The contact form uses a serverless API handler (`api/contact.js`) with an anti-spam honeypot (`b_hp_field`).
+## 1. Environment Variables Matrix
+All backend credentials must be configured securely on Vercel Serverless Functions. **Never expose secrets in frontend JavaScript.**
 
-### Required Environment Variables
-```env
-# Resend API Key (https://resend.com)
-RESEND_API_KEY=re_your_api_key_here
-
-# Destination Email Address
-CONTACT_DESTINATION_EMAIL=mayurkamane23@gmail.com
-```
-
-### Deployment Steps
-1. Create a free account at [Resend.com](https://resend.com).
-2. Generate an API Key and add your domain DNS records for email authentication (DKIM & SPF).
-3. Set `RESEND_API_KEY` and `CONTACT_DESTINATION_EMAIL` in your Vercel / Netlify environment variables settings.
+| Environment Variable | Description | Example / Required Format |
+| :--- | :--- | :--- |
+| `NEXT_PUBLIC_SITE_URL` | Canonical Production Domain URL | `https://aetherstudio.com` |
+| `RESEND_API_KEY` | Resend API Key for Email Dispatch | `re_your_api_key_here` |
+| `CONTACT_DESTINATION_EMAIL` | Destination Inbox for Lead Notifications | `mayurkamane23@gmail.com` |
+| `CONTACT_FROM_EMAIL` | Verified Sender Address | `Aether Studio Leads <onboarding@resend.dev>` |
+| `ADMIN_CRM_TOKEN` | Bearer Secret for Admin Portal Auth | `your_secure_admin_token_here` |
+| `DATABASE_URL` | PostgreSQL / Supabase Connection | `postgresql://user:pass@host:5432/db` |
+| `CAL_COM_API_KEY` | Cal.com API Key for Booking Sync | `cal_live_your_key_here` |
+| `OPENAI_API_KEY` | OpenAI Key for Live AI Evaluation | `sk-proj-your_key_here` |
 
 ---
 
-## 3. Consultation Booking & Calendar Integration
-The booking engine (`#booking` section & `api/booking.js`) provides date and time slot selections with instant confirmation UI state.
+## 2. Serverless API Architecture
 
-### Required Environment Variables
-```env
-CAL_COM_API_KEY=cal_live_your_api_key_here
-CAL_COM_EVENT_TYPE_ID=123456
-```
+### Inbound Contact API (`/api/contact`)
+- **Method**: `POST`
+- **Lead ID Generation**: Generates unique collision-resistant ID (`AS-2026-XXXXXX`).
+- **Spam & Security**: Checks anti-spam honeypot field (`b_hp_field`), validates email format, enforces input length limits, and applies 5 req/min IP rate limiting.
+- **Admin Email**: Sends structured lead summary to `CONTACT_DESTINATION_EMAIL`.
+- **Visitor Auto-Reply**: Sends branded confirmation email to visitor email with Lead ID, 4-hour response SLA, project reference summary, and next-step advice.
 
-### Integration Options
-- **Option A (Cal.com API)**: Syncs selected date/time directly with Cal.com event type via `CAL_COM_API_KEY`.
-- **Option B (Google Calendar API)**: Configure Google OAuth 2.0 service account credentials in server environment.
+### Consultation Booking API (`/api/booking`)
+- **Method**: `POST`
+- **Booking ID Generation**: Generates unique ID (`BK-2026-XXXXXX`).
+- **Notifications**: Dispatches admin booking notification and visitor confirmation email via Resend.
 
----
+### Client Inquiry API (`/api/inquiry`)
+- **Methods**: `POST` (Create inquiry), `GET` (List inquiries — Admin Token protected).
+- **Inquiry ID Generation**: Generates unique ID (`INQ-2026-XXXXXX`).
 
-## 4. Client / Project Inquiry CRM & Admin Portal
-Inquiries are processed via `api/inquiry.js` with structured lead schema (`id`, `name`, `email`, `company`, `projectType`, `budgetRange`, `timeline`, `status`).
+### Admin Proposal Generator API (`/api/admin/proposal`)
+- **Method**: `POST`
+- **Protection**: Requires `Authorization: Bearer <ADMIN_CRM_TOKEN>`.
+- **Action**: Generates and emails formal PDF/HTML proposal to client upon explicit admin request.
 
-### Required Environment Variables
-```env
-# PostgreSQL / Supabase Database Connection URL
-DATABASE_URL=postgresql://postgres:your_password@db.your_supabase_project.supabase.co:5432/postgres
-
-# Admin Portal Authorization Bearer Token
-ADMIN_CRM_TOKEN=your_secure_admin_secret_token_here
-```
-
-### Admin Portal Access
-- Open Admin Portal via JavaScript helper: `openAdminPortal('your_secure_admin_secret_token_here')`.
-- Authenticates against `api/inquiry.js` using `Authorization: Bearer <token>`.
-- Inquiries can be categorized across stages: `New`, `Contacted`, `Qualified`, `Proposal Sent`, `Won`, `Lost`.
+### AI Brief Analyzer & Quote Assistant (`/api/admin/analyze`)
+- **Method**: `POST`
+- **Protection**: Requires `Authorization: Bearer <ADMIN_CRM_TOKEN>`.
+- **Output**: Extracts category, complexity, recommended deliverables, suggested tech stack, risks, questions, and price range.
 
 ---
 
-## 5. Security & Privacy Compliance
-- **No Secrets in Frontend**: Zero API keys, database credentials, or email passwords are stored in HTML/CSS/JS.
-- **Privacy-Safe GA4 Events**: Tracks interaction events (`click_cta`, `submit_inquiry`, `filter_category`, `view_case_study`) without collecting PII (names, emails, phone numbers).
+## 3. Security Audit & `.gitignore` Configuration
+- `.gitignore` explicitly excludes `.env`, `.env.*`, `!.env.example`.
+- All form inputs are sanitized to eliminate XSS/injection vectors.
+- Error handlers return safe JSON responses without exposing stack traces or server file paths.
+
+---
+
+## 4. Local Testing & Production Vercel Deployment
+1. To test locally:
+   ```bash
+   node scratch/verify_client_ready.js
+   ```
+2. Deploying to Vercel:
+   - Commit and push changes to `origin main`.
+   - Vercel automatically detects serverless endpoints under `/api/` and builds the site.
+   - Configure environment variables under **Vercel Settings → Environment Variables**.

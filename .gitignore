@@ -7,3 +7,8 @@ node_modules/
 # Temporary / Cache
 .cache/
 .vscode/
+
+# Environment Variables & Secrets
+.env
+.env.*
+!.env.example

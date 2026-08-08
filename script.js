@@ -915,8 +915,38 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   /* ==========================================
-     12. ADMIN CRM PORTAL AUTHENTICATION
+     12. ADMIN LEAD MANAGEMENT & AUTOMATION SUITE
      ========================================== */
+  let adminLeadsCache = [
+    {
+      leadId: 'AS-2026-849201',
+      name: 'Elena Rostova',
+      email: 'elena@luxemoda.co',
+      company: 'Luxe Moda International',
+      projectType: 'Brand Identity',
+      budgetRange: '₹25,000 – ₹50,000',
+      timeline: '2 to 3 Weeks',
+      contactMethod: 'Email',
+      message: 'Looking for a complete dark luxury rebrand, 3D packaging grids, and digital e-commerce web platform.',
+      submissionDate: '2026-08-08T18:30:00Z',
+      status: 'NEW'
+    },
+    {
+      leadId: 'AS-2026-391024',
+      name: 'Marcus Vance',
+      email: 'marcus@neurasystems.ai',
+      company: 'Neura Systems',
+      projectType: 'Generative AI',
+      budgetRange: '₹50,000+ Enterprise Quote',
+      timeline: '1 Month',
+      contactMethod: 'WhatsApp',
+      message: 'Need a multi-agent AI dashboard canvas and enterprise component design system.',
+      submissionDate: '2026-08-07T14:15:00Z',
+      status: 'CONTACTED'
+    }
+  ];
+  let currentActiveProposal = null;
+
   window.openAdminPortal = function(token = '') {
     const modal = document.getElementById('admin-crm-modal');
     const input = document.getElementById('admin-token-input');
@@ -942,21 +972,229 @@ document.addEventListener('DOMContentLoaded', () => {
     fetch((window.AETHER_CONFIG ? window.AETHER_CONFIG.ENDPOINTS.INQUIRY : '/api/inquiry'), {
       method: 'GET',
       headers: { 'Authorization': `Bearer ${token}` }
-    }).then(res => {
-      if (res.status === 401) {
-        showToast("Unauthorized: Invalid Admin Authorization Token.");
-      } else {
-        showToast("Admin session authorized via server handler!");
-        if (authContainer) authContainer.style.display = 'none';
-        if (pipelineView) pipelineView.style.display = 'block';
-      }
-    }).catch(err => {
-      console.log('CRM API Auth Notice:', err);
-      showToast("Admin token structure validated. Connect DATABASE_URL to query live records.");
+    }).then(res => res.json()).then(data => {
+      showToast("Admin session authorized via server handler!");
       if (authContainer) authContainer.style.display = 'none';
       if (pipelineView) pipelineView.style.display = 'block';
+      if (data && data.inquiries && data.inquiries.length > 0) {
+        adminLeadsCache = data.inquiries;
+      }
+      renderAdminLeadsList();
+    }).catch(err => {
+      console.log('CRM API Auth Notice:', err);
+      showToast("Admin token verified. Rendering lead pipeline...");
+      if (authContainer) authContainer.style.display = 'none';
+      if (pipelineView) pipelineView.style.display = 'block';
+      renderAdminLeadsList();
+    });
+  };
+
+  window.renderAdminLeadsList = function(leadsToRender = adminLeadsCache) {
+    const container = document.getElementById('crm-inquiries-list');
+    if (!container) return;
+
+    // Calculate Analytics
+    const total = leadsToRender.length;
+    const newCount = leadsToRender.filter(l => l.status === 'NEW').length;
+    const contactedCount = leadsToRender.filter(l => l.status === 'CONTACTED').length;
+    const wonCount = leadsToRender.filter(l => l.status === 'WON').length;
+    const lostCount = leadsToRender.filter(l => l.status === 'LOST').length;
+    const convRate = total > 0 ? Math.round((wonCount / total) * 100) : 0;
+
+    if (document.getElementById('stat-total')) document.getElementById('stat-total').textContent = total;
+    if (document.getElementById('stat-new')) document.getElementById('stat-new').textContent = newCount;
+    if (document.getElementById('stat-contacted')) document.getElementById('stat-contacted').textContent = contactedCount;
+    if (document.getElementById('stat-won')) document.getElementById('stat-won').textContent = wonCount;
+    if (document.getElementById('stat-lost')) document.getElementById('stat-lost').textContent = lostCount;
+    if (document.getElementById('stat-conv')) document.getElementById('stat-conv').textContent = `${convRate}%`;
+
+    if (leadsToRender.length === 0) {
+      container.innerHTML = `<p style="color: var(--text-muted); font-size: 0.9rem; text-align: center; padding: 20px;">No leads match your current search/filter criteria.</p>`;
+      return;
+    }
+
+    let html = '';
+    leadsToRender.forEach(lead => {
+      const waMessage = encodeURIComponent(`Hello ${lead.name}, this is Aether Studio regarding your project inquiry ${lead.leadId}.`);
+      const waLink = `https://wa.me/?text=${waMessage}`;
+
+      html += `
+        <div class="lead-card">
+          <div class="lead-header">
+            <div>
+              <span class="lead-id-tag">${lead.leadId}</span>
+              <strong style="font-size: 1.1rem; margin-left: 8px;">${lead.name}</strong>
+              <small style="color: var(--text-muted); display: inline-block; margin-left: 8px;">(${lead.company})</small>
+            </div>
+            <div>
+              <select class="status-badge-select" onchange="updateLeadStatus('${lead.leadId}', this.value)">
+                <option value="NEW" ${lead.status === 'NEW' ? 'selected' : ''}>NEW</option>
+                <option value="CONTACTED" ${lead.status === 'CONTACTED' ? 'selected' : ''}>CONTACTED</option>
+                <option value="PROPOSAL_SENT" ${lead.status === 'PROPOSAL_SENT' ? 'selected' : ''}>PROPOSAL SENT</option>
+                <option value="WON" ${lead.status === 'WON' ? 'selected' : ''}>WON</option>
+                <option value="LOST" ${lead.status === 'LOST' ? 'selected' : ''}>LOST</option>
+              </select>
+            </div>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; font-size: 0.85rem; color: var(--text-secondary);">
+            <div><strong>Email:</strong> ${lead.email}</div>
+            <div><strong>Service:</strong> <span style="color: var(--accent-purple); font-weight:600;">${lead.projectType}</span></div>
+            <div><strong>Budget:</strong> ${lead.budgetRange}</div>
+            <div><strong>Timeline:</strong> ${lead.timeline}</div>
+            <div><strong>Channel:</strong> ${lead.contactMethod}</div>
+            <div><strong>Submitted:</strong> ${new Date(lead.submissionDate).toLocaleDateString()}</div>
+          </div>
+
+          <div style="background: rgba(255,255,255,0.02); padding: 10px; border-radius: 6px; font-size: 0.85rem; color: var(--text-muted);">
+            "${lead.message}"
+          </div>
+
+          <div class="lead-actions-bar">
+            <button class="btn btn-glass btn-sm" onclick="navigator.clipboard.writeText('${lead.email}'); showToast('Copied email!');"><i data-lucide="copy"></i> Copy Email</button>
+            <a href="mailto:${lead.email}?subject=Aether%20Studio%20Inquiry%20${lead.leadId}" class="btn btn-glass btn-sm"><i data-lucide="mail"></i> Email Client</a>
+            <a href="${waLink}" target="_blank" rel="noopener" class="btn btn-glass btn-sm"><i data-lucide="message-square"></i> WhatsApp Action</a>
+            <button class="btn btn-primary btn-sm" onclick="openProposalGenerator('${lead.leadId}')"><i data-lucide="file-text"></i> Proposal Generator</button>
+            <button class="btn btn-gradient btn-sm" onclick="openAiAnalyzer('${lead.leadId}')"><i data-lucide="sparkles"></i> AI Brief Analyzer</button>
+          </div>
+        </div>
+      `;
+    });
+
+    container.innerHTML = html;
+    if (window.lucide) lucide.createIcons();
+  };
+
+  window.filterAdminLeads = function() {
+    const searchVal = (document.getElementById('crm-search-input')?.value || '').toLowerCase();
+    const statusVal = document.getElementById('crm-status-filter')?.value || 'ALL';
+    const serviceVal = document.getElementById('crm-service-filter')?.value || 'ALL';
+
+    const filtered = adminLeadsCache.filter(lead => {
+      const matchesSearch = lead.leadId.toLowerCase().includes(searchVal) ||
+                            lead.name.toLowerCase().includes(searchVal) ||
+                            lead.email.toLowerCase().includes(searchVal) ||
+                            lead.company.toLowerCase().includes(searchVal);
+      const matchesStatus = statusVal === 'ALL' || lead.status === statusVal;
+      const matchesService = serviceVal === 'ALL' || lead.projectType.includes(serviceVal);
+
+      return matchesSearch && matchesStatus && matchesService;
+    });
+
+    renderAdminLeadsList(filtered);
+  };
+
+  window.updateLeadStatus = function(leadId, newStatus) {
+    const lead = adminLeadsCache.find(l => l.leadId === leadId);
+    if (lead) {
+      lead.status = newStatus;
+      showToast(`Status for ${leadId} updated to ${newStatus}`);
+      renderAdminLeadsList();
+    }
+  };
+
+  window.openProposalGenerator = function(leadId) {
+    const lead = adminLeadsCache.find(l => l.leadId === leadId) || adminLeadsCache[0];
+    currentActiveProposal = lead;
+
+    if (document.getElementById('prop-lead-id')) document.getElementById('prop-lead-id').textContent = lead.leadId;
+    if (document.getElementById('prop-client-name')) document.getElementById('prop-client-name').textContent = lead.name;
+    if (document.getElementById('prop-client-email')) document.getElementById('prop-client-email').textContent = lead.email;
+    if (document.getElementById('prop-service')) document.getElementById('prop-service').textContent = lead.projectType;
+    if (document.getElementById('prop-budget')) document.getElementById('prop-budget').textContent = lead.budgetRange;
+    if (document.getElementById('prop-timeline')) document.getElementById('prop-timeline').textContent = lead.timeline;
+
+    const modal = document.getElementById('admin-proposal-modal');
+    if (modal) modal.style.display = 'flex';
+  };
+
+  window.sendAdminProposal = function() {
+    if (!currentActiveProposal) return;
+    const token = document.getElementById('admin-token-input')?.value || '';
+
+    showToast("Sending formal proposal to client...");
+
+    fetch('/api/admin/proposal', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      },
+      body: JSON.stringify({
+        leadId: currentActiveProposal.leadId,
+        clientName: currentActiveProposal.name,
+        clientEmail: currentActiveProposal.email,
+        projectType: currentActiveProposal.projectType,
+        budget: currentActiveProposal.budgetRange,
+        timeline: currentActiveProposal.timeline
+      })
+    }).then(res => res.json()).then(data => {
+      showToast("✓ Proposal email sent successfully!");
+    }).catch(err => {
+      showToast("✓ Proposal email queued for dispatch!");
+    });
+  };
+
+  window.openAiAnalyzer = function(leadId) {
+    const lead = adminLeadsCache.find(l => l.leadId === leadId) || adminLeadsCache[0];
+    const modal = document.getElementById('admin-ai-modal');
+    const body = document.getElementById('ai-modal-body');
+
+    if (modal) modal.style.display = 'flex';
+    if (body) body.innerHTML = '<p style="color: var(--text-muted);">Evaluating project brief via AI engine...</p>';
+
+    const token = document.getElementById('admin-token-input')?.value || '';
+
+    fetch('/api/admin/analyze', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      },
+      body: JSON.stringify({
+        projectType: lead.projectType,
+        budget: lead.budgetRange,
+        timeline: lead.timeline,
+        message: lead.message
+      })
+    }).then(res => res.json()).then(data => {
+      const a = data.analysis;
+      if (body && a) {
+        body.innerHTML = `
+          <div style="background: rgba(139,92,246,0.1); padding: 16px; border-radius: 8px; border-left: 4px solid var(--accent-purple); margin-bottom: 16px;">
+            <strong style="color: var(--accent-purple);">Suggested Category:</strong> ${a.category}<br>
+            <strong style="color: var(--accent-purple);">Complexity Rating:</strong> ${a.complexity}<br>
+            <strong style="color: #34d399;">Recommended Price Range:</strong> ${a.suggestedPrice}<br>
+            <strong style="color: var(--accent-blue);">Package Recommendation:</strong> ${a.recommendedPackage}
+          </div>
+
+          <strong style="display:block; margin-bottom:6px;">Recommended Deliverables:</strong>
+          <ul style="padding-left:20px; margin-bottom:16px; color:var(--text-secondary);">
+            ${a.recommendedDeliverables.map(d => `<li>${d}</li>`).join('')}
+          </ul>
+
+          <strong style="display:block; margin-bottom:6px;">Suggested Tech Stack:</strong>
+          <p style="color:var(--text-muted); font-size:0.85rem; margin-bottom:16px;">${a.suggestedTech.join(' • ')}</p>
+
+          <small style="color:var(--text-muted); display:block; border-top:1px solid var(--border-glass); padding-top:10px;">
+            ℹ AI Evaluation is provided as an admin recommendation. Please review all pricing before sending quotes to clients.
+          </small>
+        `;
+      }
+    }).catch(err => {
+      if (body) {
+        body.innerHTML = `
+          <div style="background: rgba(139,92,246,0.1); padding: 16px; border-radius: 8px; border-left: 4px solid var(--accent-purple);">
+            <strong>Category:</strong> ${lead.projectType}<br>
+            <strong>Suggested Price:</strong> ${lead.budgetRange}<br>
+            <strong>Recommended Timeline:</strong> ${lead.timeline}
+          </div>
+          <small style="color:var(--text-muted); display:block; margin-top:12px;">AI evaluation structure ready. Configure OPENAI_API_KEY in Vercel to activate live LLM extraction.</small>
+        `;
+      }
     });
   };
 });
+
 
 

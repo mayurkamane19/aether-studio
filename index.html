@@ -1171,13 +1171,13 @@
     </div>
   </footer>
 
-  <!-- ADMIN CRM MODAL (TOKEN PROTECTED FOR SECURE PIPELINE MANAGEMENT) -->
+  <!-- ADMIN LEAD MANAGEMENT & AUTOMATION SUITE -->
   <div class="modal-backdrop" id="admin-crm-modal" style="display: none;">
-    <div class="modal-content glass-panel" style="max-width: 850px;">
+    <div class="modal-content glass-panel" style="max-width: 960px;">
       <button class="close-modal-btn" onclick="document.getElementById('admin-crm-modal').style.display='none'"><i data-lucide="x"></i></button>
       <div style="margin-bottom: 20px;">
         <span style="color: var(--accent-purple); font-weight: 700; font-size: 0.8rem; text-transform: uppercase;">ADMINISTRATION PORTAL</span>
-        <h2 style="font-size: 1.8rem; margin: 4px 0;">Project Inquiry CRM Pipeline</h2>
+        <h2 style="font-size: 1.8rem; margin: 4px 0;">Lead Pipeline & Analytics Suite</h2>
         <p style="color: var(--text-muted); font-size: 0.9rem;">Secure Lead Pipeline Management via Serverless Authorization Handler</p>
       </div>
 
@@ -1191,13 +1191,105 @@
       </div>
 
       <div id="crm-pipeline-view" style="display: none;">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
-          <strong>Active Inquiries</strong>
-          <span class="blog-card-category" style="position: relative; top: 0; left: 0;">Authorized Session</span>
+        <!-- Analytics Dashboard -->
+        <div class="admin-stats-grid">
+          <div class="admin-stat-card"><div class="admin-stat-num" id="stat-total">0</div><span class="admin-stat-label">Total Leads</span></div>
+          <div class="admin-stat-card"><div class="admin-stat-num" id="stat-new" style="color:var(--accent-purple);">0</div><span class="admin-stat-label">New</span></div>
+          <div class="admin-stat-card"><div class="admin-stat-num" id="stat-contacted" style="color:var(--accent-blue);">0</div><span class="admin-stat-label">Contacted</span></div>
+          <div class="admin-stat-card"><div class="admin-stat-num" id="stat-won" style="color:#34d399;">0</div><span class="admin-stat-label">Won</span></div>
+          <div class="admin-stat-card"><div class="admin-stat-num" id="stat-lost" style="color:#f87171;">0</div><span class="admin-stat-label">Lost</span></div>
+          <div class="admin-stat-card"><div class="admin-stat-num" id="stat-conv" style="color:var(--accent-cyan);">0%</div><span class="admin-stat-label">Conv. Rate</span></div>
         </div>
-        <div id="crm-inquiries-list" style="display: flex; flex-direction: column; gap: 12px;">
+
+        <!-- Search & Filter Bar -->
+        <div style="display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 12px; margin-bottom: 20px;">
+          <input type="text" id="crm-search-input" placeholder="Search by Lead ID, name, email, or company..." class="calc-select" onkeyup="filterAdminLeads()">
+          <select id="crm-status-filter" class="calc-select" onchange="filterAdminLeads()">
+            <option value="ALL">All Statuses</option>
+            <option value="NEW">New</option>
+            <option value="CONTACTED">Contacted</option>
+            <option value="PROPOSAL_SENT">Proposal Sent</option>
+            <option value="WON">Won</option>
+            <option value="LOST">Lost</option>
+          </select>
+          <select id="crm-service-filter" class="calc-select" onchange="filterAdminLeads()">
+            <option value="ALL">All Services</option>
+            <option value="Portfolio Website">Portfolio Website</option>
+            <option value="Dashboard Development">Dashboard Dev</option>
+            <option value="Brand Identity">Brand Identity</option>
+            <option value="Generative AI">Generative AI</option>
+          </select>
+        </div>
+
+        <!-- Lead Pipeline List -->
+        <div id="crm-inquiries-list" style="display: flex; flex-direction: column; gap: 16px;">
           <p style="color: var(--text-muted); font-size: 0.9rem;">Connect <code>DATABASE_URL</code> to stream live database records into your CRM pipeline.</p>
         </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PROPOSAL GENERATOR MODAL -->
+  <div class="modal-backdrop" id="admin-proposal-modal" style="display: none;">
+    <div class="modal-content glass-panel" style="max-width: 750px;">
+      <button class="close-modal-btn" onclick="document.getElementById('admin-proposal-modal').style.display='none'"><i data-lucide="x"></i></button>
+      <div class="proposal-preview-paper" id="proposal-paper-content">
+        <div style="display: flex; justify-content: space-between; border-bottom: 2px solid var(--accent-purple); padding-bottom: 16px; margin-bottom: 20px;">
+          <div>
+            <h2 style="margin: 0; font-size: 1.6rem;">AETHER STUDIO</h2>
+            <small style="color: var(--accent-purple);">Official Client Proposal & Scope</small>
+          </div>
+          <div style="text-align: right;">
+            <strong style="color: var(--accent-purple);" id="prop-lead-id">AS-2026-000000</strong>
+            <small style="display: block; color: var(--text-muted);" id="prop-date">Aug 09, 2026</small>
+          </div>
+        </div>
+
+        <div style="margin-bottom: 20px;">
+          <strong style="color: var(--text-muted); font-size: 0.8rem; text-transform: uppercase;">Prepared For:</strong>
+          <h3 style="margin: 4px 0;" id="prop-client-name">Valued Client</h3>
+          <span style="color: var(--accent-blue);" id="prop-client-email">client@company.com</span>
+        </div>
+
+        <div style="background: rgba(255,255,255,0.03); padding: 16px; border-radius: 8px; margin-bottom: 20px; border: 1px solid var(--border-glass);">
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; font-size: 0.9rem;">
+            <div><strong>Project Type:</strong> <span id="prop-service">Web Application</span></div>
+            <div><strong>Investment:</strong> <span id="prop-budget" style="color:#34d399; font-weight:700;">₹25,000</span></div>
+            <div><strong>Estimated Schedule:</strong> <span id="prop-timeline">2 to 3 Weeks</span></div>
+            <div><strong>Status:</strong> <span style="color:var(--accent-purple);">Proposal Active</span></div>
+          </div>
+        </div>
+
+        <div style="margin-bottom: 24px;">
+          <h4 style="margin-bottom: 8px;">Scope of Deliverables</h4>
+          <ul style="color: var(--text-secondary); font-size: 0.9rem; line-height: 1.6; padding-left: 20px;">
+            <li>Responsive Dark Luxury Web Engineering & Component Tokens</li>
+            <li>Inertial Smooth Scrolling (Lenis) & GSAP Motion Micro-Interactions</li>
+            <li>SEO Canonical Tagging, Open Graph Metadata & JSON-LD Schemas</li>
+            <li>PWA Offline Support & Service Worker Caching</li>
+            <li>Interactive Contact Desk, Booking Engine & Auto-Reply Workflows</li>
+          </ul>
+        </div>
+
+        <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+          <button class="btn btn-primary" onclick="window.print()"><i data-lucide="printer"></i> Download PDF / Print</button>
+          <button class="btn btn-gradient" onclick="sendAdminProposal()"><i data-lucide="send"></i> Send Proposal to Client Email</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- AI BRIEF & QUOTE ASSISTANT MODAL -->
+  <div class="modal-backdrop" id="admin-ai-modal" style="display: none;">
+    <div class="modal-content glass-panel" style="max-width: 700px;">
+      <button class="close-modal-btn" onclick="document.getElementById('admin-ai-modal').style.display='none'"><i data-lucide="x"></i></button>
+      <div style="margin-bottom: 20px;">
+        <span style="color: var(--accent-purple); font-weight: 700; font-size: 0.8rem; text-transform: uppercase;"><i data-lucide="sparkles"></i> AI ASSISTANT</span>
+        <h2 style="font-size: 1.6rem; margin: 4px 0;">Project Brief & Quote Evaluation</h2>
+        <p style="color: var(--text-muted); font-size: 0.85rem;">Automated requirement extraction & pricing guidance (Admin Recommendations)</p>
+      </div>
+      <div id="ai-modal-body" style="line-height: 1.6; font-size: 0.95rem;">
+        <p>Loading AI evaluation...</p>
       </div>
     </div>
   </div>
