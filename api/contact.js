@@ -85,7 +85,27 @@ module.exports = async function handler(req, res) {
     const randomCode = Math.floor(100000 + Math.random() * 900000);
     const leadId = `AS-2026-${randomCode}`;
 
-    // 6. Read Environment Variables
+    // 6. Save Lead to PostgreSQL Database (if DATABASE_URL is configured)
+    try {
+      const db = require('../lib/db');
+      await db.saveLead({
+        leadId,
+        name: cleanName,
+        email: cleanEmail,
+        company: cleanCompany,
+        projectType: cleanService,
+        budget: cleanBudget,
+        timeline: cleanTimeline,
+        preferredContact: cleanContactMethod,
+        message: cleanMessage,
+        status: 'NEW',
+        source: 'Website Contact Form'
+      });
+    } catch (dbErr) {
+      console.error('[DB INSERT NOTICE]', dbErr.message);
+    }
+
+    // 7. Read Environment Variables
     const resendApiKey = process.env.RESEND_API_KEY;
     const destinationEmail = process.env.CONTACT_DESTINATION_EMAIL || 'mayurkamane23@gmail.com';
     const fromEmail = process.env.CONTACT_FROM_EMAIL || 'Aether Studio Leads <onboarding@resend.dev>';

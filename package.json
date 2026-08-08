@@ -1,0 +1,13 @@
+{
+  "name": "aether-studio",
+  "version": "2.0.0",
+  "description": "Aether Studio Production Creative Platform",
+  "main": "api/contact.js",
+  "scripts": {
+    "start": "node api/contact.js",
+    "test": "node scratch/verify_client_ready.js"
+  },
+  "dependencies": {
+    "pg": "^8.11.3"
+  }
+}
