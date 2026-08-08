@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Project Proposal — Aether Studio</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body style="background: #06070a; color: #f8fafc; font-family: 'Inter', sans-serif; min-height: 100vh; padding: 40px 20px;">
+
+  <div style="max-width: 820px; margin: 0 auto;">
+    <!-- Brand Header -->
+    <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-glass); padding-bottom: 20px; margin-bottom: 30px;">
+      <div>
+        <h1 style="font-family: 'Space Grotesk', sans-serif; font-size: 1.8rem; margin: 0; letter-spacing: 1px;">AETHER <span style="color: var(--accent-purple);">STUDIO</span></h1>
+        <span style="color: var(--text-muted); font-size: 0.85rem;">Creative Engineering & Digital Architecture</span>
+      </div>
+      <div style="text-align: right;">
+        <span class="lead-id-tag" id="prop-id-tag">PROP-AS-2026-000000-V1</span>
+        <div style="margin-top: 6px;"><span id="prop-status-tag" style="font-size: 0.8rem; font-weight: 700; color: var(--accent-cyan);">PROPOSAL ACTIVE</span></div>
+      </div>
+    </div>
+
+    <!-- Main Proposal Paper -->
+    <div id="proposal-loading-state" style="text-align: center; padding: 60px 20px;">
+      <p style="color: var(--text-muted); font-size: 1.1rem;">Loading your proposal specifications...</p>
+    </div>
+
+    <div id="proposal-content-state" style="display: none;">
+      <!-- Title & Prepared For -->
+      <div style="background: rgba(255,255,255,0.02); padding: 24px; border-radius: 12px; border: 1px solid var(--border-glass); margin-bottom: 24px;">
+        <span style="color: var(--accent-purple); font-weight: 700; font-size: 0.8rem; text-transform: uppercase;">OFFICIAL PROJECT PROPOSAL</span>
+        <h2 style="font-size: 2rem; margin: 6px 0 12px 0; font-family: 'Space Grotesk', sans-serif;" id="prop-project-name">Digital Engineering Project</h2>
+        
+        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; font-size: 0.9rem; color: var(--text-secondary); border-top: 1px solid var(--border-glass); padding-top: 16px; margin-top: 16px;">
+          <div><strong>Prepared For:</strong> <span id="prop-client-name" style="color:var(--text-primary);">Client Name</span></div>
+          <div><strong>Company:</strong> <span id="prop-client-company">Company</span></div>
+          <div><strong>Date:</strong> <span id="prop-created-date">Date</span></div>
+        </div>
+      </div>
+
+      <!-- Scope & Deliverables -->
+      <div style="background: rgba(255,255,255,0.02); padding: 24px; border-radius: 12px; border: 1px solid var(--border-glass); margin-bottom: 24px;">
+        <h3 style="font-size: 1.2rem; margin-top: 0; color: var(--accent-purple);"><i data-lucide="layers"></i> Scope of Work & Deliverables</h3>
+        <p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 20px;" id="prop-scope-text">Detailed project scope...</p>
+        
+        <strong style="color: var(--text-primary); display: block; margin-bottom: 10px;">Included Key Deliverables:</strong>
+        <ul id="prop-deliverables-list" style="color: var(--text-secondary); line-height: 1.7; padding-left: 20px; margin-bottom: 20px;">
+          <li>Responsive Web Application</li>
+        </ul>
+
+        <strong style="color: var(--text-primary); display: block; margin-bottom: 8px;">Target Tech Stack:</strong>
+        <p style="color: var(--text-muted); font-size: 0.88rem; margin: 0;" id="prop-tech-stack">Next.js • GSAP • Lenis • Resend • PostgreSQL</p>
+      </div>
+
+      <!-- Milestones & Timeline -->
+      <div style="background: rgba(255,255,255,0.02); padding: 24px; border-radius: 12px; border: 1px solid var(--border-glass); margin-bottom: 24px;">
+        <h3 style="font-size: 1.2rem; margin-top: 0; color: var(--accent-blue);"><i data-lucide="calendar"></i> Estimated Schedule & Milestones</h3>
+        <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 16px;">Estimated Completion Schedule: <strong style="color: var(--text-primary);" id="prop-timeline-str">2 to 3 Weeks</strong></p>
+        
+        <div id="prop-milestones-grid" style="display: flex; flex-direction: column; gap: 10px;">
+          <!-- Rendered dynamically -->
+        </div>
+      </div>
+
+      <!-- Financial Investment & Payment Schedule -->
+      <div style="background: rgba(52, 211, 153, 0.04); padding: 24px; border-radius: 12px; border: 1px solid rgba(52, 211, 153, 0.25); margin-bottom: 24px;">
+        <h3 style="font-size: 1.2rem; margin-top: 0; color: #34d399;"><i data-lucide="credit-card"></i> Financial Investment Summary</h3>
+        
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 16px;">
+          <span style="font-size: 1.1rem; color: var(--text-secondary);">Total Project Investment</span>
+          <span style="font-size: 2.2rem; font-weight: 800; color: #34d399; font-family: 'Space Grotesk', sans-serif;" id="prop-total-val">₹35,000</span>
+        </div>
+
+        <strong style="color: var(--text-primary); display: block; margin-bottom: 12px;">Milestone Payment Schedule:</strong>
+        <div id="prop-payment-schedule-list" style="display: flex; flex-direction: column; gap: 10px;">
+          <!-- Payment Schedule -->
+        </div>
+      </div>
+
+      <!-- Terms & Validity -->
+      <div style="background: rgba(255,255,255,0.02); padding: 20px; border-radius: 10px; border: 1px solid var(--border-glass); margin-bottom: 30px;">
+        <strong style="color: var(--text-primary); font-size: 0.9rem; display: block; margin-bottom: 6px;">Terms & Conditions:</strong>
+        <p style="margin: 0; color: var(--text-muted); font-size: 0.85rem; line-height: 1.5;" id="prop-terms-text">Proposal valid for 14 days from dispatch.</p>
+      </div>
+
+      <!-- Actions Bar -->
+      <div id="prop-action-buttons-bar" style="display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap;">
+        <div>
+          <button class="btn btn-glass" onclick="window.print()"><i data-lucide="printer"></i> Print / Save PDF</button>
+        </div>
+        <div style="display: flex; gap: 12px;">
+          <button class="btn btn-glass" style="color: #f87171; border-color: rgba(239, 68, 68, 0.3);" onclick="openRejectModal()"><i data-lucide="x-circle"></i> Decline Proposal</button>
+          <button class="btn btn-gradient" style="font-size: 1.05rem; padding: 14px 28px;" onclick="confirmAcceptance()"><i data-lucide="check-circle"></i> Accept Proposal & Confirm Scope</button>
+        </div>
+      </div>
+
+      <!-- Celebration Screen (on ACCEPT) -->
+      <div id="prop-celebration-screen" style="display: none; text-align: center; background: rgba(52,211,153,0.1); padding: 40px 24px; border-radius: 16px; border: 2px solid #34d399; margin-top: 20px;">
+        <div style="font-size: 3rem; margin-bottom: 12px;">🎉</div>
+        <h2 style="color: #ffffff; margin-bottom: 8px;">Proposal Accepted!</h2>
+        <p style="color: #e0e7ff; max-width: 500px; margin: 0 auto 20px auto; line-height: 1.6;">
+          Thank you for choosing Aether Studio! Your acceptance has been recorded securely. Our lead strategist will contact you shortly to begin milestone onboarding.
+        </p>
+        <span class="lead-id-tag" style="background:#34d399; color:#000; font-weight:700;">STATUS: ACCEPTED</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Rejection Modal -->
+  <div class="modal-backdrop" id="reject-modal" style="display: none;">
+    <div class="modal-content glass-panel" style="max-width: 500px;">
+      <button class="close-modal-btn" onclick="document.getElementById('reject-modal').style.display='none'"><i data-lucide="x"></i></button>
+      <h3 style="margin-top: 0; color: #f87171;">Decline Proposal</h3>
+      <p style="color: var(--text-muted); font-size: 0.9rem;">Please let us know if you would like custom adjustments or budget revisions:</p>
+      <textarea id="reject-reason-input" placeholder="Optional notes or feedback for our strategy team..." class="calc-select" style="width: 100%; height: 100px; margin-bottom: 16px;"></textarea>
+      <div style="display: flex; justify-content: flex-end; gap: 10px;">
+        <button class="btn btn-glass" onclick="document.getElementById('reject-modal').style.display='none'">Cancel</button>
+        <button class="btn btn-primary" style="background: #ef4444;" onclick="submitRejection()">Confirm Decline</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const urlParams = new URLSearchParams(window.location.search);
+    const proposalId = urlParams.get('id');
+    const accessToken = urlParams.get('token');
+
+    if (!proposalId || !accessToken) {
+      document.getElementById('proposal-loading-state').innerHTML = `<p style="color: #f87171;">Invalid or missing proposal access credentials.</p>`;
+    } else {
+      fetch(`/api/proposal?id=${encodeURIComponent(proposalId)}&token=${encodeURIComponent(accessToken)}`)
+        .then(res => res.json())
+        .then(data => {
+          if (data.success && data.proposal) {
+            renderPublicProposal(data.proposal);
+          } else {
+            document.getElementById('proposal-loading-state').innerHTML = `<p style="color: #f87171;">${data.error || 'Proposal not found or access link expired.'}</p>`;
+          }
+        })
+        .catch(err => {
+          document.getElementById('proposal-loading-state').innerHTML = `<p style="color: #f87171;">Unable to load proposal details.</p>`;
+        });
+    }
+
+    function renderPublicProposal(p) {
+      document.getElementById('proposal-loading-state').style.display = 'none';
+      document.getElementById('proposal-content-state').style.display = 'block';
+
+      document.getElementById('prop-id-tag').textContent = p.proposalId;
+      document.getElementById('prop-status-tag').textContent = `STATUS: ${p.status}`;
+      document.getElementById('prop-project-name').textContent = p.projectName || p.projectType;
+      document.getElementById('prop-client-name').textContent = p.clientName;
+      document.getElementById('prop-client-company').textContent = p.company || 'Independent';
+      document.getElementById('prop-created-date').textContent = new Date(p.createdAt).toLocaleDateString();
+
+      document.getElementById('prop-scope-text').textContent = p.scope || p.summary || 'Custom web engineering scope.';
+      document.getElementById('prop-timeline-str').textContent = p.timeline || '2 to 3 Weeks';
+      document.getElementById('prop-total-val').textContent = `₹${(p.total || 35000).toLocaleString('en-IN')}`;
+      document.getElementById('prop-terms-text').textContent = p.terms || 'Proposal valid for 14 days.';
+
+      // Deliverables
+      const delivList = document.getElementById('prop-deliverables-list');
+      const delivs = Array.isArray(p.deliverables) ? p.deliverables : JSON.parse(p.deliverables || '[]');
+      delivList.innerHTML = delivs.map(d => `<li>${d}</li>`).join('');
+
+      // Tech Stack
+      const techEl = document.getElementById('prop-tech-stack');
+      const tech = Array.isArray(p.technologyStack) ? p.technologyStack : JSON.parse(p.technologyStack || '[]');
+      techEl.textContent = tech.join(' • ') || 'Next.js • GSAP • Lenis • Resend';
+
+      // Milestones
+      const mileGrid = document.getElementById('prop-milestones-grid');
+      const miles = Array.isArray(p.milestones) ? p.milestones : JSON.parse(p.milestones || '[]');
+      mileGrid.innerHTML = miles.map((m, i) => `
+        <div style="background: rgba(255,255,255,0.03); padding: 12px 16px; border-radius: 8px; border: 1px solid var(--border-glass); display: flex; justify-content: space-between; align-items: center;">
+          <span><strong>Phase ${i+1}:</strong> ${typeof m === 'string' ? m : m.name}</span>
+          <small style="color: var(--accent-purple); font-weight: 600;">${m.duration || 'Scheduled'}</small>
+        </div>
+      `).join('');
+
+      // Payment Schedule
+      const schedList = document.getElementById('prop-payment-schedule-list');
+      const scheds = Array.isArray(p.paymentSchedule) ? p.paymentSchedule : JSON.parse(p.paymentSchedule || '[]');
+      schedList.innerHTML = scheds.map(s => `
+        <div style="display: flex; justify-content: space-between; padding: 10px; background: rgba(255,255,255,0.02); border-radius: 6px; font-size: 0.9rem;">
+          <span>${s.phase} (${s.percentage}%)</span>
+          <strong style="color: #34d399;">₹${parseInt(s.amount, 10).toLocaleString('en-IN')}</strong>
+        </div>
+      `).join('');
+
+      if (p.status === 'ACCEPTED') {
+        document.getElementById('prop-action-buttons-bar').style.display = 'none';
+        document.getElementById('prop-celebration-screen').style.display = 'block';
+      }
+
+      if (window.lucide) lucide.createIcons();
+    }
+
+    function confirmAcceptance() {
+      if (!confirm("Are you sure you want to accept this proposal?")) return;
+
+      fetch('/api/proposal', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ proposalId, token: accessToken, action: 'ACCEPT' })
+      })
+      .then(res => res.json())
+      .then(data => {
+        if (data.success) {
+          document.getElementById('prop-action-buttons-bar').style.display = 'none';
+          document.getElementById('prop-celebration-screen').style.display = 'block';
+          document.getElementById('prop-status-tag').textContent = 'STATUS: ACCEPTED';
+        } else {
+          alert(data.error || 'Failed to record acceptance.');
+        }
+      });
+    }
+
+    function openRejectModal() {
+      document.getElementById('reject-modal').style.display = 'flex';
+    }
+
+    function submitRejection() {
+      const reason = document.getElementById('reject-reason-input').value.trim();
+      fetch('/api/proposal', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ proposalId, token: accessToken, action: 'REJECT', reason })
+      })
+      .then(res => res.json())
+      .then(data => {
+        document.getElementById('reject-modal').style.display = 'none';
+        alert("Thank you. Your feedback has been submitted to Aether Studio.");
+        document.getElementById('prop-status-tag').textContent = 'STATUS: REJECTED';
+      });
+    }
+  </script>
+</body>
+</html>

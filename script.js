@@ -1366,24 +1366,35 @@ document.addEventListener('DOMContentLoaded', () => {
         }
       }
 
-      // Render AI History Log Drawer
-      const aiHistoryContainer = document.getElementById('detail-ai-history-list');
-      if (aiHistoryContainer) {
-        if (data.aiHistory && data.aiHistory.length > 0) {
-          aiHistoryContainer.innerHTML = data.aiHistory.map(h => `
-            <div style="font-size:0.82rem; color:var(--text-secondary); background:rgba(255,255,255,0.02); padding:8px 12px; border-radius:6px; border:1px solid var(--border-glass);">
-              <strong>Score: ${h.score} (${h.priority})</strong> — ${h.projectCategory || 'Web Dev'} [Complexity: ${h.complexity || 'MEDIUM'}]
-              <small style="color:var(--text-muted); display:block; margin-top:2px;">${new Date(h.createdAt).toLocaleString()}</small>
-            </div>
-          `).join('');
+      // Render Proposal History Drawer
+      const propContainer = document.getElementById('detail-proposal-history-list');
+      if (propContainer) {
+        if (data.proposals && data.proposals.length > 0) {
+          propContainer.innerHTML = data.proposals.map(p => {
+            const statusColor = p.status === 'ACCEPTED' ? '#34d399' : (p.status === 'REJECTED' ? '#f87171' : (p.status === 'VIEWED' ? 'var(--accent-cyan)' : 'var(--accent-purple)'));
+            const viewUrl = `/proposal.html?id=${encodeURIComponent(p.proposalId)}&token=${encodeURIComponent(p.accessToken)}`;
+            return `
+              <div style="font-size:0.85rem; color:var(--text-secondary); background:rgba(255,255,255,0.02); padding:10px; border-radius:6px; border:1px solid var(--border-glass); display:flex; justify-content:space-between; align-items:center;">
+                <div>
+                  <strong style="color:var(--text-primary);">${p.proposalId}</strong> (Version ${p.version})
+                  <div style="font-size:0.8rem; margin-top:2px;">Quote: <strong style="color:#34d399;">₹${parseInt(p.total,10).toLocaleString('en-IN')}</strong> • Date: ${new Date(p.createdAt).toLocaleDateString()}</div>
+                </div>
+                <div style="text-align:right;">
+                  <span style="font-size:0.75rem; font-weight:700; color:${statusColor}; display:block; margin-bottom:4px;">${p.status}</span>
+                  <a href="${viewUrl}" target="_blank" class="btn btn-glass btn-sm" style="font-size:0.75rem; padding:4px 8px;"><i data-lucide="external-link"></i> View Proposal</a>
+                </div>
+              </div>
+            `;
+          }).join('');
         } else {
-          aiHistoryContainer.innerHTML = `<small style="color:var(--text-muted);">No historical AI evaluations recorded.</small>`;
+          propContainer.innerHTML = `<small style="color:var(--text-muted);">No proposals generated for this lead yet.</small>`;
         }
       }
     }).catch(err => console.log('Lead Details notice:', err));
 
     const modal = document.getElementById('admin-lead-detail-modal');
     if (modal) modal.style.display = 'flex';
+    if (window.lucide) lucide.createIcons();
   };
 
   window.saveAdminLeadNote = function() {
