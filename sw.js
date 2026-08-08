@@ -1,5 +1,5 @@
-// Service Worker for Aether Studio PWA (v1)
-const CACHE_NAME = 'aether-studio-v1';
+// Service Worker for Aether Studio PWA (v2)
+const CACHE_NAME = 'aether-studio-v2';
 
 self.addEventListener('install', (e) => {
   self.skipWaiting();

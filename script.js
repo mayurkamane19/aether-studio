@@ -581,8 +581,56 @@ document.addEventListener('DOMContentLoaded', () => {
   };
 
   /* ==========================================
-     8. GLOBAL SEARCH SYSTEM
+     8. GLOBAL SEARCH SYSTEM & BLOG INTEGRATION
      ========================================== */
+  const scrollProgressBar = document.getElementById('scroll-progress');
+  if (scrollProgressBar) {
+    window.addEventListener('scroll', () => {
+      const winScroll = document.documentElement.scrollTop || document.body.scrollTop;
+      const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+      const scrolled = (height > 0) ? (winScroll / height) * 100 : 0;
+      scrollProgressBar.style.width = scrolled + '%';
+    });
+  }
+
+  const blogPostsData = [
+    {
+      title: "How AI Is Changing Modern Web Development",
+      category: "AI & Web Engineering",
+      url: "blog/ai-modern-web-development/index.html",
+      img: "assets/blog_ai_web_dev.jpg",
+      keywords: ["ai", "web development", "autonomous agents", "llm", "coding", "front end"]
+    },
+    {
+      title: "Why Website Performance Matters for SEO",
+      category: "SEO & Speed",
+      url: "blog/website-performance-seo/index.html",
+      img: "assets/blog_site_performance.jpg",
+      keywords: ["seo", "performance", "core web vitals", "inp", "lcp", "cls", "speed"]
+    },
+    {
+      title: "AI Automation for Small Businesses",
+      category: "Business Automation",
+      url: "blog/ai-automation-small-businesses/index.html",
+      img: "assets/blog_ai_automation.jpg",
+      keywords: ["ai automation", "small business", "roi", "crm", "workflow", "chatbots"]
+    },
+    {
+      title: "How to Build a High-Converting Business Website",
+      category: "Conversion UX",
+      url: "blog/high-converting-business-website/index.html",
+      img: "assets/blog_converting_website.jpg",
+      keywords: ["conversion", "cro", "business website", "luxury brand", "visual hierarchy", "cta"]
+    },
+    {
+      title: "Modern UI/UX Trends for 2026",
+      category: "2026 Design Trends",
+      url: "blog/modern-ui-ux-trends-2026/index.html",
+      img: "assets/blog_ui_ux_trends.jpg",
+      keywords: ["ui ux", "trends 2026", "glassmorphism", "spatial design", "micro-animations"]
+    }
+  ];
+
   const globalSearchInput = document.getElementById('global-search-input');
   const searchResultsList = document.getElementById('search-results-list');
 
@@ -590,29 +638,52 @@ document.addEventListener('DOMContentLoaded', () => {
     globalSearchInput.addEventListener('input', (e) => {
       const query = e.target.value.toLowerCase().trim();
       if (!query) {
-        searchResultsList.innerHTML = '<p class="search-hint">Type keywords like "AURA MONOLITH", "NOVA COFFEE", "LUXE INTERIORS", "NEURA AI"...</p>';
+        searchResultsList.innerHTML = '<p class="search-hint">Type keywords like "AURA MONOLITH", "NOVA COFFEE", "AI Web Dev", "SEO Performance", "UI UX"...</p>';
         return;
       }
 
-      const matches = projectsData.filter(p => 
+      const projectMatches = projectsData.filter(p => 
         p.title.toLowerCase().includes(query) ||
         p.desc.toLowerCase().includes(query) ||
         p.categoryName.toLowerCase().includes(query) ||
         p.services.some(s => s.toLowerCase().includes(query))
       );
 
-      if (matches.length === 0) {
-        searchResultsList.innerHTML = `<p class="search-hint">No case studies found matching "${query}".</p>`;
+      const blogMatches = blogPostsData.filter(b =>
+        b.title.toLowerCase().includes(query) ||
+        b.category.toLowerCase().includes(query) ||
+        b.keywords.some(k => k.includes(query))
+      );
+
+      if (projectMatches.length === 0 && blogMatches.length === 0) {
+        searchResultsList.innerHTML = `<p class="search-hint">No results found matching "${query}".</p>`;
       } else {
-        searchResultsList.innerHTML = matches.map(m => `
-          <div class="search-result-item glass-card" onclick="document.getElementById('search-modal').style.display='none'; openProjectById('${m.id}')" style="padding:12px; margin-bottom:8px; cursor:pointer; display:flex; gap:12px; align-items:center;">
-            <img src="${m.img}" style="width:50px; height:50px; object-fit:cover; border-radius:8px;">
-            <div>
-              <strong style="color:var(--text-primary); display:block;">${m.title}</strong>
-              <small style="color:var(--text-muted);">${m.categoryName}</small>
+        let html = '';
+        if (projectMatches.length > 0) {
+          html += '<strong style="color:var(--accent-purple); display:block; margin:8px 0 4px; font-size:0.8rem; text-transform:uppercase;">Case Studies</strong>';
+          html += projectMatches.map(m => `
+            <div class="search-result-item glass-card" onclick="document.getElementById('search-modal').style.display='none'; openProjectById('${m.id}')" style="padding:12px; margin-bottom:8px; cursor:pointer; display:flex; gap:12px; align-items:center;">
+              <img src="${m.img}" style="width:44px; height:44px; object-fit:cover; border-radius:8px;">
+              <div>
+                <strong style="color:var(--text-primary); display:block;">${m.title}</strong>
+                <small style="color:var(--text-muted);">${m.categoryName}</small>
+              </div>
             </div>
-          </div>
-        `).join('');
+          `).join('');
+        }
+        if (blogMatches.length > 0) {
+          html += '<strong style="color:var(--accent-blue); display:block; margin:12px 0 4px; font-size:0.8rem; text-transform:uppercase;">Journal Articles</strong>';
+          html += blogMatches.map(b => `
+            <a href="${b.url}" class="search-result-item glass-card" style="padding:12px; margin-bottom:8px; cursor:pointer; display:flex; gap:12px; align-items:center; text-decoration:none;">
+              <img src="${b.img}" style="width:44px; height:44px; object-fit:cover; border-radius:8px;">
+              <div>
+                <strong style="color:var(--text-primary); display:block;">${b.title}</strong>
+                <small style="color:var(--text-muted);">${b.category}</small>
+              </div>
+            </a>
+          `).join('');
+        }
+        searchResultsList.innerHTML = html;
       }
     });
   }
