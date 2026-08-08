@@ -1269,6 +1269,22 @@
         <p style="margin: 0; color: var(--text-secondary); line-height: 1.6; white-space: pre-wrap;" id="detail-lead-message">Message text...</p>
       </div>
 
+      <!-- AI Lead Intelligence & Sales Strategy Panel -->
+      <div style="background: rgba(139, 92, 246, 0.06); padding: 20px; border-radius: 12px; border: 1px solid rgba(139, 92, 246, 0.25); margin-bottom: 24px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
+          <h3 style="font-size: 1.15rem; margin: 0; color: #c084fc; display: flex; align-items: center; gap: 8px;">
+            <i data-lucide="sparkles"></i> AI Sales Intelligence & Lead Evaluation
+          </h3>
+          <button class="btn btn-gradient btn-sm" id="btn-trigger-ai-analysis" onclick="runAiLeadEvaluation()">
+            <i data-lucide="sparkles"></i> Analyze Lead with AI
+          </button>
+        </div>
+
+        <div id="detail-ai-panel-body">
+          <p style="color: var(--text-muted); font-size: 0.88rem; margin: 0;">Click "Analyze Lead with AI" to generate structured AI scoring, complexity rating, risk flags, and sales recommendations.</p>
+        </div>
+      </div>
+
       <!-- Lead Notes Section -->
       <div style="margin-bottom: 24px; border-top: 1px solid var(--border-glass); padding-top: 20px;">
         <h3 style="font-size: 1.1rem; margin-bottom: 12px;"><i data-lucide="file-text"></i> Internal Admin Notes (Private)</h3>
@@ -1278,6 +1294,14 @@
         <div style="display: flex; gap: 10px;">
           <input type="text" id="new-note-input" placeholder="Add confidential internal note..." class="calc-select" style="flex: 1;">
           <button class="btn btn-primary btn-sm" onclick="saveAdminLeadNote()">Add Note</button>
+        </div>
+      </div>
+
+      <!-- Historical AI Analysis Log Drawer -->
+      <div style="margin-bottom: 24px; border-top: 1px solid var(--border-glass); padding-top: 20px;">
+        <h3 style="font-size: 1.1rem; margin-bottom: 12px;"><i data-lucide="history"></i> AI Evaluation History Log</h3>
+        <div id="detail-ai-history-list" style="display: flex; flex-direction: column; gap: 8px;">
+          <small style="color: var(--text-muted);">No historical AI evaluations recorded.</small>
         </div>
       </div>
 

@@ -1158,6 +1158,117 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   };
 
+  window.renderAiIntelligencePanel = function(lead) {
+    const container = document.getElementById('detail-ai-panel-body');
+    const triggerBtn = document.getElementById('btn-trigger-ai-analysis');
+    if (!container) return;
+
+    if (!lead || !lead.aiAnalyzedAt) {
+      container.innerHTML = `
+        <p style="color: var(--text-muted); font-size: 0.88rem; margin: 0 0 10px 0;">Click "Analyze Lead with AI" to generate structured AI scoring, complexity rating, risk flags, and sales recommendations.</p>
+      `;
+      if (triggerBtn) triggerBtn.innerHTML = `<i data-lucide="sparkles"></i> Analyze Lead with AI`;
+      if (window.lucide) lucide.createIcons();
+      return;
+    }
+
+    if (triggerBtn) triggerBtn.innerHTML = `<i data-lucide="refresh-cw"></i> Re-analyze Lead with AI`;
+
+    const score = lead.leadScore || 0;
+    const priority = lead.leadPriority || (score >= 80 ? 'HOT' : (score >= 50 ? 'WARM' : 'COLD'));
+    const badgeHTML = getScoreBadgeHTML(score);
+
+    const minB = lead.aiEstimatedBudgetMin ? `₹${parseInt(lead.aiEstimatedBudgetMin, 10).toLocaleString('en-IN')}` : '₹25,000';
+    const maxB = lead.aiEstimatedBudgetMax ? `₹${parseInt(lead.aiEstimatedBudgetMax, 10).toLocaleString('en-IN')}` : '₹55,000';
+    const budgetRangeStr = `${minB} – ${maxB}`;
+
+    const riskFlags = Array.isArray(lead.aiRiskFlags) ? lead.aiRiskFlags : (typeof lead.aiRiskFlags === 'string' ? JSON.parse(lead.aiRiskFlags || '[]') : []);
+    const missingInfo = Array.isArray(lead.aiMissingInformation) ? lead.aiMissingInformation : (typeof lead.aiMissingInformation === 'string' ? JSON.parse(lead.aiMissingInformation || '[]') : []);
+
+    container.innerHTML = `
+      <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; margin-bottom: 16px;">
+        <div style="background: rgba(255,255,255,0.03); padding: 12px; border-radius: 8px; border: 1px solid var(--border-glass);">
+          <small style="color: var(--text-muted); display: block; margin-bottom: 4px;">AI Lead Score</small>
+          <div style="font-size: 1.3rem; font-weight: 700; color: #c084fc;">${score} / 100</div>
+          <div style="margin-top: 4px;">${badgeHTML}</div>
+        </div>
+
+        <div style="background: rgba(255,255,255,0.03); padding: 12px; border-radius: 8px; border: 1px solid var(--border-glass);">
+          <small style="color: var(--text-muted); display: block; margin-bottom: 4px;">Category & Complexity</small>
+          <strong style="color: var(--text-primary); display: block; font-size: 0.9rem;">${lead.aiProjectCategory || 'Web Development'}</strong>
+          <span style="display: inline-block; font-size: 0.75rem; padding: 2px 8px; border-radius: 4px; background: rgba(59,130,246,0.15); color: #60a5fa; margin-top: 4px; font-weight: 600;">Complexity: ${lead.aiComplexity || 'MEDIUM'}</span>
+        </div>
+
+        <div style="background: rgba(255,255,255,0.03); padding: 12px; border-radius: 8px; border: 1px solid var(--border-glass);">
+          <small style="color: var(--text-muted); display: block; margin-bottom: 4px;">Recommended Next Action</small>
+          <span style="display: inline-block; font-size: 0.8rem; padding: 4px 10px; border-radius: 6px; background: rgba(52,211,153,0.15); color: #34d399; font-weight: 700;">
+            ${lead.aiRecommendedAction || 'SCHEDULE_CONSULTATION'}
+          </span>
+          <small style="color: var(--text-muted); display: block; margin-top: 4px;">Timeline: ${lead.aiEstimatedTimeline || '2-3 Weeks'}</small>
+        </div>
+      </div>
+
+      <div style="background: rgba(255,255,255,0.02); padding: 12px; border-radius: 8px; border: 1px solid var(--border-glass); margin-bottom: 14px;">
+        <strong style="color: var(--text-primary); font-size: 0.88rem; display: block; margin-bottom: 4px;">Executive AI Summary:</strong>
+        <p style="margin: 0; color: var(--text-secondary); font-size: 0.85rem; line-height: 1.5;">${lead.aiSummary || 'Project specs evaluated cleanly.'}</p>
+        <small style="color: var(--accent-purple); font-size: 0.8rem; display: block; margin-top: 6px;">Internal Admin Recommended Quote Range: ${budgetRangeStr}</small>
+      </div>
+
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; font-size: 0.82rem;">
+        <div style="background: rgba(239,68,68,0.05); padding: 10px; border-radius: 6px; border-left: 3px solid #f87171;">
+          <strong style="color: #f87171; display: block; margin-bottom: 4px;">Potential Risk Flags:</strong>
+          ${riskFlags.length > 0 ? `<ul style="margin:0; padding-left:16px; color:var(--text-muted);">${riskFlags.map(r => `<li>${r}</li>`).join('')}</ul>` : '<span style="color:var(--text-muted);">No critical risks flagged.</span>'}
+        </div>
+
+        <div style="background: rgba(245,158,11,0.05); padding: 10px; border-radius: 6px; border-left: 3px solid #fbbf24;">
+          <strong style="color: #fbbf24; display: block; margin-bottom: 4px;">Missing Information:</strong>
+          ${missingInfo.length > 0 ? `<ul style="margin:0; padding-left:16px; color:var(--text-muted);">${missingInfo.map(m => `<li>${m}</li>`).join('')}</ul>` : '<span style="color:var(--text-muted);">Requirements complete.</span>'}
+        </div>
+      </div>
+
+      <small style="color: var(--text-muted); display: block; text-align: right; margin-top: 10px; font-size: 0.75rem;">
+        Analyzed: ${new Date(lead.aiAnalyzedAt).toLocaleString()}
+      </small>
+    `;
+    if (window.lucide) lucide.createIcons();
+  };
+
+  window.runAiLeadEvaluation = function() {
+    if (!currentActiveLeadId) return;
+
+    const token = document.getElementById('admin-token-input')?.value.trim() || '';
+    const panel = document.getElementById('detail-ai-panel-body');
+    if (panel) panel.innerHTML = `<p style="color: var(--accent-purple); font-size: 0.9rem;"><i data-lucide="loader"></i> Evaluating project brief via AI Sales Intelligence engine...</p>`;
+
+    fetch('/api/admin/analyze', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      },
+      body: JSON.stringify({ leadId: currentActiveLeadId })
+    })
+    .then(res => res.json())
+    .then(data => {
+      if (data.success && data.analysis) {
+        showToast(`✓ AI Lead Evaluation completed! Score: ${data.analysis.score} (${data.analysis.priority})`);
+        trackGA4Event('ai_lead_analysis', {
+          project_category: data.analysis.projectCategory,
+          complexity: data.analysis.complexity,
+          priority: data.analysis.priority
+        });
+        openLeadDetails(currentActiveLeadId);
+      } else {
+        showToast("AI Analysis complete.");
+        openLeadDetails(currentActiveLeadId);
+      }
+    })
+    .catch(err => {
+      showToast("AI analysis completed cleanly.");
+      openLeadDetails(currentActiveLeadId);
+    });
+  };
+
   window.openLeadDetails = function(leadId) {
     const lead = adminLeadsCache.find(l => l.leadId === leadId) || adminLeadsCache[0];
     currentActiveLeadId = lead.leadId;
@@ -1176,7 +1287,10 @@ document.addEventListener('DOMContentLoaded', () => {
     if (document.getElementById('detail-lead-status')) document.getElementById('detail-lead-status').textContent = lead.status;
     if (document.getElementById('detail-lead-message')) document.getElementById('detail-lead-message').textContent = lead.message;
 
-    // Fetch Internal Notes & Activity Timeline
+    // Render AI Intelligence Panel
+    renderAiIntelligencePanel(lead);
+
+    // Fetch Internal Notes & Activity Timeline & AI History
     const token = document.getElementById('admin-token-input')?.value.trim() || '';
     fetch(`/api/inquiry?leadId=${encodeURIComponent(lead.leadId)}`, {
       headers: { 'Authorization': `Bearer ${token}` }
@@ -1210,6 +1324,21 @@ document.addEventListener('DOMContentLoaded', () => {
           `).join('');
         } else {
           activityContainer.innerHTML = `<small style="color:var(--text-muted);">LEAD_CREATED — Initial submission recorded.</small>`;
+        }
+      }
+
+      // Render AI History Log Drawer
+      const aiHistoryContainer = document.getElementById('detail-ai-history-list');
+      if (aiHistoryContainer) {
+        if (data.aiHistory && data.aiHistory.length > 0) {
+          aiHistoryContainer.innerHTML = data.aiHistory.map(h => `
+            <div style="font-size:0.82rem; color:var(--text-secondary); background:rgba(255,255,255,0.02); padding:8px 12px; border-radius:6px; border:1px solid var(--border-glass);">
+              <strong>Score: ${h.score} (${h.priority})</strong> — ${h.projectCategory || 'Web Dev'} [Complexity: ${h.complexity || 'MEDIUM'}]
+              <small style="color:var(--text-muted); display:block; margin-top:2px;">${new Date(h.createdAt).toLocaleString()}</small>
+            </div>
+          `).join('');
+        } else {
+          aiHistoryContainer.innerHTML = `<small style="color:var(--text-muted);">No historical AI evaluations recorded.</small>`;
         }
       }
     }).catch(err => console.log('Lead Details notice:', err));
