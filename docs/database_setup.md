@@ -34,6 +34,7 @@ The database schema is constructed from safe, idempotent migration scripts in `d
 | `009_ai_sales_copilot.sql` | AI Sales Copilot History | `lead_copilot_recommendations` table & indexes |
 | `010_business_targets.sql` | Business Revenue Targets | `business_targets` table & indexes |
 | `011_client_portal.sql` | Secure Client Portal Engine | `client_portals`, `project_milestones`, `project_updates`, `client_messages` tables & indexes |
+| `012_invoicing.sql` | Invoicing & Payments Engine | `invoices`, `invoice_items`, `payments`, `credit_notes` tables & indexes |
 
 ---
 

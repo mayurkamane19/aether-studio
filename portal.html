@@ -91,6 +91,16 @@
         </div>
       </div>
 
+      <!-- Invoices & Billing Section -->
+      <div class="portal-card">
+        <h2 style="font-size: 1.25rem; margin-bottom: 16px; display: flex; align-items: center; gap: 10px;">
+          <i data-lucide="credit-card" style="color: #fbbf24;"></i> Invoices & Financial Statements
+        </h2>
+        <div id="portal-invoices-list" style="display: flex; flex-direction: column; gap: 12px;">
+          <p style="color: var(--text-muted); font-size: 0.9rem;">No active invoices for this project.</p>
+        </div>
+      </div>
+
       <!-- Project Milestones Grid -->
       <div class="portal-card">
         <h2 style="font-size: 1.25rem; margin-bottom: 16px; display: flex; align-items: center; gap: 10px;">
@@ -184,6 +194,29 @@
         propList.innerHTML = html;
       } else {
         propList.innerHTML = '<p style="color: var(--text-muted); font-size: 0.88rem;">No official proposals generated yet.</p>';
+      }
+
+      // Render Invoices
+      const invList = document.getElementById('portal-invoices-list');
+      if (p.invoices && p.invoices.length > 0) {
+        let invHtml = '';
+        p.invoices.forEach(inv => {
+          invHtml += `
+            <div style="display: flex; justify-content: space-between; align-items: center; background: rgba(255,255,255,0.02); padding: 14px 16px; border-radius: 8px; border: 1px solid var(--border-glass);">
+              <div>
+                <strong>${inv.invoiceNumber}</strong>
+                <small style="display:block; color:var(--text-muted);">Due: ${new Date(inv.dueDate).toLocaleDateString()} | Total: ₹${parseFloat(inv.totalAmount).toLocaleString('en-IN')}</small>
+              </div>
+              <div style="text-align: right;">
+                <span class="status-pill" style="background: ${inv.status === 'PAID' ? 'rgba(52,211,153,0.2)' : 'rgba(251,191,36,0.2)'}; color: ${inv.status === 'PAID' ? '#34d399' : '#fbbf24'};">${inv.status}</span>
+                <div style="font-size: 0.8rem; color: var(--text-muted); margin-top: 4px;">Paid: ₹${parseFloat(inv.amountPaid).toLocaleString('en-IN')}</div>
+              </div>
+            </div>
+          `;
+        });
+        invList.innerHTML = invHtml;
+      } else {
+        invList.innerHTML = '<p style="color: var(--text-muted); font-size: 0.88rem;">No active invoices issued yet.</p>';
       }
 
       // Render Milestones
