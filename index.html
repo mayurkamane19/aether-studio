@@ -1338,6 +1338,26 @@
         </div>
       </div>
 
+      <!-- Automated Follow-up Sequence Panel -->
+      <div style="margin-bottom: 24px; border-top: 1px solid var(--border-glass); padding-top: 20px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+          <h3 style="font-size: 1.1rem; margin: 0; display: flex; align-items: center; gap: 8px;">
+            <i data-lucide="mail"></i> Automated Follow-up Sequence Engine
+          </h3>
+          <div style="display: flex; gap: 8px;">
+            <button class="btn btn-primary btn-sm" id="btn-manual-followup-send" onclick="triggerManualFollowupSend()">
+              <i data-lucide="send"></i> Send Follow-up Now
+            </button>
+            <button class="btn btn-glass btn-sm" id="btn-toggle-followup-pause" onclick="toggleFollowupSequenceState()">
+              <i data-lucide="pause"></i> Pause Sequence
+            </button>
+          </div>
+        </div>
+        <div id="detail-followup-sequence-list" style="display: flex; flex-direction: column; gap: 8px;">
+          <small style="color: var(--text-muted);">Loading follow-up sequence status...</small>
+        </div>
+      </div>
+
       <!-- Activity Timeline Section -->
       <div style="border-top: 1px solid var(--border-glass); padding-top: 20px;">
         <h3 style="font-size: 1.1rem; margin-bottom: 12px;"><i data-lucide="clock"></i> Activity Audit Timeline</h3>

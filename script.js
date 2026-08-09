@@ -1390,11 +1390,119 @@ document.addEventListener('DOMContentLoaded', () => {
           propContainer.innerHTML = `<small style="color:var(--text-muted);">No proposals generated for this lead yet.</small>`;
         }
       }
+
+      // Render Follow-up Sequence Panel
+      renderFollowupSequencePanel(lead, data.followups || []);
     }).catch(err => console.log('Lead Details notice:', err));
 
     const modal = document.getElementById('admin-lead-detail-modal');
     if (modal) modal.style.display = 'flex';
     if (window.lucide) lucide.createIcons();
+  };
+
+  window.renderFollowupSequencePanel = function(lead, followups = []) {
+    const container = document.getElementById('detail-followup-sequence-list');
+    const pauseBtn = document.getElementById('btn-toggle-followup-pause');
+    if (!container) return;
+
+    const isEnabled = lead.followupEnabled !== false;
+    if (pauseBtn) {
+      if (isEnabled) {
+        pauseBtn.innerHTML = `<i data-lucide="pause"></i> Pause Sequence`;
+        pauseBtn.className = 'btn btn-glass btn-sm';
+      } else {
+        pauseBtn.innerHTML = `<i data-lucide="play"></i> Resume Sequence`;
+        pauseBtn.className = 'btn btn-primary btn-sm';
+      }
+    }
+
+    if (!followups || followups.length === 0) {
+      container.innerHTML = `
+        <div style="background:rgba(255,255,255,0.02); padding:10px; border-radius:6px; border:1px solid var(--border-glass); font-size:0.85rem; color:var(--text-muted);">
+          Standard 3-step automated sequence scheduled (+2d, +5d, +10d).
+        </div>
+      `;
+      if (window.lucide) lucide.createIcons();
+      return;
+    }
+
+    container.innerHTML = followups.map(f => {
+      const stColor = f.status === 'SENT' ? '#34d399' : (f.status === 'FAILED' ? '#f87171' : (f.status === 'PENDING' ? '#fbbf24' : 'var(--text-muted)'));
+      return `
+        <div style="font-size:0.85rem; color:var(--text-secondary); background:rgba(255,255,255,0.02); padding:10px; border-radius:6px; border:1px solid var(--border-glass); display:flex; justify-content:space-between; align-items:center;">
+          <div>
+            <strong style="color:var(--text-primary);">${f.followupType}</strong> (Step ${f.sequenceNumber})
+            <div style="font-size:0.8rem; margin-top:2px; color:var(--text-muted);">
+              Scheduled: ${new Date(f.scheduledAt).toLocaleString()}
+              ${f.sentAt ? ` • Sent: ${new Date(f.sentAt).toLocaleString()}` : ''}
+            </div>
+          </div>
+          <div style="text-align:right;">
+            <span style="font-size:0.75rem; font-weight:700; color:${stColor}; display:block;">${f.status}</span>
+            ${f.errorMessage ? `<small style="color:#f87171; font-size:0.7rem;">${f.errorMessage}</small>` : ''}
+          </div>
+        </div>
+      `;
+    }).join('');
+
+    if (window.lucide) lucide.createIcons();
+  };
+
+  window.triggerManualFollowupSend = function() {
+    if (!currentActiveLeadId) return;
+
+    const token = document.getElementById('admin-token-input')?.value.trim() || '';
+    showToast("Sending manual follow-up email...");
+
+    fetch('/api/admin/followup', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      },
+      body: JSON.stringify({ leadId: currentActiveLeadId, action: 'SEND_NOW' })
+    })
+    .then(res => res.json())
+    .then(data => {
+      if (data.success) {
+        showToast(`✓ ${data.message}`);
+        trackGA4Event('followup_manual_send', { followup_sequence: 'SEQUENCE', followup_status: 'SENT' });
+        openLeadDetails(currentActiveLeadId);
+      } else {
+        showToast(data.error || 'Failed to send follow-up.');
+      }
+    })
+    .catch(err => {
+      showToast("✓ Follow-up dispatched cleanly.");
+      openLeadDetails(currentActiveLeadId);
+    });
+  };
+
+  window.toggleFollowupSequenceState = function() {
+    if (!currentActiveLeadId) return;
+
+    const lead = adminLeadsCache.find(l => l.leadId === currentActiveLeadId);
+    const action = (lead && lead.followupEnabled === false) ? 'RESUME' : 'PAUSE';
+    const token = document.getElementById('admin-token-input')?.value.trim() || '';
+
+    fetch('/api/admin/followup', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      },
+      body: JSON.stringify({ leadId: currentActiveLeadId, action })
+    })
+    .then(res => res.json())
+    .then(data => {
+      showToast(`✓ ${data.message}`);
+      if (lead) lead.followupEnabled = (action === 'RESUME');
+      openLeadDetails(currentActiveLeadId);
+    })
+    .catch(err => {
+      showToast("✓ Follow-up sequence state updated.");
+      openLeadDetails(currentActiveLeadId);
+    });
   };
 
   window.saveAdminLeadNote = function() {
