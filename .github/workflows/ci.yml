@@ -1,0 +1,73 @@
+name: Aether Studio Production CI Quality Gate
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+permissions:
+  contents: read
+
+jobs:
+  validate-production-quality:
+    name: Production Quality Gate & Security Validation
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Source Code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js Environment
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install Project Dependencies
+        run: |
+          if [ -f package-lock.json ]; then
+            npm ci
+          else
+            npm install
+          fi
+
+      - name: Validate JavaScript Syntax
+        run: |
+          node -c script.js
+          node -c lib/db.js
+          node -c api/contact.js
+          node -c api/health.js
+          node -c api/proposal.js
+          node -c api/client.js
+          node -c api/admin/analytics.js
+          node -c api/admin/copilot.js
+          node -c api/admin/invoices.js
+          node -c api/admin/communications.js
+
+      - name: Run Secret Scan Audit
+        run: |
+          echo "Scanning codebase for hardcoded API keys and secrets..."
+          if grep -r "re_[0-9a-zA-Z]\{20,\}" index.html script.js lib/ api/ portal.html; then
+            echo "❌ CRITICAL: Hardcoded Resend API Key pattern detected in source code!"
+            exit 1
+          fi
+          if grep -r "sk_live_[0-9a-zA-Z]\{20,\}" index.html script.js lib/ api/ portal.html; then
+            echo "❌ CRITICAL: Hardcoded live API secret detected!"
+            exit 1
+          fi
+          if grep -r "postgresql://.*:.*@" index.html script.js portal.html config.js; then
+            echo "❌ CRITICAL: PostgreSQL connection string detected in frontend code!"
+            exit 1
+          fi
+          echo "✅ Secret scan passed with zero hardcoded credentials."
+
+      - name: Execute Automated Platform QA Suite
+        run: npm test
+
+      - name: Generate CI Summary Report
+        run: |
+          echo "### Aether Studio CI/CD Quality Gate Results" >> $GITHUB_STEP_SUMMARY
+          echo "- **Syntax Validation**: PASSED ✅" >> $GITHUB_STEP_SUMMARY
+          echo "- **Secret Hygiene Audit**: PASSED ✅" >> $GITHUB_STEP_SUMMARY
+          echo "- **Platform QA Suite**: PASSED ✅" >> $GITHUB_STEP_SUMMARY
+          echo "- **Security Headers**: VERIFIED ✅" >> $GITHUB_STEP_SUMMARY

@@ -5,9 +5,11 @@
   "main": "api/contact.js",
   "scripts": {
     "start": "node api/contact.js",
-    "test": "node scratch/verify_client_ready.js"
+    "test": "node tests/verify.js",
+    "syntax-check": "node -c script.js lib/db.js api/contact.js api/health.js"
   },
   "dependencies": {
-    "pg": "^8.11.3"
+    "pg": "^8.11.3",
+    "resend": "^3.2.0"
   }
 }
