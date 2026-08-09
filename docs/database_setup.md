@@ -36,6 +36,7 @@ The database schema is constructed from safe, idempotent migration scripts in `d
 | `011_client_portal.sql` | Secure Client Portal Engine | `client_portals`, `project_milestones`, `project_updates`, `client_messages` tables & indexes |
 | `012_invoicing.sql` | Invoicing & Payments Engine | `invoices`, `invoice_items`, `payments`, `credit_notes` tables & indexes |
 | `013_communication_center.sql` | Omnichannel Communication Hub | `conversations`, `conversation_messages`, `message_templates`, `notifications` tables & indexes |
+| `014_production_indexes.sql` | Production Performance Indexes | Performance indexes on `leads`, `invoices`, `messages`, `activity` |
 
 ---
 
