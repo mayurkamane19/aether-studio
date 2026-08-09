@@ -129,6 +129,17 @@
       <span class="preloader-subtitle">INITIALIZING AGENCY PORTFOLIO...</span>
     </div>
   </div>
+  <script>
+    // Resilient Preloader Safety Guarantee (Ensures public website loads under all conditions)
+    (function() {
+      setTimeout(function() {
+        var p = document.getElementById('preloader');
+        if (p && getComputedStyle(p).display !== 'none') {
+          p.style.display = 'none';
+        }
+      }, 2000);
+    })();
+  </script>
 
   <!-- Scroll Progress Indicator -->
   <div class="scroll-progress-bar" id="scroll-progress"></div>

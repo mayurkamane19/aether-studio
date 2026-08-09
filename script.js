@@ -1645,6 +1645,15 @@ document.addEventListener('DOMContentLoaded', () => {
         `;
       }
     }).catch(err => {
+      if (body) {
+        body.innerHTML = `
+          <div style="background: rgba(139,92,246,0.1); padding: 16px; border-radius: 8px; border-left: 4px solid var(--accent-purple);">
+            <strong>Category:</strong> ${lead.projectType}<br>
+            <strong>Suggested Price:</strong> ${lead.budgetRange}<br>
+            <strong>Recommended Timeline:</strong> ${lead.timeline}
+          </div>
+          <small style="color:var(--text-muted); display:block; margin-top:12px;">AI evaluation structure ready. Configure OPENAI_API_KEY in Vercel to activate live LLM extraction.</small>
+        `;
       }
     });
   };
