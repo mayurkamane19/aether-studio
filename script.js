@@ -1110,6 +1110,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
           <div class="lead-actions-bar">
             <button class="btn btn-glass btn-sm" onclick="openLeadDetails('${lead.leadId}')"><i data-lucide="eye"></i> View Details & Notes</button>
+            <button class="btn btn-glass btn-sm" onclick="openClientPortalForLead('${lead.leadId}')"><i data-lucide="external-link"></i> Open Client Portal</button>
             <button class="btn btn-glass btn-sm" onclick="navigator.clipboard.writeText('${lead.email}'); showToast('Copied email!');"><i data-lucide="copy"></i> Copy Email</button>
             <a href="mailto:${lead.email}?subject=Aether%20Studio%20Inquiry%20${lead.leadId}" class="btn btn-glass btn-sm"><i data-lucide="mail"></i> Email Client</a>
             <a href="${waLink}" target="_blank" rel="noopener" class="btn btn-glass btn-sm"><i data-lucide="message-square"></i> WhatsApp Action</a>
@@ -1792,6 +1793,34 @@ document.addEventListener('DOMContentLoaded', () => {
       showToast("✓ CSV Report downloaded!");
     })
     .catch(err => showToast("Failed to generate CSV export."));
+  };
+
+  window.openClientPortalForLead = function(leadId) {
+    const lead = adminLeadsCache.find(l => l.leadId === leadId) || adminLeadsCache[0];
+    if (!lead) return;
+
+    const token = document.getElementById('admin-token-input')?.value.trim() || '';
+
+    fetch('/api/admin/client-portal', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      },
+      body: JSON.stringify({ leadId: lead.leadId, action: 'GENERATE' })
+    })
+    .then(res => res.json())
+    .then(data => {
+      if (data.success && data.portalUrl) {
+        window.open(data.portalUrl, '_blank');
+        showToast("✓ Generated Client Portal Access Link!");
+      } else {
+        window.open(`/portal.html?token=${lead.leadId}`, '_blank');
+      }
+    })
+    .catch(err => {
+      window.open(`/portal.html?token=${lead.leadId}`, '_blank');
+    });
   };
 });
 

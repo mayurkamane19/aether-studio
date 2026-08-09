@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Aether Studio — Secure Client Portal</title>
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="theme-color" content="#06070a">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    body {
+      background-color: var(--bg-dark, #06070a);
+      color: var(--text-primary, #f3f4f6);
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+    }
+    .portal-container {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 32px 20px 60px 20px;
+    }
+    .portal-card {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--border-glass, rgba(255, 255, 255, 0.08));
+      backdrop-filter: blur(16px);
+      border-radius: 16px;
+      padding: 24px;
+      margin-bottom: 24px;
+    }
+    .status-pill {
+      display: inline-block;
+      padding: 4px 12px;
+      border-radius: 99px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="portal-container">
+    <!-- Header Logo -->
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 32px;">
+      <a href="/" class="brand-logo" style="text-decoration: none;">
+        <span class="logo-mark">A</span>
+        <span class="logo-text">AETHER<span class="logo-sub">STUDIO</span></span>
+      </a>
+      <span style="color: var(--text-muted); font-size: 0.85rem;" id="portal-ref-id">Client Project Portal</span>
+    </div>
+
+    <!-- Error / Invalid Token Alert -->
+    <div id="portal-error-view" class="portal-card" style="display: none; text-align: center; padding: 40px 20px;">
+      <i data-lucide="shield-alert" style="width: 48px; height: 48px; color: #f87171; margin-bottom: 16px;"></i>
+      <h2 style="font-size: 1.5rem; margin-bottom: 8px;">Client Access Required</h2>
+      <p style="color: var(--text-muted); max-width: 500px; margin: 0 auto 20px auto;" id="portal-error-msg">
+        This client portal link is invalid, expired, or has been revoked. Please contact your Aether Studio project manager for a new secure access link.
+      </p>
+    </div>
+
+    <!-- Main Client Portal View -->
+    <div id="portal-content-view" style="display: none;">
+      <!-- Project Summary Banner -->
+      <div class="portal-card" style="background: linear-gradient(135deg, rgba(139,92,246,0.1), rgba(56,189,248,0.05));">
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 16px;">
+          <div>
+            <span style="color: var(--accent-purple); font-size: 0.8rem; font-weight: 700; text-transform: uppercase;">PROJECT DASHBOARD</span>
+            <h1 style="font-size: 2rem; margin: 6px 0;" id="portal-client-name">Client Organization</h1>
+            <p style="color: var(--text-secondary); margin: 0;" id="portal-project-type">Web Engineering Project</p>
+          </div>
+          <div>
+            <span class="status-pill" style="background: rgba(52, 211, 153, 0.15); color: #34d399; border: 1px solid rgba(52, 211, 153, 0.3);" id="portal-stage-pill">ACTIVE</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Proposals Section -->
+      <div class="portal-card">
+        <h2 style="font-size: 1.25rem; margin-bottom: 16px; display: flex; align-items: center; gap: 10px;">
+          <i data-lucide="file-text" style="color: var(--accent-purple);"></i> Project Proposals & Statements of Work
+        </h2>
+        <div id="portal-proposals-list" style="display: flex; flex-direction: column; gap: 16px;">
+          <p style="color: var(--text-muted); font-size: 0.9rem;">Loading proposal details...</p>
+        </div>
+      </div>
+
+      <!-- Project Milestones Grid -->
+      <div class="portal-card">
+        <h2 style="font-size: 1.25rem; margin-bottom: 16px; display: flex; align-items: center; gap: 10px;">
+          <i data-lucide="check-circle-2" style="color: #34d399;"></i> Engineering Milestones & Deliverables
+        </h2>
+        <div id="portal-milestones-list" style="display: flex; flex-direction: column; gap: 12px;">
+          <p style="color: var(--text-muted); font-size: 0.9rem;">Milestones will be published upon proposal confirmation.</p>
+        </div>
+      </div>
+
+      <!-- Project Communication Messages Thread -->
+      <div class="portal-card">
+        <h2 style="font-size: 1.25rem; margin-bottom: 16px; display: flex; align-items: center; gap: 10px;">
+          <i data-lucide="message-square" style="color: #38bdf8;"></i> Project Messages & Agency Communications
+        </h2>
+        <div id="portal-messages-list" style="display: flex; flex-direction: column; gap: 12px; margin-bottom: 20px; max-height: 350px; overflow-y: auto;">
+          <p style="color: var(--text-muted); font-size: 0.9rem;">No messages posted yet.</p>
+        </div>
+
+        <form id="portal-message-form" onsubmit="sendClientMessage(event)" style="display: flex; gap: 10px;">
+          <input type="text" id="client-message-input" placeholder="Type a message or question for Aether Studio strategy team..." class="calc-select" style="flex: 1;" required>
+          <button type="submit" class="btn btn-primary btn-sm"><i data-lucide="send"></i> Send Message</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const urlParams = new URLSearchParams(window.location.search);
+    const portalToken = urlParams.get('token') || urlParams.get('access_token') || '';
+
+    document.addEventListener('DOMContentLoaded', () => {
+      if (window.lucide) lucide.createIcons();
+      if (!portalToken) {
+        showPortalError('No portal token provided in link URL.');
+        return;
+      }
+      loadClientPortalData();
+    });
+
+    function showPortalError(msg) {
+      document.getElementById('portal-content-view').style.display = 'none';
+      document.getElementById('portal-error-view').style.display = 'block';
+      if (msg) document.getElementById('portal-error-msg').textContent = msg;
+    }
+
+    function loadClientPortalData() {
+      fetch(`/api/client?token=${encodeURIComponent(portalToken)}`)
+        .then(res => res.json())
+        .then(data => {
+          if (data.success && data.portal) {
+            renderPortalView(data.portal);
+          } else {
+            showPortalError(data.error || 'Client access link is invalid or expired.');
+          }
+        })
+        .catch(err => {
+          showPortalError('Unable to connect to server. Please try again.');
+        });
+    }
+
+    function renderPortalView(p) {
+      document.getElementById('portal-error-view').style.display = 'none';
+      document.getElementById('portal-content-view').style.display = 'block';
+
+      if (p.lead) {
+        document.getElementById('portal-client-name').textContent = p.lead.company !== 'Independent' ? p.lead.company : p.lead.name;
+        document.getElementById('portal-project-type').textContent = p.lead.projectType || 'Web Engineering Project';
+        document.getElementById('portal-ref-id').textContent = `Lead ID: ${p.lead.leadId}`;
+        document.getElementById('portal-stage-pill').textContent = p.lead.status || 'ACTIVE';
+      }
+
+      // Render Proposals
+      const propList = document.getElementById('portal-proposals-list');
+      if (p.proposals && p.proposals.length > 0) {
+        let html = '';
+        p.proposals.forEach(prop => {
+          html += `
+            <div style="background: rgba(255,255,255,0.02); padding: 16px; border-radius: 10px; border: 1px solid var(--border-glass);">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                <strong>${prop.projectName || prop.projectType} (${prop.proposalId})</strong>
+                <span class="status-pill" style="background: rgba(139,92,246,0.2); color: #c084fc;">${prop.status}</span>
+              </div>
+              <p style="font-size: 0.88rem; color: var(--text-secondary); margin-bottom: 12px;">${prop.summary || 'Official Statement of Work and Scope Guidelines.'}</p>
+              <div style="display: flex; gap: 10px;">
+                <a href="/proposal.html?id=${prop.proposalId}&token=${prop.accessToken}" target="_blank" class="btn btn-glass btn-sm"><i data-lucide="eye"></i> View Full Proposal</a>
+              </div>
+            </div>
+          `;
+        });
+        propList.innerHTML = html;
+      } else {
+        propList.innerHTML = '<p style="color: var(--text-muted); font-size: 0.88rem;">No official proposals generated yet.</p>';
+      }
+
+      // Render Milestones
+      const mList = document.getElementById('portal-milestones-list');
+      if (p.milestones && p.milestones.length > 0) {
+        let mHtml = '';
+        p.milestones.forEach(m => {
+          mHtml += `
+            <div style="display: flex; justify-content: space-between; align-items: center; background: rgba(255,255,255,0.02); padding: 12px 16px; border-radius: 8px;">
+              <div>
+                <strong>${m.title}</strong>
+                ${m.description ? `<small style="display:block; color:var(--text-muted);">${m.description}</small>` : ''}
+              </div>
+              <span class="status-pill" style="background: ${m.status === 'COMPLETED' ? 'rgba(52,211,153,0.2)' : 'rgba(255,255,255,0.1)'}; color: ${m.status === 'COMPLETED' ? '#34d399' : 'var(--text-secondary)'};">${m.status}</span>
+            </div>
+          `;
+        });
+        mList.innerHTML = mHtml;
+      }
+
+      // Render Messages
+      const msgList = document.getElementById('portal-messages-list');
+      if (p.messages && p.messages.length > 0) {
+        let msgHtml = '';
+        p.messages.forEach(m => {
+          const isClient = m.senderType === 'CLIENT';
+          msgHtml += `
+            <div style="align-self: ${isClient ? 'flex-end' : 'flex-start'}; background: ${isClient ? 'rgba(139,92,246,0.15)' : 'rgba(255,255,255,0.04)'}; padding: 10px 14px; border-radius: 8px; max-width: 80%;">
+              <small style="color: var(--text-muted); display: block; margin-bottom: 2px;">${isClient ? 'You' : 'Aether Studio Strategy Team'}</small>
+              <div style="font-size: 0.9rem;">${m.message}</div>
+            </div>
+          `;
+        });
+        msgList.innerHTML = msgHtml;
+      }
+
+      if (window.lucide) lucide.createIcons();
+    }
+
+    function sendClientMessage(e) {
+      e.preventDefault();
+      const input = document.getElementById('client-message-input');
+      const msg = input.value.trim();
+      if (!msg) return;
+
+      fetch('/api/client', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ token: portalToken, message: msg, action: 'POST_MESSAGE' })
+      })
+      .then(res => res.json())
+      .then(data => {
+        if (data.success) {
+          input.value = '';
+          loadClientPortalData();
+        }
+      });
+    }
+  </script>
+</body>
+</html>

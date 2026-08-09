@@ -32,6 +32,8 @@ The database schema is constructed from safe, idempotent migration scripts in `d
 | `007_add_analytics_indexes.sql` | Advanced CRM Analytics Indexes | Indexes on `created_at`, `status`, `project_type`, `source`, `lead_score` |
 | `008_sales_pipeline.sql` | Sales Pipeline & Deal Values | Deal value columns (`estimated_value`, `final_value`, `currency`, `won_at`, `lost_at`, `lost_reason`) & indexes |
 | `009_ai_sales_copilot.sql` | AI Sales Copilot History | `lead_copilot_recommendations` table & indexes |
+| `010_business_targets.sql` | Business Revenue Targets | `business_targets` table & indexes |
+| `011_client_portal.sql` | Secure Client Portal Engine | `client_portals`, `project_milestones`, `project_updates`, `client_messages` tables & indexes |
 
 ---
 
@@ -41,7 +43,7 @@ The database schema is constructed from safe, idempotent migration scripts in `d
    - Create a project on [Supabase.com](https://supabase.com) or any PostgreSQL provider.
 2. **Execute Migration Scripts**:
    - Open **Supabase SQL Editor**.
-   - Copy and paste the contents of `docs/migrations/001_create_leads.sql` through `007_add_analytics_indexes.sql`.
+   - Copy and paste the contents of `docs/migrations/001_create_leads.sql` through `011_client_portal.sql`.
    - Click **Run** to execute the schema setup.
 3. **Configure Vercel**:
    - Open **Vercel Settings → Environment Variables**.
