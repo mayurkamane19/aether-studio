@@ -1310,6 +1310,22 @@
         <p style="margin: 0; color: var(--text-secondary); line-height: 1.6; white-space: pre-wrap;" id="detail-lead-message">Message text...</p>
       </div>
 
+      <!-- AI Sales Copilot & Next Best Action Panel -->
+      <div style="background: rgba(56, 189, 248, 0.06); padding: 20px; border-radius: 12px; border: 1px solid rgba(56, 189, 248, 0.25); margin-bottom: 24px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
+          <h3 style="font-size: 1.15rem; margin: 0; color: #38bdf8; display: flex; align-items: center; gap: 8px;">
+            <i data-lucide="bot"></i> AI Sales Copilot & Next Best Action
+          </h3>
+          <button class="btn btn-primary btn-sm" id="btn-trigger-copilot" onclick="runAiCopilotAnalysis()">
+            <i data-lucide="sparkles"></i> Get Next Action
+          </button>
+        </div>
+
+        <div id="detail-copilot-body">
+          <p style="color: var(--text-muted); font-size: 0.88rem; margin: 0;">Click "Get Next Action" to generate AI sales strategy recommendations, deal health ratings, risk factors, and custom reply drafts.</p>
+        </div>
+      </div>
+
       <!-- AI Lead Intelligence & Sales Strategy Panel -->
       <div style="background: rgba(139, 92, 246, 0.06); padding: 20px; border-radius: 12px; border: 1px solid rgba(139, 92, 246, 0.25); margin-bottom: 24px;">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">

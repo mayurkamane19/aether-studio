@@ -1598,6 +1598,71 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   };
 
+  window.runAiCopilotAnalysis = function() {
+    if (!currentActiveLeadId) return;
+    const body = document.getElementById('detail-copilot-body');
+    const token = document.getElementById('admin-token-input')?.value.trim() || '';
+
+    if (body) {
+      body.innerHTML = '<p style="color: var(--text-muted); font-size: 0.88rem;">Evaluating lead signals, proposal activity, and sales decision matrix...</p>';
+    }
+
+    fetch('/api/admin/copilot', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      },
+      body: JSON.stringify({ leadId: currentActiveLeadId })
+    })
+    .then(res => res.json())
+    .then(data => {
+      if (data.success && data.copilot && body) {
+        const c = data.copilot;
+        const priorityColor = c.priority === 'URGENT' || c.priority === 'HIGH' ? '#f87171' : '#38bdf8';
+        const healthColor = c.dealHealth === 'HEALTHY' || c.dealHealth === 'HIGH_POTENTIAL' ? '#34d399' : '#fbbf24';
+
+        body.innerHTML = `
+          <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; margin-bottom: 16px;">
+            <div style="background: rgba(255,255,255,0.03); padding: 10px; border-radius: 8px; border: 1px solid var(--border-glass);">
+              <small style="color: var(--text-muted); display: block;">Next Best Action</small>
+              <strong style="color: #38bdf8; font-size: 0.95rem;">${c.action}</strong>
+            </div>
+            <div style="background: rgba(255,255,255,0.03); padding: 10px; border-radius: 8px; border: 1px solid var(--border-glass);">
+              <small style="color: var(--text-muted); display: block;">Priority Level</small>
+              <strong style="color: ${priorityColor}; font-size: 0.95rem;">${c.priority} (${c.confidence} Confidence)</strong>
+            </div>
+            <div style="background: rgba(255,255,255,0.03); padding: 10px; border-radius: 8px; border: 1px solid var(--border-glass);">
+              <small style="color: var(--text-muted); display: block;">Deal Health</small>
+              <strong style="color: ${healthColor}; font-size: 0.95rem;">${c.dealHealth}</strong>
+            </div>
+          </div>
+
+          <div style="background: rgba(255,255,255,0.02); padding: 12px; border-radius: 8px; font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 14px;">
+            <strong>AI Explanation:</strong> ${c.reason}
+          </div>
+
+          ${c.riskData && c.riskData.length > 0 ? `
+            <div style="margin-bottom: 12px; font-size: 0.82rem; color: #f87171;">
+              <strong>Risk Warnings:</strong> ${c.riskData.join(' • ')}
+            </div>
+          ` : ''}
+
+          <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+            <button class="btn btn-glass btn-sm" onclick="navigator.clipboard.writeText(\`${(c.suggestedReply || '').replace(/`/g, '\\`')}\`); showToast('Copied AI Reply Draft!');"><i data-lucide="copy"></i> Copy Reply Draft</button>
+            <button class="btn btn-glass btn-sm" onclick="navigator.clipboard.writeText(\`${(c.suggestedFollowup || '').replace(/`/g, '\\`')}\`); showToast('Copied AI Follow-up Message!');"><i data-lucide="copy"></i> Copy Follow-up</button>
+          </div>
+        `;
+        if (window.lucide) lucide.createIcons();
+      }
+    })
+    .catch(err => {
+      if (body) {
+        body.innerHTML = '<p style="color: var(--text-muted); font-size: 0.88rem;">AI Copilot initialized locally. Configure OPENAI_API_KEY for live LLM recommendations.</p>';
+      }
+    });
+  };
+
   window.openAiAnalyzer = function(leadId) {
     const lead = adminLeadsCache.find(l => l.leadId === leadId) || adminLeadsCache[0];
     const modal = document.getElementById('admin-ai-modal');
