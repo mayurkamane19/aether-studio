@@ -35,13 +35,15 @@ The Aether Studio CRM is built on a serverless PostgreSQL architecture integrate
 
 The database consists of 7 PostgreSQL tables configured via safe, idempotent migrations in `docs/migrations/`:
 
-1. **`leads`**: Core lead record (`lead_id`, `name`, `email`, `company`, `project_type`, `budget`, `timeline`, `status`, `lead_score`, `source`, `followup_enabled`, `created_at`, `updated_at`).
+1. **`leads`**: Core lead record (`lead_id`, `name`, `email`, `company`, `project_type`, `budget`, `timeline`, `status`, `lead_score`, `source`, `followup_enabled`, `estimated_value`, `final_value`, `currency`, `won_at`, `lost_at`, `lost_reason`, `created_at`, `updated_at`).
 2. **`lead_notes`**: Confidential internal admin notes (`lead_id`, `note`, `created_at`).
 3. **`lead_activity`**: Audit trail timeline log (`lead_id`, `activity_type`, `description`, `created_at`).
 4. **`lead_ai_analysis`**: Historical AI brief evaluation records (`score`, `priority`, `complexity`, `risk_flags`, `missing_information`).
 5. **`lead_pricing_analysis`**: Historical AI pricing recommendations & approval status.
 6. **`proposals`**: Official project proposals (`proposal_id`, `version`, `status`, `total`, `payment_schedule`, `access_token`, `sent_at`, `viewed_at`, `accepted_at`).
 7. **`lead_followups`**: Scheduled automated follow-up sequence steps (`followup_type`, `sequence_number`, `scheduled_at`, `status`).
+
+*See [`docs/sales_pipeline.md`](file:///c:/Users/mayur/OneDrive/Desktop/Mayur%20Creative%20Studio/docs/sales_pipeline.md) for full sales pipeline & weighted revenue documentation.*
 
 ---
 

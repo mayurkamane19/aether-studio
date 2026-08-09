@@ -30,6 +30,7 @@ The database schema is constructed from safe, idempotent migration scripts in `d
 | `005_add_proposal_management.sql` | Professional Proposal Management | `proposals` table & secure access token indexes |
 | `006_add_lead_followups.sql` | Automated Lead Follow-up Engine | `lead_followups` table & `followup_enabled` column |
 | `007_add_analytics_indexes.sql` | Advanced CRM Analytics Indexes | Indexes on `created_at`, `status`, `project_type`, `source`, `lead_score` |
+| `008_sales_pipeline.sql` | Sales Pipeline & Deal Values | Deal value columns (`estimated_value`, `final_value`, `currency`, `won_at`, `lost_at`, `lost_reason`) & indexes |
 
 ---
 
