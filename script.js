@@ -1055,6 +1055,9 @@ document.addEventListener('DOMContentLoaded', () => {
     if (document.getElementById('stat-conv')) document.getElementById('stat-conv').textContent = `${convRate}%`;
     if (document.getElementById('stat-pipeline-value')) document.getElementById('stat-pipeline-value').textContent = `₹${totalPipelineVal.toLocaleString('en-IN')}`;
 
+    // Fetch Full Serverless Aggregate Analytics
+    fetchCRMAnalytics();
+
     if (document.getElementById('pagination-info')) {
       document.getElementById('pagination-info').textContent = `Page ${page} of ${totalPages} (${total} total leads)`;
     }
@@ -1642,19 +1645,82 @@ document.addEventListener('DOMContentLoaded', () => {
         `;
       }
     }).catch(err => {
-      if (body) {
-        body.innerHTML = `
-          <div style="background: rgba(139,92,246,0.1); padding: 16px; border-radius: 8px; border-left: 4px solid var(--accent-purple);">
-            <strong>Category:</strong> ${lead.projectType}<br>
-            <strong>Suggested Price:</strong> ${lead.budgetRange}<br>
-            <strong>Recommended Timeline:</strong> ${lead.timeline}
-          </div>
-          <small style="color:var(--text-muted); display:block; margin-top:12px;">AI evaluation structure ready. Configure OPENAI_API_KEY in Vercel to activate live LLM extraction.</small>
-        `;
       }
     });
   };
+
+  let currentAnalyticsRange = 'ALL';
+
+  window.fetchCRMAnalytics = function(range = currentAnalyticsRange) {
+    currentAnalyticsRange = range;
+    const token = document.getElementById('admin-token-input')?.value.trim() || '';
+
+    fetch(`/api/admin/analytics?range=${range}`, {
+      headers: { 'Authorization': `Bearer ${token}` }
+    })
+    .then(res => res.json())
+    .then(data => {
+      if (data.success && data.analytics) {
+        const a = data.analytics;
+        if (a.kpis) {
+          if (document.getElementById('stat-total')) document.getElementById('stat-total').textContent = a.kpis.total;
+          if (document.getElementById('stat-new')) document.getElementById('stat-new').textContent = a.kpis.new;
+          if (document.getElementById('stat-contacted')) document.getElementById('stat-contacted').textContent = a.kpis.contacted;
+          if (document.getElementById('stat-qualified')) document.getElementById('stat-qualified').textContent = a.kpis.qualified;
+          if (document.getElementById('stat-won')) document.getElementById('stat-won').textContent = a.kpis.won;
+          if (document.getElementById('stat-lost')) document.getElementById('stat-lost').textContent = a.kpis.lost;
+          if (document.getElementById('stat-conv')) document.getElementById('stat-conv').textContent = a.conversion.overallWon;
+        }
+
+        if (a.pipeline) {
+          if (document.getElementById('stat-pipeline-value')) document.getElementById('stat-pipeline-value').textContent = `₹${a.pipeline.potentialPipeline.toLocaleString('en-IN')}`;
+          if (document.getElementById('crm-won-revenue-val')) document.getElementById('crm-won-revenue-val').textContent = `₹${a.pipeline.wonRevenue.toLocaleString('en-IN')}`;
+        }
+
+        if (a.conversion) {
+          const funnelBar = document.getElementById('crm-funnel-progression-bar');
+          if (funnelBar) {
+            funnelBar.innerHTML = `
+              <span>New (100%)</span> →
+              <span>Contacted (${a.conversion.newToContacted})</span> →
+              <span>Qualified (${a.conversion.contactedToQualified})</span> →
+              <span>Proposal (${a.conversion.qualifiedToProposal})</span> →
+              <span style="color:#34d399; font-weight:700;">Won (${a.conversion.overallWon})</span>
+            `;
+          }
+        }
+      }
+    })
+    .catch(err => console.log('Analytics notice:', err));
+  };
+
+  window.setAnalyticsTimeRange = function(range) {
+    fetchCRMAnalytics(range);
+    showToast(`Filtered CRM analytics for ${range}`);
+  };
+
+  window.exportCrmCsv = function() {
+    const token = document.getElementById('admin-token-input')?.value.trim() || '';
+    showToast("Generating CSV business report...");
+
+    fetch('/api/admin/analytics?exportCSV=true', {
+      headers: { 'Authorization': `Bearer ${token}` }
+    })
+    .then(res => res.blob())
+    .then(blob => {
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `aether_crm_leads_${Date.now()}.csv`;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      showToast("✓ CSV Report downloaded!");
+    })
+    .catch(err => showToast("Failed to generate CSV export."));
+  };
 });
+
 
 
 

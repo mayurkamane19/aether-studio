@@ -1191,7 +1191,21 @@
       </div>
 
       <div id="crm-pipeline-view" style="display: none;">
-        <!-- Analytics Dashboard -->
+        <!-- Advanced Analytics Controls & CSV Export Bar -->
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; flex-wrap: wrap; gap: 12px;">
+          <div style="display: flex; gap: 8px; align-items: center;">
+            <span style="font-size: 0.82rem; color: var(--text-muted); font-weight: 600;">Time Range:</span>
+            <button class="btn btn-glass btn-sm" id="btn-range-all" onclick="setAnalyticsTimeRange('ALL')">All Time</button>
+            <button class="btn btn-glass btn-sm" id="btn-range-7d" onclick="setAnalyticsTimeRange('7D')">7 Days</button>
+            <button class="btn btn-glass btn-sm" id="btn-range-30d" onclick="setAnalyticsTimeRange('30D')">30 Days</button>
+            <button class="btn btn-glass btn-sm" id="btn-range-90d" onclick="setAnalyticsTimeRange('90D')">90 Days</button>
+          </div>
+          <div>
+            <button class="btn btn-glass btn-sm" style="color: #34d399; border-color: rgba(52,211,153,0.3);" onclick="exportCrmCsv()"><i data-lucide="download"></i> Export CSV Report</button>
+          </div>
+        </div>
+
+        <!-- Executive KPI Cards -->
         <div class="admin-stats-grid">
           <div class="admin-stat-card"><div class="admin-stat-num" id="stat-total">0</div><span class="admin-stat-label">Total Leads</span></div>
           <div class="admin-stat-card"><div class="admin-stat-num" id="stat-new" style="color:var(--accent-purple);">0</div><span class="admin-stat-label">New</span></div>
@@ -1201,6 +1215,22 @@
           <div class="admin-stat-card"><div class="admin-stat-num" id="stat-lost" style="color:#f87171;">0</div><span class="admin-stat-label">Lost</span></div>
           <div class="admin-stat-card"><div class="admin-stat-num" id="stat-conv" style="color:var(--accent-cyan);">0%</div><span class="admin-stat-label">Conv. Rate</span></div>
           <div class="admin-stat-card"><div class="admin-stat-num" id="stat-pipeline-value" style="color:#34d399; font-size: 1.2rem;">₹0</div><span class="admin-stat-label">Pipeline Value</span></div>
+        </div>
+
+        <!-- Sales Funnel & Pipeline Financial Summary Grid -->
+        <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 16px; margin-bottom: 20px;">
+          <div style="background: rgba(255,255,255,0.02); padding: 16px; border-radius: 10px; border: 1px solid var(--border-glass);">
+            <strong style="color: var(--text-primary); font-size: 0.88rem; display: block; margin-bottom: 8px;"><i data-lucide="filter"></i> Conversion Funnel Progression:</strong>
+            <div style="display: flex; justify-content: space-between; font-size: 0.78rem; color: var(--text-secondary);" id="crm-funnel-progression-bar">
+              <span>New (100%)</span> → <span>Contacted</span> → <span>Qualified</span> → <span>Proposal</span> → <span>Won</span>
+            </div>
+          </div>
+
+          <div style="background: rgba(52, 211, 153, 0.05); padding: 16px; border-radius: 10px; border: 1px solid rgba(52, 211, 153, 0.25);">
+            <strong style="color: #34d399; font-size: 0.88rem; display: block; margin-bottom: 4px;">Won Revenue:</strong>
+            <div style="font-size: 1.3rem; font-weight: 800; color: #34d399;" id="crm-won-revenue-val">₹0</div>
+            <small style="color: var(--text-muted); font-size: 0.75rem; display: block; margin-top: 2px;">Sum of proposal totals for WON leads</small>
+          </div>
         </div>
 
         <!-- Search & Filter Bar -->
