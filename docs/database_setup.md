@@ -57,6 +57,8 @@ The database schema is constructed from safe, idempotent migration scripts in `d
 | `032_security_governance.sql` | Advanced Security, Compliance & Governance 3.0 | `security_events` table & indexes |
 | `033_client_experience_4.sql` | Advanced Client Experience & Self-Service 4.0 | `client_onboarding` table & indexes |
 | `034_growth_marketing_4.sql` | Advanced Growth, Marketing & Conversion Engine 4.0 | `marketing_experiments` table & indexes |
+| `035_ai_business_automation_5.sql` | AI Client & Business Automation 5.0 | `ai_automation_rules` table & indexes |
+| `036_executive_intelligence_5.sql` | Advanced Business Intelligence & Executive Analytics 5.0 | `kpi_targets` table & indexes |
 
 ---
 
