@@ -33,15 +33,26 @@ module.exports = async function handler(req, res) {
       const projectsRes = await db.getProjects();
 
       let tasks = [];
+      let phases = [];
+      let risks = [];
+      let blockers = [];
+
       if (projectId) {
-        tasks = (await db.getTasksByProject(String(projectId).trim())).rows || [];
+        const cleanProj = String(projectId).trim();
+        tasks = (await db.getTasksByProject(cleanProj)).rows || [];
+        phases = (await db.getProjectPhases(cleanProj)).rows || [];
+        risks = (await db.getProjectRisks(cleanProj)).rows || [];
+        blockers = (await db.getProjectBlockers(cleanProj)).rows || [];
       }
 
       return res.status(200).json({
         success: true,
         team: teamRes.rows || [],
         projects: projectsRes.rows || [],
-        tasks
+        tasks,
+        phases,
+        risks,
+        blockers
       });
 
     } catch (err) {
@@ -92,6 +103,30 @@ module.exports = async function handler(req, res) {
         }
         const resTime = await db.logTimeEntry(taskId, author || 'Admin', hours, message || '');
         return res.status(200).json({ success: true, timeEntry: resTime.rows ? resTime.rows[0] : null });
+      }
+
+      if (action === 'CREATE_PHASE') {
+        const resPhase = await db.createProjectPhase(req.body);
+        return res.status(200).json({ success: true, phase: resPhase.rows ? resPhase.rows[0] : null });
+      }
+
+      if (action === 'CREATE_RISK') {
+        const resRisk = await db.createProjectRisk(req.body);
+        return res.status(200).json({ success: true, risk: resRisk.rows ? resRisk.rows[0] : null });
+      }
+
+      if (action === 'CREATE_BLOCKER') {
+        const resBlocker = await db.createProjectBlocker(req.body);
+        return res.status(200).json({ success: true, blocker: resBlocker.rows ? resBlocker.rows[0] : null });
+      }
+
+      if (action === 'ADD_DEPENDENCY') {
+        const { parentTaskId, childTaskId } = req.body || {};
+        if (parentTaskId === childTaskId) {
+          return res.status(400).json({ success: false, error: 'Circular Dependency Violation: A task cannot depend on itself.' });
+        }
+        const resDep = await db.addTaskDependency(parentTaskId, childTaskId);
+        return res.status(200).json({ success: true, dependency: resDep.rows ? resDep.rows[0] : null });
       }
 
       return res.status(400).json({ success: false, error: 'Invalid operation action.' });
