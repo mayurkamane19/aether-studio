@@ -65,6 +65,8 @@ The database schema is constructed from safe, idempotent migration scripts in `d
 | `040_security_governance_7.sql` | Enterprise Security, Governance & Compliance 7.0 | `security_incidents` table & indexes |
 | `041_revenue_intelligence_9.sql` | Product Growth, Monetization & Revenue Intelligence 9.0 | `revenue_goals` table & indexes |
 | `042_agentic_operations_9.sql` | Advanced Agentic AI & Autonomous Business Operations 9.0 | `agent_logs` table & indexes |
+| `043_client_ai_experience_10.sql` | AI-Native Client Experience & Personalization 10.0 | `client_ai_queries` table & indexes |
+| `044_predictive_operations_10.sql` | Autonomous Business Intelligence & Predictive Operations 10.0 | `predictive_alerts` table & indexes |
 
 ---
 

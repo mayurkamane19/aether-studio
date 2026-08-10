@@ -1,0 +1,16 @@
+-- AETHER STUDIO — CRM PHASE 44 MIGRATION: AUTONOMOUS BUSINESS INTELLIGENCE & PREDICTIVE OPERATIONS 10.0
+-- Run this SQL script in your Supabase SQL Editor or PostgreSQL database console.
+
+CREATE TABLE IF NOT EXISTS predictive_alerts (
+  id SERIAL PRIMARY KEY,
+  alert_id VARCHAR(50) UNIQUE NOT NULL,
+  category VARCHAR(50) NOT NULL, -- 'REVENUE', 'PIPELINE', 'PROJECT', 'PAYMENT', 'SUPPORT', 'CHURN'
+  severity VARCHAR(20) DEFAULT 'MEDIUM', -- 'CRITICAL', 'HIGH', 'MEDIUM', 'LOW'
+  title VARCHAR(255) NOT NULL,
+  evidence TEXT,
+  recommendation TEXT,
+  status VARCHAR(50) DEFAULT 'OPEN', -- 'OPEN', 'ACKNOWLEDGED', 'RESOLVED', 'DISMISSED'
+  created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+CREATE INDEX IF NOT EXISTS idx_pa_category ON predictive_alerts(category);
