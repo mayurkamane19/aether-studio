@@ -59,6 +59,8 @@ The database schema is constructed from safe, idempotent migration scripts in `d
 | `034_growth_marketing_4.sql` | Advanced Growth, Marketing & Conversion Engine 4.0 | `marketing_experiments` table & indexes |
 | `035_ai_business_automation_5.sql` | AI Client & Business Automation 5.0 | `ai_automation_rules` table & indexes |
 | `036_executive_intelligence_5.sql` | Advanced Business Intelligence & Executive Analytics 5.0 | `kpi_targets` table & indexes |
+| `037_operations_automation_6.sql` | Intelligent Operations & Workflow Automation 6.0 | `workflow_execution_logs` table & indexes |
+| `038_enterprise_collaboration_6.sql` | Enterprise Collaboration & Workspace 6.0 | `workspace_messages` table & indexes |
 
 ---
 
