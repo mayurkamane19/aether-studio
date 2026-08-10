@@ -37,6 +37,7 @@ The database schema is constructed from safe, idempotent migration scripts in `d
 | `012_invoicing.sql` | Invoicing & Payments Engine | `invoices`, `invoice_items`, `payments`, `credit_notes` tables & indexes |
 | `013_communication_center.sql` | Omnichannel Communication Hub | `conversations`, `conversation_messages`, `message_templates`, `notifications` tables & indexes |
 | `014_production_indexes.sql` | Production Performance Indexes | Performance indexes on `leads`, `invoices`, `messages`, `activity` |
+| `015_ai_agency_os.sql` | AI Agency Operating System | `ai_agency_actions`, `ai_insights_cache` tables & indexes |
 
 ---
 
