@@ -50,6 +50,7 @@ The database schema is constructed from safe, idempotent migration scripts in `d
 | `025_project_resource_planning.sql` | Project Management & Resource Planning 2.0 | `project_phases`, `project_risks`, `project_blockers` tables & indexes |
 | `026_finance_operations.sql` | Advanced Finance & Revenue Operations 2.0 | `expenses`, `payment_plans` tables & indexes |
 | `027_sales_marketing_engine.sql` | Advanced Sales & Marketing Engine 2.0 | `campaigns`, `lead_attributions` tables & indexes |
+| `028_customer_success.sql` | Customer Success, Retention & Client Lifecycle 2.0 | `client_health_scores`, `client_renewals` tables & indexes |
 
 ---
 
