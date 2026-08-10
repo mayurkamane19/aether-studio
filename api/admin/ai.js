@@ -99,6 +99,16 @@ module.exports = async function handler(req, res) {
         });
       }
 
+      if (action === 'CHAT') {
+        const { message, conversationId } = req.body || {};
+        if (!message) {
+          return res.status(400).json({ success: false, error: 'message is required for AI Copilot Chat.' });
+        }
+
+        const chatRes = await aiAgency.processCopilotChat({ message, conversationId });
+        return res.status(200).json(chatRes);
+      }
+
       const summary = await aiAgency.generateExecutiveSummary();
       return res.status(200).json({
         success: true,

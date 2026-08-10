@@ -44,6 +44,7 @@ The database schema is constructed from safe, idempotent migration scripts in `d
 | `019_document_management.sql` | Secure Document Management | `documents`, `document_versions`, `document_requests` tables & indexes |
 | `020_automation_engine.sql` | Automation & Workflow Engine | `workflow_definitions`, `workflow_events`, `workflow_runs` tables & indexes |
 | `021_executive_analytics.sql` | Executive Command Center & BI | `analytics_snapshots`, `analytics_alerts` tables & indexes |
+| `022_ai_copilot.sql` | AI Business Copilot 2.0 | `ai_conversations`, `ai_messages`, `ai_tool_runs` tables & indexes |
 
 ---
 
