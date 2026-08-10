@@ -43,6 +43,7 @@ The database schema is constructed from safe, idempotent migration scripts in `d
 | `018_client_collaboration.sql` | Client Portal 2.0 & Collaboration | `client_deliverables`, `client_feedback`, `client_tickets`, `client_ticket_messages` tables & indexes |
 | `019_document_management.sql` | Secure Document Management | `documents`, `document_versions`, `document_requests` tables & indexes |
 | `020_automation_engine.sql` | Automation & Workflow Engine | `workflow_definitions`, `workflow_events`, `workflow_runs` tables & indexes |
+| `021_executive_analytics.sql` | Executive Command Center & BI | `analytics_snapshots`, `analytics_alerts` tables & indexes |
 
 ---
 
