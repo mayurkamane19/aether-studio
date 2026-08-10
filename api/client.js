@@ -1,9 +1,9 @@
 /**
  * SERVERLESS API ENDPOINT: /api/client
- * Client Portal Data Retrieval & Interactive Messaging API for Aether Studio.
+ * Client Portal 2.0 & Collaboration Hub API for Aether Studio.
  * Validates cryptographically hashed portal access tokens.
  * Data Isolation Guarantee: Client A token ONLY returns Client A project data.
- * Zero secrets or internal admin metadata exposed.
+ * Zero internal secrets, team workload, AI scores, or financial strategy exposed.
  */
 
 const db = require('../lib/db');
@@ -32,7 +32,7 @@ module.exports = async function handler(req, res) {
   }
   rateLimitMap.set(clientIp, userLimit);
 
-  if (userLimit.count > 20) {
+  if (userLimit.count > 30) {
     return res.status(429).json({ success: false, error: 'Too many requests. Please try again in a minute.' });
   }
 
@@ -47,13 +47,21 @@ module.exports = async function handler(req, res) {
 
       const portalData = await db.getClientPortalDataByToken(String(token).trim());
 
-      if (!portalData) {
+      if (!portalData || !portalData.lead) {
         return res.status(401).json({ success: false, error: 'Client portal link is invalid, expired, or revoked.' });
       }
 
+      const leadId = portalData.lead.leadId;
+      const deliverables = (await db.getClientDeliverablesByLead(leadId)).rows || [];
+      const tickets = (await db.getClientTicketsByLead(leadId)).rows || [];
+
       return res.status(200).json({
         success: true,
-        portal: portalData
+        portal: {
+          ...portalData,
+          deliverables,
+          tickets
+        }
       });
 
     } catch (err) {
@@ -62,13 +70,13 @@ module.exports = async function handler(req, res) {
     }
   }
 
-  // 2. POST /api/client (Post Client Message)
+  // 2. POST /api/client (Client Actions: Messages, Approvals, Feedback & Tickets)
   if (req.method === 'POST') {
     try {
-      const { token, message, action } = req.body || {};
+      const { token, action, message, deliverableId, rating, comment, subject, description } = req.body || {};
 
-      if (!token || !message) {
-        return res.status(400).json({ success: false, error: 'Portal token and message are required.' });
+      if (!token) {
+        return res.status(400).json({ success: false, error: 'Portal token is required.' });
       }
 
       const portalData = await db.getClientPortalDataByToken(String(token).trim());
@@ -77,12 +85,34 @@ module.exports = async function handler(req, res) {
         return res.status(401).json({ success: false, error: 'Unauthorized: Invalid portal token.' });
       }
 
-      const sanitizedMsg = String(message).replace(/[<>]/g, '').trim();
-      if (!sanitizedMsg) {
-        return res.status(400).json({ success: false, error: 'Message content cannot be empty.' });
+      const leadId = portalData.lead.leadId;
+
+      if (action === 'APPROVE_DELIVERABLE') {
+        if (!deliverableId) {
+          return res.status(400).json({ success: false, error: 'deliverableId is required.' });
+        }
+        const appRes = await db.approveDeliverable(deliverableId, leadId);
+        if (comment) {
+          await db.addClientFeedback(deliverableId, leadId, rating || 5, comment);
+        }
+        return res.status(200).json({ success: true, deliverable: appRes.rows ? appRes.rows[0] : null });
       }
 
-      await db.addClientMessage(portalData.lead.leadId, 'CLIENT', sanitizedMsg);
+      if (action === 'CREATE_TICKET') {
+        if (!subject || !description) {
+          return res.status(400).json({ success: false, error: 'subject and description are required.' });
+        }
+        const tktRes = await db.createClientTicket({ leadId, subject, description });
+        return res.status(200).json({ success: true, ticket: tktRes.rows ? tktRes.rows[0] : null });
+      }
+
+      // Default action: POST_MESSAGE
+      if (!message) {
+        return res.status(400).json({ success: false, error: 'Message content is required.' });
+      }
+
+      const sanitizedMsg = String(message).replace(/[<>]/g, '').trim();
+      await db.addClientMessage(leadId, 'CLIENT', sanitizedMsg);
 
       return res.status(200).json({
         success: true,

@@ -40,6 +40,7 @@ The database schema is constructed from safe, idempotent migration scripts in `d
 | `015_ai_agency_os.sql` | AI Agency Operating System | `ai_agency_actions`, `ai_insights_cache` tables & indexes |
 | `016_team_project_operations.sql` | Team & Project Operations | `team_members`, `projects`, `tasks`, `task_comments`, `time_entries` tables & indexes |
 | `017_calendar_resource_planning.sql` | Agency Calendar & Scheduling | `calendar_events`, `meetings`, `task_dependencies` tables & indexes |
+| `018_client_collaboration.sql` | Client Portal 2.0 & Collaboration | `client_deliverables`, `client_feedback`, `client_tickets`, `client_ticket_messages` tables & indexes |
 
 ---
 
