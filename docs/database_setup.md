@@ -46,6 +46,7 @@ The database schema is constructed from safe, idempotent migration scripts in `d
 | `021_executive_analytics.sql` | Executive Command Center & BI | `analytics_snapshots`, `analytics_alerts` tables & indexes |
 | `022_ai_copilot.sql` | AI Business Copilot 2.0 | `ai_conversations`, `ai_messages`, `ai_tool_runs` tables & indexes |
 | `023_client_collaboration.sql` | Client Experience 3.0 | `client_notifications`, `client_change_requests`, `client_activity_logs` tables & indexes |
+| `024_unified_communication.sql` | Unified Communication Center 2.0 | `conversations`, `communication_messages`, `communication_templates` tables & indexes |
 
 ---
 
