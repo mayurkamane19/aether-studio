@@ -63,6 +63,8 @@ The database schema is constructed from safe, idempotent migration scripts in `d
 | `038_enterprise_collaboration_6.sql` | Enterprise Collaboration & Workspace 6.0 | `workspace_messages` table & indexes |
 | `039_integrations_7.sql` | Advanced Integrations & Ecosystem 7.0 | `webhook_logs` table & indexes |
 | `040_security_governance_7.sql` | Enterprise Security, Governance & Compliance 7.0 | `security_incidents` table & indexes |
+| `041_revenue_intelligence_9.sql` | Product Growth, Monetization & Revenue Intelligence 9.0 | `revenue_goals` table & indexes |
+| `042_agentic_operations_9.sql` | Advanced Agentic AI & Autonomous Business Operations 9.0 | `agent_logs` table & indexes |
 
 ---
 
