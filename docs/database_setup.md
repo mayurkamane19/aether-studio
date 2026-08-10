@@ -48,6 +48,7 @@ The database schema is constructed from safe, idempotent migration scripts in `d
 | `023_client_collaboration.sql` | Client Experience 3.0 | `client_notifications`, `client_change_requests`, `client_activity_logs` tables & indexes |
 | `024_unified_communication.sql` | Unified Communication Center 2.0 | `conversations`, `communication_messages`, `communication_templates` tables & indexes |
 | `025_project_resource_planning.sql` | Project Management & Resource Planning 2.0 | `project_phases`, `project_risks`, `project_blockers` tables & indexes |
+| `026_finance_operations.sql` | Advanced Finance & Revenue Operations 2.0 | `expenses`, `payment_plans` tables & indexes |
 
 ---
 
