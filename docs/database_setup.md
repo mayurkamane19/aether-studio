@@ -53,6 +53,10 @@ The database schema is constructed from safe, idempotent migration scripts in `d
 | `028_customer_success.sql` | Customer Success, Retention & Client Lifecycle 2.0 | `client_health_scores`, `client_renewals` tables & indexes |
 | `029_support_helpdesk.sql` | Advanced Support & Helpdesk 2.0 | `knowledge_articles` table & indexes |
 | `030_ai_agency_os.sql` | Advanced AI Agency Operating System 3.0 | `ai_recommendations` table & indexes |
+| `031_reporting_data_intelligence.sql` | Advanced Reporting & Data Intelligence 3.0 | `saved_reports` table & indexes |
+| `032_security_governance.sql` | Advanced Security, Compliance & Governance 3.0 | `security_events` table & indexes |
+| `033_client_experience_4.sql` | Advanced Client Experience & Self-Service 4.0 | `client_onboarding` table & indexes |
+| `034_growth_marketing_4.sql` | Advanced Growth, Marketing & Conversion Engine 4.0 | `marketing_experiments` table & indexes |
 
 ---
 
