@@ -61,6 +61,8 @@ The database schema is constructed from safe, idempotent migration scripts in `d
 | `036_executive_intelligence_5.sql` | Advanced Business Intelligence & Executive Analytics 5.0 | `kpi_targets` table & indexes |
 | `037_operations_automation_6.sql` | Intelligent Operations & Workflow Automation 6.0 | `workflow_execution_logs` table & indexes |
 | `038_enterprise_collaboration_6.sql` | Enterprise Collaboration & Workspace 6.0 | `workspace_messages` table & indexes |
+| `039_integrations_7.sql` | Advanced Integrations & Ecosystem 7.0 | `webhook_logs` table & indexes |
+| `040_security_governance_7.sql` | Enterprise Security, Governance & Compliance 7.0 | `security_incidents` table & indexes |
 
 ---
 
