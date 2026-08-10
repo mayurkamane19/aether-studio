@@ -54,13 +54,19 @@ module.exports = async function handler(req, res) {
       const leadId = portalData.lead.leadId;
       const deliverables = (await db.getClientDeliverablesByLead(leadId)).rows || [];
       const tickets = (await db.getClientTicketsByLead(leadId)).rows || [];
+      const notifications = (await db.getClientNotifications(leadId)).rows || [];
+      const changeRequests = (await db.getClientChangeRequests(leadId)).rows || [];
+      const activityLogs = (await db.getClientActivityLogs(leadId)).rows || [];
 
       return res.status(200).json({
         success: true,
         portal: {
           ...portalData,
           deliverables,
-          tickets
+          tickets,
+          notifications,
+          changeRequests,
+          activityLogs
         }
       });
 
@@ -104,6 +110,22 @@ module.exports = async function handler(req, res) {
         }
         const tktRes = await db.createClientTicket({ leadId, subject, description });
         return res.status(200).json({ success: true, ticket: tktRes.rows ? tktRes.rows[0] : null });
+      }
+
+      if (action === 'CREATE_CHANGE_REQUEST') {
+        const { title, description: reqDesc, priority, projectId, deliverableId: delivId } = req.body || {};
+        if (!title || !reqDesc) {
+          return res.status(400).json({ success: false, error: 'title and description are required.' });
+        }
+        const chgRes = await db.createClientChangeRequest({
+          leadId,
+          projectId,
+          deliverableId: delivId,
+          title,
+          description: reqDesc,
+          priority
+        });
+        return res.status(200).json({ success: true, changeRequest: chgRes.rows ? chgRes.rows[0] : null });
       }
 
       // Default action: POST_MESSAGE
