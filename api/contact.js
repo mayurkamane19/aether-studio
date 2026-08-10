@@ -99,8 +99,20 @@ module.exports = async function handler(req, res) {
         preferredContact: cleanContactMethod,
         message: cleanMessage,
         status: 'NEW',
-        source: 'Website Contact Form'
+        source: req.body?.utm_source ? `UTM: ${req.body.utm_source}` : 'Website Contact Form'
       });
+
+      if (req.body?.utm_source || req.body?.utm_campaign) {
+        await db.saveLeadAttribution({
+          leadId,
+          utmSource: req.body.utm_source || '',
+          utmMedium: req.body.utm_medium || '',
+          utmCampaign: req.body.utm_campaign || '',
+          utmTerm: req.body.utm_term || '',
+          utmContent: req.body.utm_content || '',
+          referrer: req.headers['referer'] || ''
+        });
+      }
     } catch (dbErr) {
       console.error('[DB INSERT NOTICE]', dbErr.message);
     }
